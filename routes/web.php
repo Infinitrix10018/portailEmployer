@@ -1,12 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\InscriptionController;
-use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\GestionConnection;
-use App\Http\Controllers\FicheController;
-use App\Http\Controllers\MenuFournisseurController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommisController;
+use App\Http\Controllers\ResponsableController;
+use App\Http\Controllers\FournisseurController;
 
 
 
@@ -15,6 +14,17 @@ use App\Http\Controllers\AdminController;
 //partie pour admin (va être dans un groupe de Route plus tard.)
 Route::get('/Admin/Menu',
 [AdminController::class, 'index'])->name("MenuAdmin");
+
+
+
+
+//test route
+
+Route::get('/VoirFiche',
+[FournisseurController::class, 'show'])->name("VoirFiche");
+
+Route::get('/VoirFicheFournisseur',
+[FournisseurController::class, 'showFiche'])->name("VoirFicheFournisseur");
 
 
 //old routes

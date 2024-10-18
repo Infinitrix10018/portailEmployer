@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Fournisseur;
+use App\Models\Telephone;
+use Illuminate\Support\Facades\Log;
 
 class FournisseurController extends Controller
 {
@@ -39,7 +41,44 @@ class FournisseurController extends Controller
      */
     public function show()
     {
-        $id_fournisseur = Auth::user()->id_fournisseurs;
+        $id_fournisseur = 3;
+        $fournisseurs = Fournisseur::with([
+            'region',
+            'licences_rbq',
+            'code_unspsc', 
+            'demande'
+        ])->get();
+
+
+        // Filter by cities
+        if ($request->has('cities') && is_array($request->input('cities'))) {
+            $query->whereIn('city', $request->input('cities'));
+        }
+
+        // Filter by jobs
+        if ($request->has('jobs') && is_array($request->input('jobs'))) {
+            $query->whereIn('job', $request->input('jobs'));
+        }
+        // Collect phones without an associated contact
+        //$phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))->get();
+
+
+        // Log the main fournisseur data
+        Log::info('Fournisseur: ', $fournisseurs->toArray());
+
+        if (!$fournisseurs) {
+            abort(404); // Handle the case when the supplier is not found
+        }
+
+        Log::info('Loaded Fournisseur:', $fournisseurs->toArray());
+
+        return view('views.ListeFournisseur', compact('fournisseurs'));
+        
+    }
+
+    public function showFiche()
+    {
+        $id_fournisseur = 3;
         $fournisseur = Fournisseur::with([
             'region',
             'telephones',
