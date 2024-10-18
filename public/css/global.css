@@ -1,0 +1,48 @@
+html ,body
+{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+input.form-control:focus , .form-select:focus
+{
+    -webkit-box-shadow:0px 0px 24px 0px rgba(45,255,196,0.4);
+    -moz-box-shadow: 0px 0px 24px 0px rgba(45,255,196,0.4);
+    box-shadow: 0px 0px 24px 0px rgba(45,255,196,0.4);
+}
+
+.button
+{
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.success{
+    background-image: url('/img/successCheck.svg');
+    background-size: 40px;
+    background-repeat: no-repeat;
+    color: rgba(9,237,17);
+    background-position: right center;
+    padding-right: 40px;
+    -webkit-box-shadow:0px 0px 24px 0px rgba(9,237,17,0.4);
+    -moz-box-shadow: 0px 0px 24px 0px rgba(9,237,17,0.4);
+    box-shadow: 0px 0px 24px 0px rgba(9,237,17,0.4);
+    position: relative;
+}
+
+.failure
+{
+    background-image: url('/img/failure.svg');
+    background-size: 40px;
+    background-repeat: no-repeat;
+    color: rgba(255,0,0);
+    background-position: right center;
+    padding-right: 40px;
+    -webkit-box-shadow:0px 0px 24px 0px rgba(255,0,0.4);
+    -moz-box-shadow: 0px 0px 24px 0px rgba(255,0,0.4);
+    box-shadow: 0px 0px 24px 0px rgba(255,0,0.4);
+    position: relative;
+}

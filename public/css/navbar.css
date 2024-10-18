@@ -1,0 +1,73 @@
+nav{ 
+    background-color:rgb(0,118,213) ;
+    border: 1px solid grey;
+}
+
+.navbar{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    z-index: 999;
+    position: sticky;
+}
+
+.navbar-brand
+{
+    padding:  2 2% 2 2%;
+    background-color: rgb(11,35,65);
+}
+
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
+}
+
+.nav-item {
+    padding-left: 5px;
+    padding-right: 5px;
+    border-left: solid 2px rgba(0, 0, 0, 0.3);
+    
+}
+
+#brandName{
+    color:white;
+    font-size: 2rem;
+    margin-bottom: 0px;
+}
+
+#Menu {
+    position: fixed; 
+    top: 0; 
+    right: -250px; 
+    width: 250px; 
+    height: 100%; 
+    background-color: rgb(11,35,65); 
+    color: white; 
+    padding: 20px; 
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3); 
+    z-index: 1000; 
+}
+
+#Menu a {
+    display: block; 
+    color: white; 
+    text-decoration: none; 
+    margin-bottom: 10px; 
+    font-size: 18px; 
+}
+
+#Menu button {
+    display: block; 
+    background: none; 
+    color: white; 
+    border: none; 
+    font-size: 20px; 
+    cursor: pointer; 
+    margin-bottom: 20px; 
+}
