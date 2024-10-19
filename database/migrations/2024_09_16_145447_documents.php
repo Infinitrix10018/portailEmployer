@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id('id_document');
-            $table->foreignId('id_fournisseur');
+            $table->foreignId('id_fournisseurs');
             $table->string('nomDocument', 32);
             $table->string('extension_document', 10);
         });

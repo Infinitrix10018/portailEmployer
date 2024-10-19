@@ -49,20 +49,6 @@ class FournisseurController extends Controller
             'demande'
         ])->get();
 
-
-        // Filter by cities
-        if ($request->has('cities') && is_array($request->input('cities'))) {
-            $query->whereIn('city', $request->input('cities'));
-        }
-
-        // Filter by jobs
-        if ($request->has('jobs') && is_array($request->input('jobs'))) {
-            $query->whereIn('job', $request->input('jobs'));
-        }
-        // Collect phones without an associated contact
-        //$phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))->get();
-
-
         // Log the main fournisseur data
         Log::info('Fournisseur: ', $fournisseurs->toArray());
 
@@ -124,6 +110,21 @@ class FournisseurController extends Controller
 
         return view('views.pageVoirFiche', compact('fournisseur', 'phonesWithoutContact'));
         
+    }
+
+    public function search(Request $request)
+    {
+        // Filter by cities
+        if ($request->has('cities') && is_array($request->input('cities'))) {
+            $query->whereIn('city', $request->input('cities'));
+        }
+
+        // Filter by jobs
+        if ($request->has('jobs') && is_array($request->input('jobs'))) {
+            $query->whereIn('job', $request->input('jobs'));
+        }
+        // Collect phones without an associated contact
+        //$phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))->get();
     }
 
     /**

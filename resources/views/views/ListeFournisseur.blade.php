@@ -1,7 +1,7 @@
 @extends('layouts.app')
     @section('title',"V3R Fournisseur Login")
     @section('css')
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="{{ asset('css/ListeFournisseurs.css') }}">
     @show
     @section('js')
         <script src=""></script>
@@ -31,13 +31,13 @@
     @foreach ($fournisseurs as $fournisseur)
         <form action="{{ route('VoirFicheFournisseur') }}" method="POST" class="person-card">
             @csrf <!-- Include CSRF token -->
-            <input type="hidden" name="id" value="{{ $fournisseur->id_fournisseurs }}">
-            <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0;">
-                <div class="row">
-                    <h3 class="col-lg-6">{{ $fournisseur->nom_entreprise }}</h3>
-                    <h3 class="col-lg-6">{{ $fournisseur->ville }}</h3>
-                </div>
-            </button>
+            <div class="container-xxl">
+                <input type="hidden" name="id" value="{{ $fournisseur->id_fournisseurs }}">
+                <button type="submit" class="custom-button">
+                    <h3 id="padding5">{{ $fournisseur->nom_entreprise }}</h3>
+                    <h3 id="padding5">{{ $fournisseur->ville }}</h3>
+                </button>
+            </div>
         </form>
     @endforeach
 
