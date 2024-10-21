@@ -18,9 +18,10 @@
 <body>
 <div>
     <header>
-        <nav class="navbar  fixed-top navbar-light">
-            <a class="navbar-brand" href="{{ route('Accueil') }}">
-                <p id="brandName">fournisseur.v3r.net</p>
+        @if (!isset($showNavbar) || $showNavbar)
+        <nav class="navbar fixed-top navbar-light">
+            <a class="navbar-brand" href="">
+                <p id="brandName">Employé.v3r.net</p>
             </a>
             <div id="navbarNav">
                 <ul class="navbar-nav">
@@ -29,19 +30,17 @@
                             <button onclick="openMenu()" class="navbar-toggler" type="button">
                                 <img src="{{ asset('img/menu.svg') }}" alt="menuButton">
                             </button>
-                            
                         </div>
                     </li>
                 </ul>
             </div>
         </nav>
+        @endif
     </header>
 
     <div class="" style="display:none;right:0;" id="Menu">
         <button onclick="closeMenu()">Fermer &times;</button>
-        <a href="#" class="">Se connecter</a>
-        <a href="#" class="">Inscription</a>
-        <a href="#" class="">Link 3</a>
+        <a href="#" class="{{ route('ConnexionEmployer') }}">Se connecter</a>
         @auth <a href="{{ route('Logout') }}">Fermer Session</a> @endauth     
     </div>
 
@@ -51,9 +50,9 @@
         </div>
     @endif
     @if(session('success'))
-    <div class="alert alert-success" id="success">
-        {{ session('success') }}
-    </div>
+        <div class="alert alert-success" id="success">
+            {{ session('success') }}
+        </div>
     @endif
 
     @yield('content')
