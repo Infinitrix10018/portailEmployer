@@ -28,7 +28,10 @@ Route::get('/ModelCourriel',
 Route::get('/VoirFiche',
 [FournisseurController::class, 'show'])->name("VoirFiche");
 
-Route::POST('/VoirFicheFournisseur',
+Route::get('/SetSessionFicheFournisseur/{id}',
+[FournisseurController::class, 'setSession'])->name("SetSessionFicheFournisseur");
+
+Route::get('/VoirFicheFournisseur',
 [FournisseurController::class, 'showFiche'])->name("VoirFicheFournisseur");
 
 
