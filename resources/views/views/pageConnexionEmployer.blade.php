@@ -37,3 +37,7 @@
     @endsection
 
 @endsection
+
+@php
+    $showNavbar = false;
+@endphp

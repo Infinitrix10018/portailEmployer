@@ -34,24 +34,20 @@ Route::get('/VoirFicheFournisseur',
 [FournisseurController::class, 'showFiche'])->name("VoirFicheFournisseur");
 
 
-//old routes
 
-Route::get('/',
- function () {return view('views/index');}); //dump page
 
-Route::get('/Accueil',
- function () {return view('views/pageAccueil');})->name("Accueil");
 
 Route::get('/PageInscriptionsLicences',
  function () {return view('views/pageInscriptionsLicences');})->name("InscriptionLicences");
 
-Route::get('/ConnexionFournisseur',
- function () {return view('views/pageConnexionFournisseur');})->name("ConnexionFournisseur");
-
-
+Route::get('/',
+ function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployer");
 
 Route::post('/Login',
  [GestionConnection::class, 'Login'])->name('Login');
+
+
+ //old routes
 
  /*
 Route::group(['middleware' => ['auth:sanctum']], function () {
