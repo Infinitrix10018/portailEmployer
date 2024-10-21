@@ -22,8 +22,7 @@ class LoginUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['nullable', 'required_without:NEQ'], 
-            'NEQ' => ['nullable', 'required_without:email'], 
+            'email' => ['nullable', 'required'], 
             'password' => ['required'],
         ];
     }
@@ -31,8 +30,7 @@ class LoginUserRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.required_without' => 'Un email ou un NEQ est requis.', 
-            'NEQ.required_without' => 'Un NEQ ou un email est requis.', 
+            'email.required' => 'Un email est requis.', 
             'password.required' => 'Le mot de passe est requis.',
         ];
     }

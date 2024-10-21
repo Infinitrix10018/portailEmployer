@@ -12,8 +12,6 @@ use App\Http\Controllers\FournisseurController;
 //new routes
 
 //partie pour admin (va être dans un groupe de Route plus tard.)
-Route::get('/Admin/Menu',
-[AdminController::class, 'index'])->name("MenuAdmin");
 
 Route::get('/ModelCourriel',
  function () {return view('views/pageModelCourriel');})->name("ModelCourriel");
@@ -34,9 +32,6 @@ Route::POST('/VoirFicheFournisseur',
 [FournisseurController::class, 'showFiche'])->name("VoirFicheFournisseur");
 
 
-
-
-
 Route::get('/PageInscriptionsLicences',
  function () {return view('views/pageInscriptionsLicences');})->name("InscriptionLicences");
 
@@ -45,6 +40,13 @@ Route::get('/',
 
 Route::post('/Login',
  [GestionConnection::class, 'Login'])->name('Login');
+
+
+
+ Route::group(['middleware' => ['auth:sanctum', \App\Http\Middleware\PreventBackHistory::class]], function () {
+    Route::get('/Logout', [GestionConnection::class, 'Logout'])->name('Logout');
+    Route::get('/Admin/Menu', [AdminController::class, 'index'])->name("MenuAdmin");
+});
 
 
  //old routes
