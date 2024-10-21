@@ -30,7 +30,7 @@ Route::get('/ModelCourriel',
 Route::get('/VoirFiche',
 [FournisseurController::class, 'show'])->name("VoirFiche");
 
-Route::get('/VoirFicheFournisseur',
+Route::POST('/VoirFicheFournisseur',
 [FournisseurController::class, 'showFiche'])->name("VoirFicheFournisseur");
 
 
