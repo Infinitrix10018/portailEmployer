@@ -15,7 +15,14 @@ use App\Http\Controllers\FournisseurController;
 Route::get('/Admin/Menu',
 [AdminController::class, 'index'])->name("MenuAdmin");
 
+Route::get('/ModelCourriel',
+ function () {return view('views/pageModelCourriel');})->name("ModelCourriel");
+ 
+ Route::get('/ChangementRole',
+ function () {return view('views/pageChangementRole');})->name("ChangementRole");
 
+ Route::get('/Parametres',
+ function () {return view('views/pageParametres');})->name("Parametres");
 
 
 //test route
