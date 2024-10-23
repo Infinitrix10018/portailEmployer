@@ -134,6 +134,48 @@ class FournisseurController extends Controller
     // exemple de chat gpt
     public function rechercherDeChatGPT(Request $request)
     {
+        $query = Fournisseur::query();
+
+        // Get search parameters from request
+        $villes = $request->input('city');
+        $regions = $request->input('region');
+        $liences_rbqs = $request->input('work_type');
+        $code_unspscs = $request->input('unspsc_code');
+
+        // Filter by city, region, and postal code
+        if ($city) {
+            $query->where('city', 'LIKE', "%$city%");
+        }
+        if ($region) {
+            $query->where('region', 'LIKE', "%$region%");
+        }
+        if ($postalCode) {
+            $query->where('postal_code', 'LIKE', "%$postalCode%");
+        }
+
+        // Filter by work type (if provided)
+        if ($workType) {
+            $query->whereHas('workTypes', function($q) use ($workType) {
+                $q->where('name', 'LIKE', "%$workType%");
+            });
+        }
+
+        // Filter by UNSPSC code (if provided)
+        if ($unspscCode) {
+            $query->whereHas('unspscCodes', function($q) use ($unspscCode) {
+                $q->where('code', 'LIKE', "%$unspscCode%");
+            });
+        }
+
+        // Execute the query and get the results
+        $companies = $query->get();
+
+        return view('companies.index', compact('companies'));
+    }
+
+    // debut de recherche pour la page voir fourniseurs
+    public function rechercheDebut(Request $request)
+    {
         $query = Company::query();
 
         // Get search parameters from request

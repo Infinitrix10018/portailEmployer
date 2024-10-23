@@ -25,6 +25,8 @@ Route::get('/ModelCourriel',
 
 //test route
 
+
+// routes pour voir les fiches
 Route::get('/VoirFiche',
 [FournisseurController::class, 'show'])->name("VoirFiche");
 
@@ -33,6 +35,10 @@ Route::get('/SetSessionFicheFournisseur/{id}',
 
 Route::get('/VoirFicheFournisseur',
 [FournisseurController::class, 'showFiche'])->name("VoirFicheFournisseur");
+
+//route de recherche ci-dessous
+Route::get('/VoirFiche/searchx', 
+[FournisseurController::class, 'searchX'])->name('VoirFiche.search_x');
 
 
 Route::get('/PageInscriptionsLicences',

@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
             [
                 'id_fournisseurs' => 0,
                 'name' => 'admin',
-                'email' => null,
+                'email' => 'admin',
                 'NEQ' => null,
                 'password' => Hash::make('admin'),
                 'role' => 'Administrateur',
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
             [
                 'id_fournisseurs' => 0,
                 'name' => 'responsable',
-                'email' => null,
+                'email' => 'responsable',
                 'NEQ' => null,
                 'password' => Hash::make('responsable'),
                 'role' => 'Responsable',
@@ -63,7 +63,7 @@ class UserSeeder extends Seeder
             [
                 'id_fournisseurs' => 0,
                 'name' => 'commis',
-                'email' => null,
+                'email' => 'commis',
                 'NEQ' => null,
                 'password' => Hash::make('commis'),
                 'role' => 'Commis',
