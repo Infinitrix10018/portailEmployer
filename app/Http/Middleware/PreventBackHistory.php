@@ -10,10 +10,11 @@ class PreventBackHistory
 {
     public function handle(Request $request, Closure $next)
     {
-        
-        if (!Auth::check()) {
-            return redirect()->route('Accueil'); 
+
+        if (!Auth::guard('sanctum')->check()) {
+            return redirect()->route('ConnexionEmployer');
         }
+
 
         $response = $next($request);
 
@@ -21,6 +22,4 @@ class PreventBackHistory
                         ->header('Pragma', 'no-cache')
                         ->header('Expires', '0');
     }
-
-
 }

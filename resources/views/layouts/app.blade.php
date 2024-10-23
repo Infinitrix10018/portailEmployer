@@ -40,7 +40,6 @@
 
     <div class="" style="display:none;right:0;" id="Menu">
         <button onclick="closeMenu()">Fermer &times;</button>
-        <a href="#" class="{{ route('ConnexionEmployer') }}">Se connecter</a>
         @auth <a href="{{ route('Logout') }}">Fermer Session</a> @endauth     
     </div>
 
