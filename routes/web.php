@@ -47,14 +47,15 @@ Route::get('/PageInscriptionsLicences',
 Route::get('/',
  function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployer");
 
-Route::post('/Login',
- [GestionConnection::class, 'Login'])->name('Login');
+Route::get('/login',function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployerUhOh");
+Route::post('/login',[GestionConnection::class, 'login'])->name('login');
 
 
-
- Route::group(['middleware' => ['auth:sanctum', \App\Http\Middleware\PreventBackHistory::class]], function () {
+ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,'auth:sanctum']], function () {
     Route::get('/Logout', [GestionConnection::class, 'Logout'])->name('Logout');
     Route::get('/Admin/Menu', [AdminController::class, 'index'])->name("MenuAdmin");
+    
+    
 });
 
 
