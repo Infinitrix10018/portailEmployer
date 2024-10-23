@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Fournisseur;
 use App\Models\Telephone;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class FournisseurController extends Controller
 {
@@ -41,30 +42,32 @@ class FournisseurController extends Controller
      */
     public function show()
     {
-        $id_fournisseur = 3;
         $fournisseurs = Fournisseur::with([
             'region',
             'licences_rbq',
             'code_unspsc', 
             'demande'
         ])->get();
-
-        // Log the main fournisseur data
         Log::info('Fournisseur: ', $fournisseurs->toArray());
 
         if (!$fournisseurs) {
-            abort(404); // Handle the case when the supplier is not found
+            abort(404);
         }
-
         Log::info('Loaded Fournisseur:', $fournisseurs->toArray());
 
-        return view('views.ListeFournisseur', compact('fournisseurs'));
-        
+        return view('views.ListeFournisseur', compact('fournisseurs')); 
+    }
+
+    public function setSession($id) {
+        Session::put('id_fourni', $id);
+        //session(['id_fourni' => $id]);
+        //Log::info('id fournisseur: ', $id);
+        return redirect()->route('VoirFicheFournisseur');
     }
 
     public function showFiche()
     {
-        $id_fournisseur = 3;
+        $id_fournisseurs = Session::get('id_fourni');
         $fournisseur = Fournisseur::with([
             'region',
             'telephones',
@@ -72,7 +75,7 @@ class FournisseurController extends Controller
             'licences_rbq',
             'code_unspsc', 
             'demande'
-        ])->where('id_fournisseurs', $id_fournisseur)
+        ])->where('id_fournisseurs', $id_fournisseurs)
         ->first();
 
         // Collect phones without an associated contact
@@ -112,6 +115,7 @@ class FournisseurController extends Controller
         
     }
 
+    //exemple chatgpt
     public function search(Request $request)
     {
         // Filter by cities
@@ -125,6 +129,49 @@ class FournisseurController extends Controller
         }
         // Collect phones without an associated contact
         //$phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))->get();
+    }
+
+    // exemple de chat gpt
+    public function rechercherDeChatGPT(Request $request)
+    {
+        $query = Company::query();
+
+        // Get search parameters from request
+        $city = $request->input('city');
+        $region = $request->input('region');
+        $postalCode = $request->input('postal_code');
+        $workType = $request->input('work_type');
+        $unspscCode = $request->input('unspsc_code');
+
+        // Filter by city, region, and postal code
+        if ($city) {
+            $query->where('city', 'LIKE', "%$city%");
+        }
+        if ($region) {
+            $query->where('region', 'LIKE', "%$region%");
+        }
+        if ($postalCode) {
+            $query->where('postal_code', 'LIKE', "%$postalCode%");
+        }
+
+        // Filter by work type (if provided)
+        if ($workType) {
+            $query->whereHas('workTypes', function($q) use ($workType) {
+                $q->where('name', 'LIKE', "%$workType%");
+            });
+        }
+
+        // Filter by UNSPSC code (if provided)
+        if ($unspscCode) {
+            $query->whereHas('unspscCodes', function($q) use ($unspscCode) {
+                $q->where('code', 'LIKE', "%$unspscCode%");
+            });
+        }
+
+        // Execute the query and get the results
+        $companies = $query->get();
+
+        return view('companies.index', compact('companies'));
     }
 
     /**
