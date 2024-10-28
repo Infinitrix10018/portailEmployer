@@ -4,14 +4,14 @@ body {
 
 #containerBlanc {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 20px;
     border-style: solid;
     border-color: gray;
     margin-top: 50px;
 }
 
 .col-md-6 {
-    padding-top: 60px;
+    padding-top: 50px;
     padding-bottom: 10px;
 }
 
@@ -27,8 +27,8 @@ body {
 
 .col-lg-7, .col-sm-5 {
     text-align: center;
-    padding-top: 30px;
-    padding-bottom: 40px;
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
 .button

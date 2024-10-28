@@ -7,10 +7,11 @@
     
     @section('content')
 
-                <div class="container-xxl sub-bx">
+                <div class="container-xxl sub-bx" id="containerBlanc">
                     <div class="container-xxl">
                         <div class="row">
 
+                        <!--foreach ($users as $user)!-->
                             <div class="col-md-5">
                                 <label for="province">Utilisateur:</label>
                                 <input type="text" class="form-control" value="placeholder">
@@ -26,20 +27,21 @@
                                     <option value="Aucun">Aucun</option>
                                 </select>
                             </div>
+                        <!--endforeach!-->
 
-                            <div class="col-md-2">
+                            <div class="col-sm-2">
                                 <div class="row">
-                                    <button type="button" class="button">Ajouter</button>
+                                    <button type="button" class="button" id="idBoutonAjouter">Ajouter</button>
 
-                                    <button type="button" class="button">Supprimer</button>
+                                    <button type="button" class="button" id="idBoutonSupprimer">Supprimer</button>
                                 </div>
                             </div>
 
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                                 <button type="button" class="button">Enregistrer les modifications</button>
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <button type="button" class="button">Annuler</button>
                             </div>
                         </div>

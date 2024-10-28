@@ -38,7 +38,7 @@
                             </div>
 
                             <div class="col-md-6" id="texteBox">
-                            <input type="text" class="form-control">
+                            <input type="number" class="form-control">
                             </div>
 
                             <div class="col-md-6" id="texteh5">
