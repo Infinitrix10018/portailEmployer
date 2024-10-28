@@ -72,36 +72,21 @@ class FournisseurController extends Controller
             'region',
             'telephones',
             'personne_ressources.telephones',
-            'licences_rbq',
-            'code_unspsc', 
             'demande'
         ])->where('id_fournisseurs', $id_fournisseurs)
         ->first();
 
-        // Collect phones without an associated contact
         $phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))->get();
 
+        $licences = DB::table('licences_rbq')
+        ->join('fournisseur_licence_rbq_liaison', 'licences_rbq.id_licence_rbq', '=', 'fournisseur_licence_rbq_liaison.id_licence_rbq')
+        ->where('fournisseur_licence_rbq_liaison.id_fournisseurs', $id_fournisseurs)
+        ->get();
 
-        // Log the main fournisseur data
-        Log::info('Fournisseur: ', $fournisseur->toArray());
-
-        // Log the count of telephones
-        Log::info('Telephones count: ' . $fournisseur->telephones->count());
-
-        // Log the count of personne ressources
-        Log::info('Personne Ressources count: ' . $fournisseur->personne_ressources->count());
-
-        foreach ($fournisseur->personne_ressources as $personne) {
-            Log::info('Personne Ressource ID: ' . $personne->id_personne_ressource);
-            Log::info('Personne Ressource Telephones count: ' . $personne->telephones->count());
-        }
-
-        foreach ($fournisseur->personne_ressources as $personne) {
-            Log::info('Personne Resource: ', $personne->toArray());
-            if ($personne->telephone) {
-                Log::info('Personne Resource Telephone: ', $personne->telephone->toArray());
-            }
-        }
+        $codes = DB::table('code_unspsc')
+        ->join('fournisseur_code_unspsc_liaison', 'code_unspsc.id_code_unspsc', '=', 'fournisseur_code_unspsc_liaison.id_code_unspsc')
+        ->where('fournisseur_code_unspsc_liaison.id_fournisseurs', $id_fournisseurs)
+        ->get();
 
         if (!$fournisseur) {
             abort(404); // Handle the case when the supplier is not found
@@ -110,8 +95,10 @@ class FournisseurController extends Controller
         Log::info('Loaded Fournisseur:', $fournisseur->toArray());
         Log::info('Phones:', $fournisseur->telephones->toArray());
         Log::info('Contacts:', $fournisseur->personne_ressources->toArray());
+        Log::info('Loaded Fournisseur:', $licences->toArray());
+        Log::info('Loaded Fournisseur:', $codes->toArray());
 
-        return view('views.pageVoirFiche', compact('fournisseur', 'phonesWithoutContact'));
+        return view('views.pageVoirFiche', compact('fournisseur', 'phonesWithoutContact', 'licences', 'codes'));
         
     }
 

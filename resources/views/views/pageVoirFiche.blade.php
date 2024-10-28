@@ -83,20 +83,24 @@
             </div>
         </div>
 
-        <div>
-            <h2>Licences RBQ</h2>
-            <ul>
-                @foreach($fournisseur->licences_rbq as $licence)
-                    <li>{{ $licence->sous_categorie }}</li>
-                @endforeach
-            </ul>
+        <div class="container-xxl">
+            @if($licences->isNotEmpty())
+                <h2>Licences RBQ</h2>
+                <div class="container-xxl" id="containerWithBorder">
+                    @foreach($licences as $licence)
+                        <p>{{ $licence->sous_categorie }}</p>
+                    @endforeach
+                </div>
+            @endif
 
-            <h2>Code UNSPSC</h2>
-            <ul>
-                @foreach($fournisseur->code_unspsc as $code)
-                    <li>{{ $code->precision_categorie }}</li>
-                @endforeach
-            </ul>
+            @if($codes->isNotEmpty())
+                <h2>Code UNSPSC</h2>
+                <div class="container-xxl" id="containerWithBorder">
+                    @foreach($codes as $code)
+                        <p>{{ $code->precision_categorie }}</p>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 
