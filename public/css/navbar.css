@@ -71,3 +71,8 @@ nav{
     cursor: pointer; 
     margin-bottom: 20px; 
 }
+
+.Important
+{
+    color:red !important;
+}

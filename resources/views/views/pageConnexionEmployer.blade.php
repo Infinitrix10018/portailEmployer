@@ -1,5 +1,5 @@
 @extends('layouts.app')
-    @section('title',"V3R Fournisseur Page Connexion N")
+    @section('title',"V3R  Page Connexion ")
     @section('css')
         <link rel="stylesheet" href="{{ asset('css/pageConnexionEmployer.css') }}">
     @show

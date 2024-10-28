@@ -20,7 +20,7 @@
     <header>
         @if (!isset($showNavbar) || $showNavbar)
         <nav class="navbar fixed-top navbar-light">
-            <a class="navbar-brand" href="">
+            <a class="navbar-brand" href="{{ route('VoirFiche') }}">
                 <p id="brandName">Employé.v3r.net</p>
             </a>
             <div id="navbarNav">
@@ -40,6 +40,12 @@
 
     <div class="" style="display:none;right:0;" id="Menu">
         <button onclick="closeMenu()">Fermer &times;</button>
+        <a href="{{ route('VoirFiche') }}">Ma fiche</a>
+        <a href="">Ajouter ou voir mes finances</a>
+        <a href="">Modifier ma fiche</a>
+        <a href="">Ajouter un telephone</a>
+        <a href="">Ajouter une personne contacte</a>
+        <a href="" class="Important">! Supprimer ma fiche !</a>
         @auth <a href="{{ route('Logout') }}">Fermer Session</a> @endauth     
     </div>
 

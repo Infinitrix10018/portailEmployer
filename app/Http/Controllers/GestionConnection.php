@@ -31,7 +31,7 @@ class GestionConnection extends Controller
             
             Auth::login($user);
 
-            return redirect()->route('MenuAdmin');
+            return redirect()->route('VoirFiche');
         }
 
         return redirect()->route('ConnexionEmployer')->with('erreur', 'Email ou mot de passe incorrect.');
