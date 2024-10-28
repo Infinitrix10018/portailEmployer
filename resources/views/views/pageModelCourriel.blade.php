@@ -1,7 +1,7 @@
 @extends('layouts.app')
     @section('title',"V3R Fournisseur")
     @section('css')
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="{{ asset('css/pageModelCourriel.css') }}">
     @show
     <!-- Needs to be adapted for bigger and smaller screens !-->
     
