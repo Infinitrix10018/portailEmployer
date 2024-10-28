@@ -27,8 +27,7 @@ Route::get('/ModelCourriel',
 
 
 // routes pour voir les fiches
-Route::get('/VoirFiche',
-[FournisseurController::class, 'show'])->name("VoirFiche");
+
 
 Route::get('/SetSessionFicheFournisseur/{id}',
 [FournisseurController::class, 'setSession'])->name("SetSessionFicheFournisseur");
@@ -51,124 +50,19 @@ Route::get('/login',function () {return view('views/pageConnexionEmployer');})->
 Route::post('/login',[GestionConnection::class, 'login'])->name('login');
 
 
- Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,'auth:sanctum']], function () {
+ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable,Commis']], function () {
     Route::get('/Logout', [GestionConnection::class, 'Logout'])->name('Logout');
-    Route::get('/Admin/Menu', [AdminController::class, 'index'])->name("MenuAdmin");
+    Route::get('/VoirFiche',[FournisseurController::class, 'show'])->name("VoirFiche");
+
+    
     
     
 });
 
+ 
 
- //old routes
-
- /*
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/Logout', [GestionConnection::class, 'Logout'])->name('Logout');
-
-     Route::get('/VoirFiche',
-    [InscriptionController::class, 'show'])->name("VoirFiche");
-
-    Route::get('/AjouterTelephoneForm',
-    [InscriptionController::class, 'formAddPhone'])->name("AjouterTelephoneForm");
-    Route::post('/AjouterTelephone',
-    [InscriptionController::class, 'addPhone'])->name("AjouterTelephone");
-
-    Route::get('/AjouterContacteForm',
-    [InscriptionController::class, 'formAddPerson'])->name("AjouterContacteForm");
-    Route::post('/AjouterContacte',
-    [InscriptionController::class, 'addPerson'])->name("AjouterContacte");
-
-    
-
-    
-
-    //Route::get('/MenuFournisseur', function () {return view('views/pageMenuFournisseur');})->name("MenuFournisseur");
-
-    Route::get('/MenuFournisseur',
-    [MenuFournisseurController::class, 'index'])->name("MenuFournisseur");
-
-    Route::get('/AjoutFinances',
-    [FinanceController::class, 'index'])->name("AjoutFinances");
-    Route::post('/AjoutFinances',
-    [FinanceController::class, 'store'])->name('Finance.store');
-
-    
-
-});
-*/
-
-// début section pour les routes inscriptions
-/*
-Route::get('/Inscription',
-[InscriptionController::class, 'index'])->name('Inscription');
-
-Route::post('/Inscription',
-[InscriptionController::class, 'store'])->name('Inscription.store');
-
-Route::get('/Inscription/search',
-[InscriptionController::class, 'search'])->name('Inscription.search');
-
-Route::get('/Inscription/searchLicencesRBQ', 
-[InscriptionController::class, 'searchRBQ'])->name('inscriptions.search_rbq');
-
-Route::get('/Inscription/searchCodeUNSPSC', 
-[InscriptionController::class, 'searchUNSPSC'])->name('inscriptions.search_unspsc');
-*/
-// fin section pour les routes inscriptions
 
 /*
-// vrai route ci-dessous
-Route::get('/',
-function () {return view('views/index');})->name("dump");
-
-Route::get('/Accueil',
-function () {return view('views/pageAccueil');})->name("Accueil");
-
-Route::post('/Login',
- [GestionConnection::class, 'Login'])->name('Login');
-
- Route::get('/Admin/Menu', 
- [AdminController::class, 'menu'])->name('MenuAdmin');
-
- Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    //route pour admin seuleument
-    
-    Route::get('/MenuAdmin', 
-    [AdminController::class, 'menu'])->name('MenuAdmin');
-
-});
-
-Route::middleware(['role:admin'])->get('/test-role', function () {
-    return 'Role middleware passed!';
-});
-
-Route::middleware(['auth:sanctum', 'role:responsable'])->group(function () {
-    //route pour responsable seuleument
-
-});
-
-Route::middleware(['auth:sanctum', 'role:commis'])->group(function () {
-    //route pour commis seuleument
-
-});
-
-
-Route::middleware(['auth:sanctum', 'role:admin,responsable'])->group(function () {
-    //route pour admin et responsable seuleument
-
-});
-
-
-Route::middleware(['auth:sanctum'])->group(function () {
-    //route differente selon le role
-    
-});
-
-// fin vrai route
-
-
-
-
 // Different routes depending on role
 // Admin Routes
 Route::middleware(['auth:sanctum', 'check.role:admin'])->group(function () {
@@ -199,5 +93,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/showB', 'ContentController@showB')->middleware('check.role:editor,viewer')->name('content.showB');
 });
 // fin exemple de chatgpt
-
 */
