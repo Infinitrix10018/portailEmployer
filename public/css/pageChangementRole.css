@@ -11,8 +11,8 @@ body {
 }
 
 .col-md-5, .col-sm-2, .col-lg-8, .col-sm-4 {
-    margin-top: 30px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #idBoutonAjouter, #idBoutonSupprimer {
