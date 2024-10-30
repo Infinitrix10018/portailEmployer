@@ -46,7 +46,7 @@
         <a href="">Ajouter un telephone</a>
         <a href="">Ajouter une personne contacte</a>
         <a href="" class="Important">! Supprimer ma fiche !</a>
-        @auth <a href="{{ route('Logout') }}">Fermer Session</a> @endauth     
+        @auth <a href="{{ route('Logout') }}" >Fermer Session</a> @endauth     
     </div>
 
     @if(session('erreur'))
