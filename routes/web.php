@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommisController;
 use App\Http\Controllers\ResponsableController;
 use App\Http\Controllers\FournisseurController;
+use App\Http\Controllers\UserController;
+
 
 
 
@@ -16,10 +18,17 @@ use App\Http\Controllers\FournisseurController;
 Route::get('/ModelCourriel',
  function () {return view('views/pageModelCourriel');})->name("ModelCourriel");
  
- Route::get('/ChangementRole',
- function () {return view('views/pageChangementRole');})->name("ChangementRole");
+Route::get('/ChangementRole', 
+[UserController::class, 'index'])->name("ChangementRole");
 
- Route::get('/Parametres',
+Route::post('/users/update', 
+[UserController::class, 'updateRoles'])->name('updateRoles');
+
+Route::get('/users', 
+[UserController::class, 'index']);
+
+
+Route::get('/Parametres',
  function () {return view('views/pageParametres');})->name("Parametres");
 
 
