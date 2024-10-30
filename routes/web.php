@@ -46,7 +46,7 @@ Route::get('/PageInscriptionsLicences',
 Route::get('/',
  function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployer");
 
-Route::get('/login',function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployerUhOh");
+Route::get('/login',function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployerUhOh");//don`t touch the tape
 Route::post('/login',[GestionConnection::class, 'login'])->name('login');
 
 
