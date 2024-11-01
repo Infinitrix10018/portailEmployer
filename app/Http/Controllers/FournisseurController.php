@@ -203,6 +203,16 @@ class FournisseurController extends Controller
         return view('companies.index', compact('companies'));
     }
 
+    public function rechercheFichiers(string $id)
+    {
+        $directory = '';
+        $files = Storage::disk('public')->files($directory);
+
+        $files = Storage::disk('your_disk')->files($directory);
+        $pattern = '/^' . $id . '-.*-' . $fileName . '\./';
+        $matchingFiles = preg_grep($pattern, $files);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
