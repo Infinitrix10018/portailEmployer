@@ -13,7 +13,7 @@
                                 <input type="text" class="form-control" id="idObjet">
 
                                 <label for="idMessage">Message:</label>
-                                <input type="text" class="form-control" id="idMessage">
+                                <textarea type="text" class="form-control" id="idMessage"></textarea>
                             </div>
 
                             <div class="col-md-5">
