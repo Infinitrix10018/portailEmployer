@@ -1,0 +1,43 @@
+body {
+    background-color: rgb(0,118,213);
+}
+
+.container-xxl {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+}
+
+.col-md-7, .col-md-5 {
+    background-color: white;
+    border-radius: 20px;
+    border-style: solid;
+    border-color: gray;
+    margin-top: 50px;
+    padding: 30px;
+}
+
+button {
+    padding: 10px 20px 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    color: rgb(0,118,213);
+}
+
+#idBoutonAjouter, #idBoutonModifier, #idBoutonSupprimer {
+    width: 200px;
+    background-color: rgb(0,118,213);
+    color: white;
+    margin: 10px;
+}
+
+#idMessage {
+    height: 140px;
+}

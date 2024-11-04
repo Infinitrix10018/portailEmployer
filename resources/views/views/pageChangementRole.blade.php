@@ -42,7 +42,7 @@
                             </div>
 
                             <div class="col-sm-4">
-                                <button type="button" class="button">Annuler</button>
+                                <button type="button" class="button" id="idBoutonAnnuler">Annuler</button>
                             </div>
                         </div>
                     </div> 
