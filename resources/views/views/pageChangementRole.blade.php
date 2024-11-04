@@ -9,6 +9,7 @@
 
                 <div class="container-xxl sub-bx" id="containerBlanc">
                     <div class="container-xxl">
+                    <form action="{{ route('user.updateRoles') }}" method="POST">
                     @csrf
                         <div class="row">
                         @foreach ($users as $user)
@@ -37,7 +38,7 @@
                             </div>
 
                             <div class="col-lg-8">
-                                <button type="button" class="button" id="idBoutonEnregistrer">Enregistrer les modifications</button>
+                                <button type="submit" class="button" id="idBoutonEnregistrer">Enregistrer les modifications</button>
                             </div>
 
                             <div class="col-sm-4">
@@ -45,6 +46,7 @@
                             </div>
                         </div>
                     </div> 
-                </div> 
+                </div>
+                </form>
     
 @endsection

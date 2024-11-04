@@ -21,8 +21,7 @@ Route::get('/ModelCourriel',
 Route::get('/ChangementRole', 
 [UserController::class, 'index'])->name("ChangementRole");
 
-Route::post('/users/update', 
-[UserController::class, 'updateRoles'])->name('updateRoles');
+Route::post('/user/updateRoles', [UserController::class, 'updateRoles'])->name('user.updateRoles');
 
 Route::get('/users', 
 [UserController::class, 'index']);
