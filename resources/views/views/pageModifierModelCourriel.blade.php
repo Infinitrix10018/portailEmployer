@@ -8,7 +8,7 @@
     @section('content')
 
                     <div class="container-xxl">
-                            <div class="col-md-7">
+                            <div class="col-lg-10">
                                 <label for="idNom">Nom:</label>
                                 <input type="text" class="form-control" id="idNom">
 
@@ -18,31 +18,11 @@
                                 <label for="idMessage">Message:</label>
                                 <textarea type="text" class="form-control" id="idMessage"></textarea>
                             </div>
-
-                            <div class="col-md-5">
-                            <select id="idModele" name="modele" class="form-select" required>
-                                    <option value="Default">Modèles</option>
-                                    <option value="Accusé">Accusé de réception</option>
-                                    <option value="Approbation">Approbation</option>
-                                    <option value="Refus">Refus</option>
-                                    <option value="Finances">Finances</option>
-                                </select>
-
-                                <div class="row">
-
-                                <button type="button" class="button" id="idBoutonAjouter">Ajouter un modele</button>
-
-                                <button type="button" class="button" id="idBoutonModifier">Modifier un modele</button>
-
-                                <button type="button" class="button" id="idBoutonSupprimer">Supprimer un modele</button>
-
-                                </div>
-                            </div>
                     </div> 
 
                     <div class="container-xxl">
 
-                            <div class="col-lg-11">
+                            <div class="col-lg-9">
                                 <button type="submit" class="button" id="idBoutonEnregistrer">Enregistrer les modifications</button>
                             </div>
 

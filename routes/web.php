@@ -17,6 +17,12 @@ use App\Http\Controllers\UserController;
 
 Route::get('/ModelCourriel',
  function () {return view('views/pageModelCourriel');})->name("ModelCourriel");
+
+ Route::get('/ModifierModelCourriel',
+ function () {return view('views/pageModifierModelCourriel');})->name("ModifierModelCourriel");
+
+ Route::get('/SupprimerModelCourriel',
+ function () {return view('views/pageSupprimerModelCourriel');})->name("SupprimerModelCourriel");
  
 Route::get('/ChangementRole', 
 [UserController::class, 'index'])->name("ChangementRole");

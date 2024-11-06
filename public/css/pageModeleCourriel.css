@@ -22,12 +22,26 @@ body {
     padding: 30px;
 }
 
+.col-lg-10 {
+    background-color: white;
+    border-radius: 20px;
+    border-style: solid;
+    border-color: gray;
+    margin-top: 50px;
+    padding: 30px;
+}
+
+label {
+    margin: 8px;
+}
+
 button {
     padding: 10px 20px 10px 20px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     background-color: white;
+    margin: 0px 10px 0px 0px;
     color: rgb(0,118,213);
 }
 
@@ -43,5 +57,5 @@ button {
 }
 
 #idMessage {
-    height: 140px;
+    height: 100px;
 }
