@@ -1,5 +1,5 @@
 @extends('layouts.app')
-    @section('title',"V3R Fournisseur Login")
+    @section('title',"Voir Fiches")
     @section('css')
         <link rel="stylesheet" href="{{ asset('css/pageInscription.css') }}">
     @show
@@ -105,6 +105,14 @@
     </div>
 
 
-    <!--ADD A BUTON THAT LEADS TO A PAGE TO CHANGE THE STATUS OF THE REQUEST-->
+    @if (Auth::check() && (Auth::user()->role === 'Administrateur' || Auth::user()->role === 'Responsable'))
+        <div class="col-lg-11">
+            <a href="{{ route('ChangeStatusPage', ['id' => $fournisseur->id_fournisseurs]) }}"><button type="submit" class="button" id="idModStatus">Modifier etat demande</button></a>
+        </div>
+    @endif
+
+
+    
+    
 
 @endsection

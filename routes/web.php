@@ -8,6 +8,7 @@ use App\Http\Controllers\ResponsableController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\ModelCourrielController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ModStatusController;
 
 
 
@@ -68,12 +69,13 @@ Route::post('/login',[GestionConnection::class, 'login'])->name('login');
     Route::get('/Logout', [GestionConnection::class, 'Logout'])->name('Logout');
     Route::get('/VoirFiche',[FournisseurController::class, 'show'])->name("VoirFiche");
 
-    
-    
-    
 });
 
- 
+Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable']], function () {
+    Route::get('/ChangeStatusPage', [ModStatusController::class, 'index'])->name("ChangeStatusPage");
+    Route::post('/ChangeStatus', [ModStatusController::class, 'changeStatus'])->name("ChangeStatus");
+});
+
 
 
 /*
