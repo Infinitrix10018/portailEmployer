@@ -22,11 +22,10 @@
                             <div class="col-md-5">
                             <select id="idModele" name="modele" class="form-select" required>
                                     <option value="Default">Modèles</option>
-                                    <option value="Accusé">Accusé de réception</option>
-                                    <option value="Approbation">Approbation</option>
-                                    <option value="Refus">Refus</option>
-                                    <option value="Finances">Finances</option>
-                                </select>
+                                    @foreach($modelCourriel as $modelCourriel)
+                                        <option value="{{ $modelCourriel->nom_courriel }}">{{ $modelCourriel->nom_courriel }}</option>
+                                    @endforeach
+                            </select>
 
                                 <div class="row">
 

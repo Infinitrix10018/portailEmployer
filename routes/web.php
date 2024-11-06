@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommisController;
 use App\Http\Controllers\ResponsableController;
 use App\Http\Controllers\FournisseurController;
+use App\Http\Controllers\ModelCourrielController;
 use App\Http\Controllers\UserController;
 
 
@@ -31,6 +32,9 @@ Route::post('/user/updateRoles', [UserController::class, 'updateRoles'])->name('
 
 Route::get('/users', 
 [UserController::class, 'index']);
+
+Route::get('/modelCourriel',
+[ModelCourrielController::class, 'listeModelCourriel']);
 
 
 Route::get('/Parametres',
