@@ -16,9 +16,6 @@ use App\Http\Controllers\UserController;
 
 //partie pour admin (va être dans un groupe de Route plus tard.)
 
-Route::get('/ModelCourriel',
- function () {return view('views/pageModelCourriel');})->name("ModelCourriel");
-
  Route::get('/ModifierModelCourriel',
  function () {return view('views/pageModifierModelCourriel');})->name("ModifierModelCourriel");
 
@@ -33,9 +30,8 @@ Route::post('/user/updateRoles', [UserController::class, 'updateRoles'])->name('
 Route::get('/users', 
 [UserController::class, 'index']);
 
-Route::get('/modelCourriel',
+Route::get('/ModelCourriel',
 [ModelCourrielController::class, 'listeModelCourriel']);
-
 
 Route::get('/Parametres',
  function () {return view('views/pageParametres');})->name("Parametres");
