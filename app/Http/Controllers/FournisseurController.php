@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Fournisseur;
 use App\Models\Telephone;
+use App\Models\Documents;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class FournisseurController extends Controller
 {
@@ -66,40 +68,76 @@ class FournisseurController extends Controller
 
     public function showFiche()
     {
-        $id_fournisseurs = Session::get('id_fourni');
+        $id_fournisseur = Session::get('id_fourni');
         $fournisseur = Fournisseur::with([
             'region',
             'telephones',
             'personne_ressources.telephones',
             'demande'
-        ])->where('id_fournisseurs', $id_fournisseurs)
+        ])->where('id_fournisseurs', $id_fournisseur)
         ->first();
 
-        $phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))->get();
-
+        $phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))
+        ->where('id_fournisseurs', $id_fournisseur)
+        ->get();
+        
         $licences = DB::table('licences_rbq')
         ->join('fournisseur_licence_rbq_liaison', 'licences_rbq.id_licence_rbq', '=', 'fournisseur_licence_rbq_liaison.id_licence_rbq')
-        ->where('fournisseur_licence_rbq_liaison.id_fournisseurs', $id_fournisseurs)
+        ->where('fournisseur_licence_rbq_liaison.id_fournisseurs', $id_fournisseur)
         ->get();
 
         $codes = DB::table('code_unspsc')
         ->join('fournisseur_code_unspsc_liaison', 'code_unspsc.id_code_unspsc', '=', 'fournisseur_code_unspsc_liaison.id_code_unspsc')
-        ->where('fournisseur_code_unspsc_liaison.id_fournisseurs', $id_fournisseurs)
+        ->where('fournisseur_code_unspsc_liaison.id_fournisseurs', $id_fournisseur)
         ->get();
 
-        if (!$fournisseur) {
-            abort(404); // Handle the case when the supplier is not found
+        $categorieCode = $codes->groupBy('categorie');
+        Log::info($categorieCode);
+
+        // For each category, group by classe_categorie
+        foreach ($categorieCode as $categorie => $items) {
+            $categorieCode[$categorie] = $items->groupBy('classe_categorie');
         }
 
-        Log::info('Loaded Fournisseur:', $fournisseur->toArray());
-        Log::info('Phones:', $fournisseur->telephones->toArray());
-        Log::info('Contacts:', $fournisseur->personne_ressources->toArray());
-        Log::info('Loaded Fournisseur:', $licences->toArray());
-        Log::info('Loaded Fournisseur:', $codes->toArray());
+        $fichiers = Documents::where('id_fournisseurs', $id_fournisseur)->get();
 
-        return view('views.pageVoirFiche', compact('fournisseur', 'phonesWithoutContact', 'licences', 'codes'));
-        
+        if (!$fournisseur) {
+            abort(404);
+        }
+        return view('views.pageVoirFiche', 
+        compact('fournisseur', 'phonesWithoutContact', 'licences', 'categorieCode', 'fichiers')); 
     }
+
+    public function download($id_document)
+    {
+        \Log::info('Before download');
+
+        //$fichier = Documents::findOrFail($id_document);
+        $fichier = Documents::where('id_document', $id_document)->first();
+
+        $filePath = $fichier->cheminDocument;
+        $fileName = $fichier->nomDocument;
+    
+        // Check if the file exists before proceeding
+        if (!Storage::disk('public')->exists($filePath)) {
+            \Log::error("File not found: $filePath");
+            abort(404, 'File not found');
+        }
+    
+        // Get the file size and MIME type
+        $fileSize = Storage::disk('public')->size($filePath);
+        $mimeType = Storage::disk('public')->mimeType($filePath);
+    
+        // Return the download response with custom headers
+        return response()->download(storage_path("app/public/$filePath"), $fileName, [
+            'Content-Length' => $fileSize,
+            'Content-Type' => $mimeType,
+        ]);
+    }
+
+
+
+    
 
     //exemple chatgpt
     public function search(Request $request)

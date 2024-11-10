@@ -12,7 +12,6 @@ use App\Http\Controllers\ModStatusController;
 
 
 
-
 //new routes
 
 //partie pour admin (va être dans un groupe de Route plus tard.)
@@ -65,13 +64,22 @@ Route::get('/login',function () {return view('views/pageConnexionEmployer');})->
 Route::post('/login',[GestionConnection::class, 'login'])->name('login');
 
 
- Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable,Commis']], function () {
+Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
+'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable,Commis']],
+ function () {
+
     Route::get('/Logout', [GestionConnection::class, 'Logout'])->name('Logout');
     Route::get('/VoirFiche',[FournisseurController::class, 'show'])->name("VoirFiche");
 
+    Route::get('/VoirFiche/download/{id_document}',
+    [FournisseurController::class, 'download'])->name('VoirFiche.download');
+
 });
 
-Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable']], function () {
+Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
+'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable']],
+ function () {
+
     Route::get('/ChangeStatusPage', [ModStatusController::class, 'index'])->name("ChangeStatusPage");
     Route::post('/ChangeStatus', [ModStatusController::class, 'changeStatus'])->name("ChangeStatus");
 });

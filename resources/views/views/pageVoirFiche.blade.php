@@ -93,14 +93,41 @@
                 </div>
             @endif
 
-            @if($codes->isNotEmpty())
+            @if($categorieCode->isNotEmpty())
                 <h2>Code UNSPSC</h2>
                 <div class="container-xxl" id="containerWithBorder">
-                    @foreach($codes as $code)
-                        <p>{{ $code->precision_categorie }}</p>
+                    @foreach($categorieCode as $section1 => $classCategories)
+                        <h3>{{ $section1 }}</h3>
+                        @foreach($classCategories as $section2 => $codeUnspscs)
+                            <h5>{{ $section2 }}</h5>
+                            <ul>
+                                @foreach($codeUnspscs as $codeUnspsc)
+                                    <li class="licence-item" data-id="{{ $codeUnspsc->id_code_unspsc }}">
+                                        {{ $codeUnspsc->precision_categorie }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endforeach
                     @endforeach
                 </div>
             @endif
+        </div>
+        <div class="container-xxl">
+            <h2>Commentaire</h2>
+            <div class="container-xxl" id="containerWithBorder">
+                @if($fournisseur->commentaire)
+                    <h2>Votre commentaire</h2>
+                    <p class="col-sm-12">Votre commentaire: {{ $fournisseur->commentaire }} </p>
+                @endif
+
+                @foreach ($fichiers as $fichier)
+                <p>
+                    <a href="{{ route('VoirFiche.download', $fichier->id_document) }}" download>
+                        {{ $fichier->nomDocument }}
+                    </a>
+                </p>
+            @endforeach
+            </div>
         </div>
     </div>
 
@@ -110,9 +137,5 @@
             <a href="{{ route('ChangeStatusPage', ['id' => $fournisseur->id_fournisseurs]) }}"><button type="submit" class="button" id="idModStatus">Modifier etat demande</button></a>
         </div>
     @endif
-
-
-    
-    
 
 @endsection
