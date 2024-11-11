@@ -136,9 +136,6 @@ class FournisseurController extends Controller
     }
 
 
-
-    
-
     //exemple chatgpt
     public function search(Request $request)
     {
