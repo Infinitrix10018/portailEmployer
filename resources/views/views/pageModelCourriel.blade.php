@@ -40,7 +40,7 @@
                             </form>
 
                                 <a href="{{url('/SupprimerModelCourriel')}}"> 
-                                    <button type="button" class="button" id="idBoutonSupprimer">Supprimer un modele existant</button>
+                                    <button type="button" class="button" id="idBoutonSupprimer">Supprimer un modele existant (Non fonctionel)</button>
                                 </a>
 
                             </div>
