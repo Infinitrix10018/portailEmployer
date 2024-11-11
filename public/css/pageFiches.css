@@ -6,6 +6,33 @@ form{
     padding: 20px;
 }
 
+h1, h2, h3, h4, h5, h6, label, li{ 
+    color: rgb(120,198,224);
+}
+
+h3 {
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 25;
+}
+
+p{ 
+    color: rgb(255,255,255);  
+}
+
+.selected-item{
+    font-weight: bold;
+}
+
+.button{
+    border-color: rgb(0,118,213);
+    border-radius: 10px;
+    margin-top: 5px;
+    padding: 15px;
+    background-color:rgb(0,118,213);
+    align-items: center;
+    color: white;
+}
 
 .container-fluid, .container, .container-xl, .container-lg, .container-xxl{ 
     border-color: rgb(0,118,213);
@@ -16,25 +43,7 @@ form{
     align-items: center;
 }
 
-h1, h2, h3, h4, h5, h6, label, li{ 
-    color: rgb(120,198,224);
-}
-
-p{ 
-    color: rgb(255,255,255);
-    
-}
-
-.selected-item{
-    font-weight: bold;
-}
-
 a:link{
     text-decoration: none;    
 }
 
-h3 {
-    text-align: left;
-    font-weight: bold;
-    margin-bottom: 25;
-}

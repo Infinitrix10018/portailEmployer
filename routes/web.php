@@ -74,6 +74,9 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::get('/VoirFiche/download/{id_document}',
     [FournisseurController::class, 'download'])->name('VoirFiche.download');
 
+    Route::get('/VoirFiche/search',
+    [FournisseurController::class, 'search'])->name('VoirFiche.search');
+
 });
 
 Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
