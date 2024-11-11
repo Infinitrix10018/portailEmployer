@@ -20,20 +20,28 @@
                             </div>
 
                             <div class="col-md-5">
+                            <label for="modeles">Modèles existants:</label>
+                            
                             <select id="idModele" name="modele" class="form-select" required>
-                                    <option value="Default">Modèles</option>
+                                    <option value="Default"></option>
                                     @foreach($modelCourriel as $modelCourriel)
                                         <option value="{{ $modelCourriel->nom_courriel }}">{{ $modelCourriel->nom_courriel }}</option>
                                     @endforeach
                             </select>
 
                                 <div class="row">
+                                    
+                                <a href="{{url('/AjouterModelCourriel')}}"> 
+                                    <button type="button" class="button" id="idBoutonAjouter">Ajouter un modele</button>
+                                </a>
 
-                                <button type="button" class="button" id="idBoutonAjouter">Ajouter un modele</button>
+                                <a href="{{url('/ModifierModelCourriel')}}"> 
+                                    <button type="button" class="button" id="idBoutonModifier">Modifier un modele existant</button>
+                                </a>
 
-                                <button type="button" class="button" id="idBoutonModifier">Modifier un modele</button>
-
-                                <button type="button" class="button" id="idBoutonSupprimer">Supprimer un modele</button>
+                                <a href="{{url('/SupprimerModelCourriel')}}"> 
+                                    <button type="button" class="button" id="idBoutonSupprimer">Supprimer un modele existant</button>
+                                </a>
 
                                 </div>
                             </div>
