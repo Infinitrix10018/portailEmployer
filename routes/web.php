@@ -9,6 +9,7 @@ use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\ModelCourrielController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModStatusController;
+use App\Http\Controllers\ModInfoController;
 
 
 
@@ -67,7 +68,7 @@ Route::get('/',
 Route::get('/login',function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployerUhOh");//don`t touch the tape
 Route::post('/login',[GestionConnection::class, 'login'])->name('login');
 
-
+//tous role non fournisseur
 Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable,Commis']],
  function () {
@@ -83,10 +84,11 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 
 });
 
+//responsable et admin
 Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable']],
  function () {
-
+    Route::get('/ChangeInfoPage', [ModInfoController::class, 'index'])->name("ChangeInfoPage");
     Route::get('/ChangeStatusPage', [ModStatusController::class, 'index'])->name("ChangeStatusPage");
     Route::post('/ChangeStatus', [ModStatusController::class, 'changeStatus'])->name("ChangeStatus");
 });

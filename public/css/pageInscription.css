@@ -126,15 +126,6 @@ h3{
     
 }
 
-li:hover{
-    background-color: black;
-    font-size: 18px;
-    color: white;
-    border-color: rgb(0,118,213);
-    border-radius: 10px;
-    padding: 10px;
-}
-
 .selected-item{
     font-weight: bold;
 }

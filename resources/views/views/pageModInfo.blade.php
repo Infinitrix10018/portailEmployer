@@ -1,5 +1,5 @@
 @extends('layouts.app')
-    @section('title',"Voir Fiches")
+    @section('title',"Modifier Fiches")
     @section('css')
         <link rel="stylesheet" href="{{ asset('css/pageInscription.css') }}">
     @show
@@ -11,9 +11,6 @@
     <!-- Add content here!
          https://tablericons.com/ for icons
     -->
-    @if (Auth::check() && (Auth::user()->role === 'Administrateur' || Auth::user()->role === 'Responsable'))
-        <a href="{{ route('ChangeInfoPage', ['id' => $fournisseur->id_fournisseurs]) }}"><button class="button" id="idModInfo"><img src="{{ asset('img/edit.svg') }}" width="50" height="50" alt="Edit"></button></a>
-    @endif
 
     <div class="container-xxl">
         <div class="container-xxl" id="containerWithBorder">
@@ -32,21 +29,21 @@
             <div class="container-xxl" id="containerWithBorder">
                 <h1>Adresse</h1>
                 <div class="row">
-                    <p class="col-sm-3">No. civique: {{ $fournisseur->no_rue }} </p>
+                    <p>No. civique: {{ $fournisseur->no_rue }} </p>
 
-                    <p class="col-sm-6">Rue: {{ $fournisseur->rue }} </p>
+                    <p>Rue: {{ $fournisseur->rue }} </p>
 
-                    <p class="col-sm-3">Bureau:{{ $fournisseur->no_bureau }} </p>
+                    <p>Bureau:{{ $fournisseur->no_bureau }} </p>
                         
-                    <p class="col-lg-12">Ville: {{ $fournisseur->ville }} </p>
+                    <p>Ville: {{ $fournisseur->ville }} </p>
                         
-                    <p class="col-md-5">Province: {{ $fournisseur->province }} </p>
+                    <p>Province: {{ $fournisseur->province }} </p>
 
-                    <p class="col-md-5">Regions administratives: 
+                    <p>Regions administratives: 
                         {{ $fournisseur->region ? $fournisseur->region->no_region : 'aucune region administrative' }} - 
                         {{ $fournisseur->region ? $fournisseur->region->nom_region : '' }} </p>
                         
-                    <p class="col-md-2">Code postal: {{ $fournisseur->code_postal }} </p>
+                    <p>Code postal: {{ $fournisseur->code_postal }} </p>
                 </div>
 
                 <p>Site internet: {{ $fournisseur->site_internet }} </p>
@@ -54,9 +51,9 @@
                 <h2>Téléphone</h2>
                 <div class="row">
                     @foreach($phonesWithoutContact  as $phone)
-                        <p class="col-md-3">Type de Téléphones: {{ $phone->type_tel }}</p> 
-                        <p class="col-md-6">Téléphones: {{ $phone->no_tel }}</p>
-                        <p class="col-md-3">Poste: {{ $phone->poste_tel }}</p>
+                        <p>Type de Téléphones: {{ $phone->type_tel }}</p> 
+                        <p>Téléphones: {{ $phone->no_tel }}</p>
+                        <p>Poste: {{ $phone->poste_tel }}</p>
                     @endforeach
                 </div>
             </div> 
@@ -69,14 +66,14 @@
                 <div class="contact-info">
                     @foreach($fournisseur->personne_ressources as $contact)
                         <div class="contact row">
-                            <p class="col-md-4">Prenom du contact: {{ $contact->prenom_contact }}</p>
-                            <p class="col-md-4">Nom du contact: {{ $contact->nom_contact }}</p>
-                            <p class="col-md-4">Fonction du contact: {{ $contact->fonction }}</p>
+                            <p>Prenom du contact: {{ $contact->prenom_contact }}</p>
+                            <p>Nom du contact: {{ $contact->nom_contact }}</p>
+                            <p>Fonction du contact: {{ $contact->fonction }}</p>
 
                             @foreach($contact->telephones as $phone)
-                                <p class="col-md-4">Type de téléphone: {{ $phone->type_tel }}</p>
-                                <p class="col-md-4">Numéro de téléphone: {{ $phone->no_tel }}</p>
-                                <p class="col-md-4">poste du téléphone: {{ $phone->poste_tel }}</p>
+                                <p>Type de téléphone: {{ $phone->type_tel }}</p>
+                                <p>Numéro de téléphone: {{ $phone->no_tel }}</p>
+                                <p>poste du téléphone: {{ $phone->poste_tel }}</p>
                             @endforeach
 
                              <p class="col-md-6">Adresse courriel: {{ $contact->email_contact }}</p>
@@ -115,30 +112,6 @@
                 </div>
             @endif
         </div>
-        <div class="container-xxl">
-            <h2>Commentaire</h2>
-            <div class="container-xxl" id="containerWithBorder">
-                @if($fournisseur->demande->commentaire)
-                    <h2>Votre commentaire</h2>
-                    <p class="col-sm-12">Votre commentaire: {{ $fournisseur->demande->commentaire }} </p>
-                @endif
-
-                @foreach ($fichiers as $fichier)
-                <p>
-                    <a href="{{ route('VoirFiche.download', $fichier->id_document) }}" download>
-                        {{ $fichier->nomDocument }}
-                    </a>
-                </p>
-            @endforeach
-            </div>
-        </div>
     </div>
-
-
-    @if (Auth::check() && (Auth::user()->role === 'Administrateur' || Auth::user()->role === 'Responsable'))
-        <div class="col-lg-11">
-            <a href="{{ route('ChangeStatusPage', ['id' => $fournisseur->id_fournisseurs]) }}"><button class="button" id="idModStatus">Modifier etat demande</button></a>
-        </div>
-    @endif
 
 @endsection

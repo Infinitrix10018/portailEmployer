@@ -10,6 +10,7 @@ use App\Models\Documents;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
 
 class FournisseurController extends Controller
 {
@@ -77,35 +78,45 @@ class FournisseurController extends Controller
         ])->where('id_fournisseurs', $id_fournisseur)
         ->first();
 
-        $phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))
-        ->where('id_fournisseurs', $id_fournisseur)
-        ->get();
+        if (!$fournisseur) {
+            abort(404); 
+        }
+
         
+        if (!empty($fournisseur->demande->commentaire)) {
+            try {
+                Log::info("Attempt decrypt comment for fournisseur ID: $id_fournisseur");
+                $fournisseur->demande->commentaire = Crypt::decryptString($fournisseur->demande->commentaire);
+                Log::info("Success decrypted comment for fournisseur ID: $id_fournisseur");
+            } catch (\Exception $e) {
+                Log::error("Failed to decrypt comment for fournisseur ID: $id_fournisseur", ['error' => $e->getMessage()]);
+                $fournisseur->demande->commentaire = 'Unable to decrypt comment';
+            }
+        }
+
+        $phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))
+            ->where('id_fournisseurs', $id_fournisseur)
+            ->get();
+
         $licences = DB::table('licences_rbq')
-        ->join('fournisseur_licence_rbq_liaison', 'licences_rbq.id_licence_rbq', '=', 'fournisseur_licence_rbq_liaison.id_licence_rbq')
-        ->where('fournisseur_licence_rbq_liaison.id_fournisseurs', $id_fournisseur)
-        ->get();
+            ->join('fournisseur_licence_rbq_liaison', 'licences_rbq.id_licence_rbq', '=', 'fournisseur_licence_rbq_liaison.id_licence_rbq')
+            ->where('fournisseur_licence_rbq_liaison.id_fournisseurs', $id_fournisseur)
+            ->get();
 
         $codes = DB::table('code_unspsc')
-        ->join('fournisseur_code_unspsc_liaison', 'code_unspsc.id_code_unspsc', '=', 'fournisseur_code_unspsc_liaison.id_code_unspsc')
-        ->where('fournisseur_code_unspsc_liaison.id_fournisseurs', $id_fournisseur)
-        ->get();
+            ->join('fournisseur_code_unspsc_liaison', 'code_unspsc.id_code_unspsc', '=', 'fournisseur_code_unspsc_liaison.id_code_unspsc')
+            ->where('fournisseur_code_unspsc_liaison.id_fournisseurs', $id_fournisseur)
+            ->get();
 
         $categorieCode = $codes->groupBy('categorie');
-        Log::info($categorieCode);
 
-        // For each category, group by classe_categorie
         foreach ($categorieCode as $categorie => $items) {
             $categorieCode[$categorie] = $items->groupBy('classe_categorie');
         }
 
         $fichiers = Documents::where('id_fournisseurs', $id_fournisseur)->get();
 
-        if (!$fournisseur) {
-            abort(404);
-        }
-        return view('views.pageVoirFiche', 
-        compact('fournisseur', 'phonesWithoutContact', 'licences', 'categorieCode', 'fichiers')); 
+        return view('views.pageVoirFiche', compact('fournisseur', 'phonesWithoutContact', 'licences', 'categorieCode', 'fichiers'));
     }
 
     public function download($id_document)
