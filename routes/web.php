@@ -27,6 +27,10 @@ Route::get('/ChangementRole',
 
 Route::post('/user/updateRoles', [UserController::class, 'updateRoles'])->name('user.updateRoles');
 
+Route::post('/ajouterModeleCourriel', [ModelCourrielController::class, 'store'])->name('modelCourriel.store');
+
+Route::get('/ModifierModelCourriel', [ModelCourrielController::class, 'showModifierForm']);
+
 Route::get('/users', 
 [UserController::class, 'index']);
 

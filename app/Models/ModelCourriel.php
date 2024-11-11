@@ -11,6 +11,8 @@ class ModelCourriel extends Model
 
     protected $table = 'model_courriel';
 
-    protected $fillable = ['id_model_courriel', 'nom_courriel', 'objet', 'message'];
+    public $timestamps = false;
+
+    protected $fillable = ['nom_courriel', 'objet', 'message'];
 
 }

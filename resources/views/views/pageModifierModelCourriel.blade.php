@@ -10,13 +10,13 @@
                     <div class="container-xxl">
                             <div class="col-lg-10">
                                 <label for="idNom">Nom:</label>
-                                <input type="text" class="form-control" id="idNom">
+                                <input type="text" class="form-control" id="idNom" value="{{ $model->nom_courriel ?? '' }}">
 
                                 <label for="idObjet">Objet:</label>
-                                <input type="text" class="form-control" id="idObjet">
+                                <input type="text" class="form-control" id="idObjet" value="{{ $model->objet ?? '' }}">
 
                                 <label for="idMessage">Message:</label>
-                                <textarea type="text" class="form-control" id="idMessage"></textarea>
+                                <textarea type="text" class="form-control" id="idMessage" value="{{ $model->message ?? '' }}"></textarea>
                             </div>
                     </div> 
 
