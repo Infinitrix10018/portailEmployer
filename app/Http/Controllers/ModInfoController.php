@@ -54,7 +54,10 @@ class ModInfoController extends Controller
         return view('views.pageModInfo', compact('fournisseur', 'phonesWithoutContact', 'licences', 'categorieCode', 'fichiers'));
     }
 
+    public function ChangeInfo(Request $request)
+    {
 
+    }
 
 
 
