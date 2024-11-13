@@ -89,6 +89,7 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable']],
  function () {
     Route::get('/ChangeInfoPage', [ModInfoController::class, 'index'])->name("ChangeInfoPage");
+    Route::post('/ChangeInfo', [ModInfoController::class, 'ChangeInfo'])->name("ChangeInfo");
     Route::get('/ChangeStatusPage', [ModStatusController::class, 'index'])->name("ChangeStatusPage");
     Route::post('/ChangeStatus', [ModStatusController::class, 'changeStatus'])->name("ChangeStatus");
 });
