@@ -79,7 +79,7 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::get('/VoirFiche/download/{id_document}',
     [FournisseurController::class, 'download'])->name('VoirFiche.download');
 
-    Route::get('/VoirFiche/search',
+    Route::post('/VoirFiche/search',
     [FournisseurController::class, 'search'])->name('VoirFiche.search');
 
 });
@@ -92,6 +92,13 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::get('/ChangeStatusPage', [ModStatusController::class, 'index'])->name("ChangeStatusPage");
     Route::post('/ChangeStatus', [ModStatusController::class, 'changeStatus'])->name("ChangeStatus");
 });
+
+// search routes
+
+Route::get('/recherche/ville', [FournisseurController::class, 'rechercheVille'])->name('recherche.ville');
+Route::get('/recherche/region', [FournisseurController::class, 'rechercheRegion'])->name('recherche.region');
+Route::get('/recherche/licence', [FournisseurController::class, 'rechercheLicences'])->name('recherche.licence');
+Route::get('/recherche/code', [FournisseurController::class, 'rechercheCodes'])->name('recherche.code');
 
 
 

@@ -1,9 +1,9 @@
 function addToLists() {
     // Get the input values
-    const rbq = document.getElementById("rbq").value.trim();
-    const code = document.getElementById("code").value.trim();
-    const ville = document.getElementById("ville").value.trim();
-    const region = document.getElementById("region").value.trim();
+    const rbq = document.getElementById("rechercheRbq").value.trim();
+    const code = document.getElementById("rechercheCode").value.trim();
+    const ville = document.getElementById("rechercheVille").value.trim();
+    const region = document.getElementById("rechercheRegion").value.trim();
 
     // Arrays for storing lists
     const lists = [
@@ -24,10 +24,10 @@ function addToLists() {
     });
 
     // Optionally, clear the input fields after adding to lists
-    document.getElementById("rbq").value = "";
-    document.getElementById("code").value = "";
-    document.getElementById("ville").value = "";
-    document.getElementById("region").value = "";
+    document.getElementById("rechercheRbq").value = "";
+    document.getElementById("rechercheCode").value = "";
+    document.getElementById("rechercheVille").value = "";
+    document.getElementById("rechercheRegion").value = "";
 }
 
 function deleteItem(event) {
@@ -49,6 +49,19 @@ function submitLists() {
     document.getElementById("listeVilleCacher").value = listeVilleValues.join(",");
     document.getElementById("listeRegionCacher").value = listeRegionValues.join(",");
 
+
+    $.ajax({
+        url: "{{ route('VoirFiche.search') }}", // Same route, just handling it with AJAX
+        method: "POST",
+        data: $('#listsForm').serialize(), // Serialize the form data
+        success: function (response) {
+            // Update the results container with the partial view content
+            $('#searchResultsContainer').html(response);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log('Error:', textStatus, errorThrown);
+        }
+    });
     // Submit the form
     document.getElementById("listsForm").submit();
 }

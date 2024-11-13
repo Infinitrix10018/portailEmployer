@@ -14,48 +14,29 @@ use Illuminate\Support\Facades\Crypt;
 
 class FournisseurController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $fournisseurs = Fournisseur::with('demande')->get();
         return view('ListeFournisseur', compact('fournisseurs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show()
     {
+        
         $fournisseurs = Fournisseur::with([
             'region',
-            'licences_rbq',
-            'code_unspsc', 
             'demande'
-        ])->get();
+        ])
+        ->where('id_fournisseurs', -1)//mettre en commentaire si nous ne voulons pas avoir le where ici
+        ->get();
         Log::info('Fournisseur: ', $fournisseurs->toArray());
 
         if (!$fournisseurs) {
             abort(404);
         }
         Log::info('Loaded Fournisseur:', $fournisseurs->toArray());
+
 
         return view('views.ListeFournisseur', compact('fournisseurs')); 
     }
@@ -146,21 +127,106 @@ class FournisseurController extends Controller
         ]);
     }
 
+    public function searchsomething(Request $request)
+    {
+        // Retrieve the form inputs
+        $listeRbq = $request->input('listeRbq', []);
+        $listeCode = $request->input('listeCode', []);
+        $listeVille = $request->input('listeVille', []);
+        $listeRegion = $request->input('listeRegion', []);
+        $otherQuery1Conditions = $request->input('otherQuery1Conditions', []);
+        $otherQuery2Conditions = $request->input('otherQuery2Conditions', []);
 
-    //exemple chatgpt
+        // Start building the main SQL query
+        $sql = "SELECT * FROM fournisseurs WHERE 1=1";
+        $bindings = [];
+
+        // Add the city filters using OR conditions
+        if (!empty($listeVille)) {
+            $sql .= " AND (";
+            foreach ($listeVille as $index => $ville) {
+                if ($index > 0) {
+                    $sql .= " OR ";
+                }
+                $sql .= "city LIKE ?";
+                $bindings[] = "%$ville%";
+            }
+            $sql .= ")";
+        }
+
+        // Add the region filters using OR conditions
+        if (!empty($listeRegion)) {
+            $sql .= " AND (";
+            foreach ($listeRegion as $index => $region) {
+                if ($index > 0) {
+                    $sql .= " OR ";
+                }
+                $sql .= "region LIKE ?";
+                $bindings[] = "%$region%";
+            }
+            $sql .= ")";
+        }
+
+        // Add the AND conditions for otherQuery1
+        if (!empty($listeRbq)) {
+            foreach ($listeRbq as $key => $rbq) {
+                $sql .= " AND licences_rbq.$key = ?";
+                $bindings[] = $rbq;
+            }
+        }
+
+        // Add the AND conditions for otherQuery2
+        if (!empty($listeCode)) {
+            foreach ($listeCode as $key => $code) {
+                $sql .= " AND code_unspsc.$key = ?";
+                $bindings[] = $code;
+            }
+        }
+
+        // Execute the raw SQL query
+        $results = DB::select($sql, $bindings);
+
+        return view('search-results', ['results' => $results]);
+    }
+
     public function search(Request $request)
     {
-        // Filter by cities
-        if ($request->has('cities') && is_array($request->input('cities'))) {
-            $query->whereIn('city', $request->input('cities'));
+        \Log::info('avant recherche');
+        // Retrieve the form inputs
+        $listeRbq = explode(",", $request->input('listeRbq'));
+        $listeCode = explode(",", $request->input('listeCode'));
+        $listeVille = explode(",", $request->input('listeVille'));
+        $listeRegion = explode(",", $request->input('listeRegion'));
+        \Log::info('log listes', [
+            'listeRbq' => $listeRbq,
+            'listeCode' => $listeCode,
+            'listeVille' => $listeVille,
+            'listeRegion' => $listeRegion
+        ]);
+
+         if ($listeRbq && $listeCode) {
+            // Get the fournisseurs and their counts for both lists
+            $results = DB::table('fournisseurs')
+                ->join('fournisseur_licence_rbq_liaison', 'licences_rbq.id_licence_rbq', '=', 'fournisseur_licence_rbq_liaison.id_licence_rbq')
+                ->join('fournisseurs', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
+                ->join('fournisseur_code_unspsc_liaison', 'code_unspsc.id_code_unspsc', '=', 'fournisseur_code_unspsc_liaison.id_code_unspsc')
+                ->join('fournisseurs', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_code_unspsc_liaison.id_fournisseurs')
+                ->whereIn('ville', $listeVille)
+                ->whereIn('licences_rbq.categorie', $listeRbq)
+                ->whereIn('code_unspsc.categorie', $listeCode)
+                ->whereIn('fournisseurs.ville', $listeCode)
+                ->whereIn('fournisseurs.no_region_admin', $listeCode)
+                ->select('fournisseur_licence_rbq_liaison.id_fournisseurs', 
+                         DB::raw('COUNT(DISTINCT CASE WHEN fournisseurs.id_fournisseurs IN (?) THEN 1 END) as listeIdRbq', [$listeRbq]),
+                         DB::raw('COUNT(DISTINCT CASE WHEN fournisseurs.id_fournisseurs IN (?) THEN 1 END) as ListeIdCode', [$listeCode]))
+                ->groupBy('fournisseur_licence_rbq_liaison.id_fournisseurs')
+                ->orderByDesc(DB::raw('listeIdRbq + ListeIdCode'))  // Order by the sum of both counts
+                ->get();
         }
 
-        // Filter by jobs
-        if ($request->has('jobs') && is_array($request->input('jobs'))) {
-            $query->whereIn('job', $request->input('jobs'));
-        }
-        // Collect phones without an associated contact
-        //$phonesWithoutContact = Telephone::whereNotIn('id_telephone', $fournisseur->personne_ressources->pluck('id_telephone'))->get();
+         \Log::info('results:', $results->toArray());
+
+         return view('partials.searchResults', compact('results'));
     }
 
     // exemple de chat gpt
@@ -181,9 +247,6 @@ class FournisseurController extends Controller
         if ($region) {
             $query->where('region', 'LIKE', "%$region%");
         }
-        if ($postalCode) {
-            $query->where('postal_code', 'LIKE', "%$postalCode%");
-        }
 
         // Filter by work type (if provided)
         if ($workType) {
@@ -205,47 +268,82 @@ class FournisseurController extends Controller
         return view('companies.index', compact('companies'));
     }
 
-    // debut de recherche pour la page voir fourniseurs
-    public function rechercheDebut(Request $request)
+    public function rechercheVille(Request $request)
     {
-        $query = Company::query();
+        // Get the search term from the query string
+        $searchTerm = $request->input('search');
+        
+        // Perform the query to find matching cities
+        $ville = DB::table('fournisseurs')
+            ->where('ville', 'LIKE', '%' . $searchTerm . '%')
+            ->orderBy('ville')
+            ->limit(10) // Optional: limit results for performance
+            ->get();
 
-        // Get search parameters from request
-        $city = $request->input('city');
-        $region = $request->input('region');
-        $postalCode = $request->input('postal_code');
-        $workType = $request->input('work_type');
-        $unspscCode = $request->input('unspsc_code');
+        Log::info('Loaded fournisseur from ville:', $ville->toArray());
+        // Return the result as JSON
+        return response()->json($ville);
+    }
 
-        // Filter by city, region, and postal code
-        if ($city) {
-            $query->where('city', 'LIKE', "%$city%");
-        }
-        if ($region) {
-            $query->where('region', 'LIKE', "%$region%");
-        }
-        if ($postalCode) {
-            $query->where('postal_code', 'LIKE', "%$postalCode%");
-        }
+    public function rechercheRegion(Request $request)
+    {
+        // Get the search term from the query string
+        $searchTerm = $request->input('search');
+        
+        // Perform the query to find matching cities
+        $region = DB::table('regions_administratives')
+            ->where('nom_region', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('no_region', 'LIKE', '%' . $searchTerm . '%')
+            ->orderBy('nom_region')
+            ->limit(10) // Optional: limit results for performance
+            ->get();
 
-        // Filter by work type (if provided)
-        if ($workType) {
-            $query->whereHas('workTypes', function($q) use ($workType) {
-                $q->where('name', 'LIKE', "%$workType%");
-            });
-        }
+        // Return the result as JSON
+        return response()->json($region);
+    }
 
-        // Filter by UNSPSC code (if provided)
-        if ($unspscCode) {
-            $query->whereHas('unspscCodes', function($q) use ($unspscCode) {
-                $q->where('code', 'LIKE', "%$unspscCode%");
-            });
-        }
+    public function rechercheLicences(Request $request)
+    {
+        // Get the search term from the query string
+        $searchTerm = $request->input('search');
+        
+        // Perform the query to find matching cities
+        $licences = DB::table('licences_rbq')
+            ->whereIn('id_licence_rbq', function($query) {
+                $query->select('id_licence_rbq')
+                    ->from('fournisseur_licence_rbq_liaison');
+            })
+            ->where('sous_categorie', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('categorie', 'LIKE', '%' . $searchTerm . '%')
+            ->orderBy('sous_categorie')
+            ->limit(10) // Optional: limit results for performance
+            ->get();
 
-        // Execute the query and get the results
-        $companies = $query->get();
+        // Return the result as JSON
+        return response()->json($licences);
+    }
 
-        return view('companies.index', compact('companies'));
+    public function rechercheCodes(Request $request)
+    {
+        // Get the search term from the query string
+        $searchTerm = $request->input('search');
+        
+        // Perform the query to find matching cities
+        $ville = DB::table('code_unspsc')
+            ->whereIn('id_code_unspsc', function($query) {
+                $query->select('id_code_unspsc')
+                    ->from('fournisseur_code_unspsc_liaison');
+            })
+            ->where('categorie', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('code_unspsc', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('sous_categorie', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('precision_categorie', 'LIKE', '%' . $searchTerm . '%')
+            ->orderBy('code_unspsc')
+            ->limit(10) // Optional: limit results for performance
+            ->get();
+
+        // Return the result as JSON
+        return response()->json($ville);
     }
 
     public function rechercheFichiers(string $id)
