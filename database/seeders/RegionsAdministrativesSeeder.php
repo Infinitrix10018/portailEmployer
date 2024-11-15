@@ -15,6 +15,12 @@ class RegionsAdministrativesSeeder extends Seeder
     {
         DB::table('regions_administratives')->insert([
             [
+                'no_region' => '00',
+                'nom_region' => 'hors du québec',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'no_region' => '01',
                 'nom_region' => 'Bas-Saint-Laurent',
                 'created_at' => now(),

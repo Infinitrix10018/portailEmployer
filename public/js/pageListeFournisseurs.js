@@ -57,6 +57,7 @@ function submitLists() {
         success: function (response) {
             // Update the results container with the partial view content
             $('#searchResultsContainer').html(response);
+            console.log($('#listsForm').serialize());
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log('Error:', textStatus, errorThrown);

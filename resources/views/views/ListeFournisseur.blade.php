@@ -116,7 +116,7 @@
             $('#rechercheVille').on('keyup', function() {
                 let query = $(this).val();
                 
-                if (query.length > 1) {
+                if (query.length > 0) {
                     $.ajax({
                         url: '{{ route("recherche.ville") }}',
                         method: 'GET',
@@ -152,7 +152,7 @@
             $('#rechercheRegion').on('keyup', function() {
                 let query = $(this).val();
 
-                if (query.length > 1) {
+                if (query.length > 0) {
                     $.ajax({
                         url: '{{ route("recherche.region") }}',
                         method: 'GET',
@@ -205,6 +205,7 @@
                 <ul id="listeRegion" onclick="deleteItem(event)"></ul>
             </div>
             <form id="listsForm" action="{{ route('VoirFiche.search') }}" method="POST">
+                @csrf
                 <input type="hidden" name="listeRbq" id="listeRbqCacher">
                 <input type="hidden" name="listeCode" id="listeCodeCacher">
                 <input type="hidden" name="listeVille" id="listeVilleCacher">

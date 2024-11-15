@@ -16,13 +16,13 @@ class LicencesRBQ extends Seeder
         DB::table('licences_rbq')->insert([
             [
                 'categorie' => 'entrepreneur général',
-                'sous_categorie' => '1.1.1 - Entrepreneur en batiment résidentiels neufs visés à un plan de quarantie, classe 1',
+                'sous_categorie' => '1.1.1 - Entrepreneur en batiment résidentiels neufs visés à un plan de quarantie. classe 1',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'categorie' => 'entrepreneur général',
-                'sous_categorie' => '1.1.2 - Entrepreneur en batiment résidentiels neufs visés à un plan de quarantie, classe 2',
+                'sous_categorie' => '1.1.2 - Entrepreneur en batiment résidentiels neufs visés à un plan de quarantie. classe 2',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -58,7 +58,7 @@ class LicencesRBQ extends Seeder
             ],
             [
                 'categorie' => 'entrepreneur général',
-                'sous_categorie' => '1.7 - Entrepreneur en télécommunication, transport, transformation et distribution d\'énergie électrique',
+                'sous_categorie' => '1.7 - Entrepreneur en télécommunication transport transformation et distribution d\'énergie électrique',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -148,7 +148,7 @@ class LicencesRBQ extends Seeder
             ],
             [
                 'categorie' => 'entrepreneur spécialisé',
-                'sous_categorie' => '4.2 - Entrepreneur en travaux de maçonnerie non structurale, marbre et céramique',
+                'sous_categorie' => '4.2 - Entrepreneur en travaux de maçonnerie non structurale marbre et céramique',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -178,7 +178,7 @@ class LicencesRBQ extends Seeder
             ],
             [
                 'categorie' => 'entrepreneur spécialisé',
-                'sous_categorie' => '7.0 - Entrepreneur en isolation, étanchéité, couvertures et revêtement extérieur',
+                'sous_categorie' => '7.0 - Entrepreneur en isolation étanchéité couvertures et revêtement extérieur',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -366,13 +366,13 @@ class LicencesRBQ extends Seeder
             ],
             [
                 'categorie' => 'entrepreneur spécialisé',
-                'sous_categorie' => '17.1 - Entrepreneur en instrumentation, contrôle et régulation',
+                'sous_categorie' => '17.1 - Entrepreneur en instrumentation contrôle et régulation',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'categorie' => 'entrepreneur spécialisé',
-                'sous_categorie' => '17.2 - Entrepreneur en intercommunication, téléphonie et surveillance',
+                'sous_categorie' => '17.2 - Entrepreneur en intercommunication téléphonie et surveillance',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

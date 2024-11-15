@@ -127,68 +127,6 @@ class FournisseurController extends Controller
         ]);
     }
 
-    public function searchsomething(Request $request)
-    {
-        // Retrieve the form inputs
-        $listeRbq = $request->input('listeRbq', []);
-        $listeCode = $request->input('listeCode', []);
-        $listeVille = $request->input('listeVille', []);
-        $listeRegion = $request->input('listeRegion', []);
-        $otherQuery1Conditions = $request->input('otherQuery1Conditions', []);
-        $otherQuery2Conditions = $request->input('otherQuery2Conditions', []);
-
-        // Start building the main SQL query
-        $sql = "SELECT * FROM fournisseurs WHERE 1=1";
-        $bindings = [];
-
-        // Add the city filters using OR conditions
-        if (!empty($listeVille)) {
-            $sql .= " AND (";
-            foreach ($listeVille as $index => $ville) {
-                if ($index > 0) {
-                    $sql .= " OR ";
-                }
-                $sql .= "city LIKE ?";
-                $bindings[] = "%$ville%";
-            }
-            $sql .= ")";
-        }
-
-        // Add the region filters using OR conditions
-        if (!empty($listeRegion)) {
-            $sql .= " AND (";
-            foreach ($listeRegion as $index => $region) {
-                if ($index > 0) {
-                    $sql .= " OR ";
-                }
-                $sql .= "region LIKE ?";
-                $bindings[] = "%$region%";
-            }
-            $sql .= ")";
-        }
-
-        // Add the AND conditions for otherQuery1
-        if (!empty($listeRbq)) {
-            foreach ($listeRbq as $key => $rbq) {
-                $sql .= " AND licences_rbq.$key = ?";
-                $bindings[] = $rbq;
-            }
-        }
-
-        // Add the AND conditions for otherQuery2
-        if (!empty($listeCode)) {
-            foreach ($listeCode as $key => $code) {
-                $sql .= " AND code_unspsc.$key = ?";
-                $bindings[] = $code;
-            }
-        }
-
-        // Execute the raw SQL query
-        $results = DB::select($sql, $bindings);
-
-        return view('search-results', ['results' => $results]);
-    }
-
     public function search(Request $request)
     {
         \Log::info('avant recherche');
@@ -204,68 +142,29 @@ class FournisseurController extends Controller
             'listeRegion' => $listeRegion
         ]);
 
-         if ($listeRbq && $listeCode) {
-            // Get the fournisseurs and their counts for both lists
-            $results = DB::table('fournisseurs')
-                ->join('fournisseur_licence_rbq_liaison', 'licences_rbq.id_licence_rbq', '=', 'fournisseur_licence_rbq_liaison.id_licence_rbq')
-                ->join('fournisseurs', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
-                ->join('fournisseur_code_unspsc_liaison', 'code_unspsc.id_code_unspsc', '=', 'fournisseur_code_unspsc_liaison.id_code_unspsc')
-                ->join('fournisseurs', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_code_unspsc_liaison.id_fournisseurs')
-                ->whereIn('ville', $listeVille)
-                ->whereIn('licences_rbq.categorie', $listeRbq)
-                ->whereIn('code_unspsc.categorie', $listeCode)
-                ->whereIn('fournisseurs.ville', $listeCode)
-                ->whereIn('fournisseurs.no_region_admin', $listeCode)
-                ->select('fournisseur_licence_rbq_liaison.id_fournisseurs', 
-                         DB::raw('COUNT(DISTINCT CASE WHEN fournisseurs.id_fournisseurs IN (?) THEN 1 END) as listeIdRbq', [$listeRbq]),
-                         DB::raw('COUNT(DISTINCT CASE WHEN fournisseurs.id_fournisseurs IN (?) THEN 1 END) as ListeIdCode', [$listeCode]))
-                ->groupBy('fournisseur_licence_rbq_liaison.id_fournisseurs')
-                ->orderByDesc(DB::raw('listeIdRbq + ListeIdCode'))  // Order by the sum of both counts
-                ->get();
-        }
+        // Get the fournisseurs and their counts for both lists
+        $results = DB::table('fournisseurs')
+            ->join('fournisseur_licence_rbq_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
+            ->join('licences_rbq', 'fournisseur_licence_rbq_liaison.id_licence_rbq', '=', 'licences_rbq.id_licence_rbq')
+            //->join('fournisseur_code_unspsc_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_code_unspsc_liaison.id_fournisseurs')
+            //->join('code_unspsc', 'fournisseur_code_unspsc_liaison.id_code_unspsc', '=', 'code_unspsc.id_code_unspsc')
+            //->join('regions_administratives', 'fournisseurs.no_region_admin', '=', 'regions_administratives.no_region')
+            ->whereIn('licences_rbq.categorie', $listeRbq)
+            //->whereIn('code_unspsc.categorie', $listeCode)
+            ->whereIn('fournisseurs.ville', $listeVille)
+            //->whereIn('fournisseurs.no_region_admin', $listeRegion)
+            /*
+            ->select('fournisseur_licence_rbq_liaison.id_fournisseurs', 
+                    DB::raw('COUNT(DISTINCT CASE WHEN fournisseurs.id_fournisseurs IN (' . implode(',', $listeRbq ?? []) . ') THEN 1 END) as listeIdRbq'),
+                    DB::raw('COUNT(DISTINCT CASE WHEN fournisseurs.id_fournisseurs IN (' . implode(',', $listeCode ?? []) . ') THEN 1 END) as ListeIdCode'))
+            */
+            //->groupBy('fournisseurs.id_fournisseurs')
+            //->orderByDesc(DB::raw('listeIdRbq + ListeIdCode'))  // Order by the sum of both counts
+            ->get();
 
          \Log::info('results:', $results->toArray());
 
-         return view('partials.searchResults', compact('results'));
-    }
-
-    // exemple de chat gpt
-    public function rechercherDeChatGPT(Request $request)
-    {
-        $query = Fournisseur::query();
-
-        // Get search parameters from request
-        $villes = $request->input('city');
-        $regions = $request->input('region');
-        $liences_rbqs = $request->input('work_type');
-        $code_unspscs = $request->input('unspsc_code');
-
-        // Filter by city, region, and postal code
-        if ($city) {
-            $query->where('city', 'LIKE', "%$city%");
-        }
-        if ($region) {
-            $query->where('region', 'LIKE', "%$region%");
-        }
-
-        // Filter by work type (if provided)
-        if ($workType) {
-            $query->whereHas('workTypes', function($q) use ($workType) {
-                $q->where('name', 'LIKE', "%$workType%");
-            });
-        }
-
-        // Filter by UNSPSC code (if provided)
-        if ($unspscCode) {
-            $query->whereHas('unspscCodes', function($q) use ($unspscCode) {
-                $q->where('code', 'LIKE', "%$unspscCode%");
-            });
-        }
-
-        // Execute the query and get the results
-        $companies = $query->get();
-
-        return view('companies.index', compact('companies'));
+         return view('partials.fournisseursListe', compact('results'));
     }
 
     public function rechercheVille(Request $request)
@@ -280,7 +179,6 @@ class FournisseurController extends Controller
             ->limit(10) // Optional: limit results for performance
             ->get();
 
-        Log::info('Loaded fournisseur from ville:', $ville->toArray());
         // Return the result as JSON
         return response()->json($ville);
     }
@@ -356,5 +254,4 @@ class FournisseurController extends Controller
         $matchingFiles = preg_grep($pattern, $files);
     }
 
-    
 }

@@ -102,7 +102,6 @@ Route::get('/recherche/licence', [FournisseurController::class, 'rechercheLicenc
 Route::get('/recherche/code', [FournisseurController::class, 'rechercheCodes'])->name('recherche.code');
 
 
-
 /*
 // Different routes depending on role
 // Admin Routes
