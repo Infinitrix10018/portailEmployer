@@ -79,7 +79,7 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::get('/VoirFiche/download/{id_document}',
     [FournisseurController::class, 'download'])->name('VoirFiche.download');
 
-    Route::post('/VoirFiche/search',
+    Route::get('/VoirFiche/search',
     [FournisseurController::class, 'search'])->name('VoirFiche.search');
 
 });

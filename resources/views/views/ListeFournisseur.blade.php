@@ -4,6 +4,9 @@
     <link rel="stylesheet" href="{{ asset('css/pageFiches.css') }}">
 @show
 @section('js')
+    <script>
+        const searchUrl = "{{ route('VoirFiche.search') }}";
+    </script>
     <script src="{{ asset('js/pageListeFournisseurs.js') }}"></script>
 @endsection
 @section('content')
@@ -204,13 +207,13 @@
                 <h3>Liste des regions</h3>
                 <ul id="listeRegion" onclick="deleteItem(event)"></ul>
             </div>
-            <form id="listsForm" action="{{ route('VoirFiche.search') }}" method="POST">
+            <form id="listsForm" action="{{ route('VoirFiche.search') }}" method="get">
                 @csrf
                 <input type="hidden" name="listeRbq" id="listeRbqCacher">
                 <input type="hidden" name="listeCode" id="listeCodeCacher">
                 <input type="hidden" name="listeVille" id="listeVilleCacher">
                 <input type="hidden" name="listeRegion" id="listeRegionCacher">
-                <button type="button" class="button" onclick="submitLists()">Faire une recherche</button>
+                <button type="submit" class="button" onclick="submitLists()">Faire une recherche</button>
             </form>
         </div>
     </div>

@@ -142,25 +142,60 @@ class FournisseurController extends Controller
             'listeRegion' => $listeRegion
         ]);
 
+
+        $listeRbq = array_filter($listeRbq);
+        $listeCode = array_filter($listeCode);
+
+        $rbqPrep = array_map(function ($value) {
+            return is_string($value) ? "'" . addslashes($value) . "'" : $value;
+        }, $listeRbq);
+        $codePrep = array_map(function ($value) {
+            return is_string($value) ? "'" . addslashes($value) . "'" : $value;
+        }, $listeCode);
+
+        $selectColumns = [
+            'fournisseurs.id_fournisseurs',
+            'nom_entreprise',
+            'ville',
+            'etat_demande'
+        ];
+
+        // Conditionally add columns to the select based on a condition
+        if (!empty(array_filter($listeRbq))) {
+            $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN sous_categorie IN (' . implode(',', $rbqPrep) . ') THEN 1 END) as nbrRbq');
+        }
+
+        if (!empty(array_filter($listeCode))) {
+            $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN precision_categorie IN (' . implode(',', $codePrep) . ') THEN 1 END) as nbrCode');
+        }
+                
         // Get the fournisseurs and their counts for both lists
         $results = DB::table('fournisseurs')
-            ->join('fournisseur_licence_rbq_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
-            ->join('licences_rbq', 'fournisseur_licence_rbq_liaison.id_licence_rbq', '=', 'licences_rbq.id_licence_rbq')
-            //->join('fournisseur_code_unspsc_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_code_unspsc_liaison.id_fournisseurs')
-            //->join('code_unspsc', 'fournisseur_code_unspsc_liaison.id_code_unspsc', '=', 'code_unspsc.id_code_unspsc')
-            //->join('regions_administratives', 'fournisseurs.no_region_admin', '=', 'regions_administratives.no_region')
-            ->whereIn('licences_rbq.categorie', $listeRbq)
-            //->whereIn('code_unspsc.categorie', $listeCode)
-            ->whereIn('fournisseurs.ville', $listeVille)
-            //->whereIn('fournisseurs.no_region_admin', $listeRegion)
-            /*
-            ->select('fournisseur_licence_rbq_liaison.id_fournisseurs', 
-                    DB::raw('COUNT(DISTINCT CASE WHEN fournisseurs.id_fournisseurs IN (' . implode(',', $listeRbq ?? []) . ') THEN 1 END) as listeIdRbq'),
-                    DB::raw('COUNT(DISTINCT CASE WHEN fournisseurs.id_fournisseurs IN (' . implode(',', $listeCode ?? []) . ') THEN 1 END) as ListeIdCode'))
-            */
-            //->groupBy('fournisseurs.id_fournisseurs')
-            //->orderByDesc(DB::raw('listeIdRbq + ListeIdCode'))  // Order by the sum of both counts
+            ->leftJoin('fournisseur_licence_rbq_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
+            ->leftJoin('licences_rbq', 'fournisseur_licence_rbq_liaison.id_licence_rbq', '=', 'licences_rbq.id_licence_rbq')
+            ->leftJoin('fournisseur_code_unspsc_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_code_unspsc_liaison.id_fournisseurs')
+            ->leftJoin('code_unspsc', 'fournisseur_code_unspsc_liaison.id_code_unspsc', '=', 'code_unspsc.id_code_unspsc')
+            ->leftJoin('regions_administratives', 'fournisseurs.no_region_admin', '=', 'regions_administratives.no_region')
+            ->leftJoin('demandesfournisseurs', 'fournisseurs.id_fournisseurs', '=', 'demandesfournisseurs.id_fournisseurs')
+            ->when(!empty(array_filter($listeRbq)), function ($query) use ($listeRbq) {
+                return $query->whereIn('licences_rbq.sous_categorie', $listeRbq);
+            })
+            ->when(!empty(array_filter($listeCode)), function ($query) use ($listeCode) {
+                return $query->whereIn('code_unspsc.precision_categorie', $listeCode); 
+            })
+            ->when(!empty(array_filter($listeVille)), function ($query) use ($listeVille) {
+                return $query->whereIn('fournisseurs.ville', $listeVille); 
+            })
+            ->when(!empty(array_filter($listeRegion)), function ($query) use ($listeRegion) {
+                return $query->whereIn('fournisseurs.no_region_admin', $listeRegion);
+            })
+            ->select($selectColumns)
+            ->groupBy('fournisseurs.id_fournisseurs', 'nom_entreprise',
+            'ville','etat_demande')
+            ->orderByDesc(DB::raw('nbrRbq'))  // Order by the sum of both counts
             ->get();
+
+            //\Log::info('Generated SQL:', ['sql' => $results->toSql()]);
 
          \Log::info('results:', $results->toArray());
 
@@ -211,9 +246,11 @@ class FournisseurController extends Controller
                 $query->select('id_licence_rbq')
                     ->from('fournisseur_licence_rbq_liaison');
             })
-            ->where('sous_categorie', 'LIKE', '%' . $searchTerm . '%')
-            ->orWhere('categorie', 'LIKE', '%' . $searchTerm . '%')
-            ->orderBy('sous_categorie')
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('sous_categorie', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('categorie', 'LIKE', '%' . $searchTerm . '%');
+            })
+            ->orderBy('id_licence_rbq')
             ->limit(10) // Optional: limit results for performance
             ->get();
 

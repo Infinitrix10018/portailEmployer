@@ -37,6 +37,7 @@ function deleteItem(event) {
 }
 
 function submitLists() {
+
     // Convert list items to comma-separated values
     const listeRbqValues = Array.from(document.getElementById("listeRbq").children).map(li => li.textContent);
     const listeCodeValues = Array.from(document.getElementById("listeCode").children).map(li => li.textContent);
@@ -49,22 +50,26 @@ function submitLists() {
     document.getElementById("listeVilleCacher").value = listeVilleValues.join(",");
     document.getElementById("listeRegionCacher").value = listeRegionValues.join(",");
 
+    $('#listsForm').on('submit', function(e) {
+        e.preventDefault();
 
-    $.ajax({
-        url: "{{ route('VoirFiche.search') }}", // Same route, just handling it with AJAX
-        method: "POST",
-        data: $('#listsForm').serialize(), // Serialize the form data
-        success: function (response) {
-            // Update the results container with the partial view content
-            $('#searchResultsContainer').html(response);
-            console.log($('#listsForm').serialize());
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('Error:', textStatus, errorThrown);
-        }
+        $.ajax({
+            url: searchUrl, // Same route, just handling it with AJAX
+            method: "get",
+            data: $('#listsForm').serialize(), // Serialize the form data
+            success: function (response) {
+                // Update the results container with the partial view content
+                $('#searchResultsContainer').html(response);
+                console.log($('#listsForm').serialize());
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('Error:', textStatus, errorThrown);
+            }
+        });
     });
+
     // Submit the form
-    document.getElementById("listsForm").submit();
+    //document.getElementById("listsForm").submit();
 }
 
 
