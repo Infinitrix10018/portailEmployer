@@ -30,7 +30,6 @@
                             
                             <form action="{{ url('/ModifierModelCourriel') }}" method="get">
                             <select id="idModele" name="modele" class="form-select" required>
-                                    <option value="Default"></option>
                                     @foreach($modelCourriel as $modelCourriel)
                                         <option value="{{ $modelCourriel->nom_courriel }}">{{ $modelCourriel->nom_courriel }}</option>
                                     @endforeach
@@ -38,11 +37,7 @@
 
                                     <button type="submit" class="button" id="idBoutonModifier">Modifier un modele existant</button>
                             </form>
-
-                                <a href="{{url('/SupprimerModelCourriel')}}"> 
-                                    <button type="button" class="button" id="idBoutonSupprimer">Supprimer un modele existant (Non fonctionel)</button>
-                                </a>
-
+                            
                             </div>
                     </div>
     
