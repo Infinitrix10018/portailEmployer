@@ -38,7 +38,7 @@ Route::get('/users',
 [UserController::class, 'index']);
 
 Route::get('/ModelCourriel',
-[ModelCourrielController::class, 'listeModelCourriel']);
+[ModelCourrielController::class, 'listeModelCourriel'])->name("listeModelCourriel");
 
 Route::get('/Parametres',
  function () {return view('views/pageParametres');})->name("Parametres");

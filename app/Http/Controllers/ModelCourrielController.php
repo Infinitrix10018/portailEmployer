@@ -22,27 +22,33 @@ class ModelCourrielController extends Controller
         $selectedModele = $request->query('modele');
 
         $model = ModelCourriel::where('nom_courriel', $selectedModele)->first();
-    
+        Log::info('model :', $model->toArray());
         return view('views.pageModifierModelCourriel', compact('model'));
 }
 
     public function updateModele(Request $request)
-{
+    {
         $validated = $request->validate([
-            'id' => 'required|exists:id_model_courriel,id',
+            'id' => 'required|exists:model_courriel,id_model_courriel',
             'nom' => 'required|string|max:250',
             'objet' => 'required|string|max:64',
             'message' => 'required|string|max:512',
         ]);
 
+        ModelCourriel::where(['id_model_courriel' => $request->id ])->update([
+            'nom_courriel' => $request->nom,
+            'objet' => $request->objet,
+            'message' => $request->message,
+        ]); 
+        /*
         $model = ModelCourriel::findOrFail($validated['id']);
         $model->nom_courriel = $validated['nom'];
         $model->objet = $validated['objet'];
         $model->message = $validated['message'];
         $model->save();
-
+        */
         return redirect()->route('listeModelCourriel')->with('success', 'Modèle mis à jour avec succès!');
-}
+    }
 
 
     public function store(Request $request)

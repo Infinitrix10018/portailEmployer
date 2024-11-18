@@ -98,31 +98,31 @@ class StoreFormInscription extends FormRequest
     }
 
     public function messages()
-{
-    return [
-        //a faire un peu plus, mais cela va prendre du temps.
-        'fournisseur.nom_entreprise.required' => 'Vous devez fournir un nom d\'entreprise.',
-        'fournisseur.nom_entreprise.regex' => 'Le nom d\'entreprise doit seuleument contenir des lettres, des chiffres ainsi que c\'est caractére-ci : "’‘-.".',
-        'fournisseur.email.regex' => 'L\'adresse email doit être valide de format email@email.com.',
-        'fournisseur.mdp.required' => 'Vous devez entrer un mot de passe.',
-        'fournisseur.mdp.regex' => 'Le mot de passe doit être de 7-12 de long, avoir une majuscule, une minuscule, au moins 1 chiffre ainsi qu\'un symbol spécial.',
-        'fournisseur.no_rue.required' => 'Vous devez entrer un numéro civique.',
-        'fournisseur.no_rue.regex' => 'Le numéro de rue doit être entre 1 et 8 chiffres.',
-        'fournisseur.rue.required' => 'Vous devez entrer un nom de rue.',
-        'fournisseur.rue.regex' => 'Le nom de la rue ne doit pas contenir de caracteres spéciaux.',
-        'fournisseur.no_bureau.regex' => 'Le numéro de rue doit être entre 1 et 16 chiffres.',
-        'fournisseur.ville.required' => 'Vous devez entrer une ville.',
-        'fournisseur.ville.regex' => 'Le nom de la ville ne doit pas contenir de caracteres spéciaux.',
-        'fournisseur.code_postal.required' => 'Vous devez entrer un code postal.',
-        'fournisseur.code_postal.regex' => 'Le code postal doit être conforme au pattern du Canada (A1A-1A1).',
-        'fournisseur.site_internet.regex' => 'L\'URL ne doit pas contenir d\'espaces ou de caracteres spéciaux.',
+    {
+        return [
+            //a faire un peu plus, mais cela va prendre du temps.
+            'fournisseur.nom_entreprise.required' => 'Vous devez fournir un nom d\'entreprise.',
+            'fournisseur.nom_entreprise.regex' => 'Le nom d\'entreprise doit seuleument contenir des lettres, des chiffres ainsi que c\'est caractére-ci : "’‘-.".',
+            'fournisseur.email.regex' => 'L\'adresse email doit être valide de format email@email.com.',
+            'fournisseur.mdp.required' => 'Vous devez entrer un mot de passe.',
+            'fournisseur.mdp.regex' => 'Le mot de passe doit être de 7-12 de long, avoir une majuscule, une minuscule, au moins 1 chiffre ainsi qu\'un symbol spécial.',
+            'fournisseur.no_rue.required' => 'Vous devez entrer un numéro civique.',
+            'fournisseur.no_rue.regex' => 'Le numéro de rue doit être entre 1 et 8 chiffres.',
+            'fournisseur.rue.required' => 'Vous devez entrer un nom de rue.',
+            'fournisseur.rue.regex' => 'Le nom de la rue ne doit pas contenir de caracteres spéciaux.',
+            'fournisseur.no_bureau.regex' => 'Le numéro de rue doit être entre 1 et 16 chiffres.',
+            'fournisseur.ville.required' => 'Vous devez entrer une ville.',
+            'fournisseur.ville.regex' => 'Le nom de la ville ne doit pas contenir de caracteres spéciaux.',
+            'fournisseur.code_postal.required' => 'Vous devez entrer un code postal.',
+            'fournisseur.code_postal.regex' => 'Le code postal doit être conforme au pattern du Canada (A1A-1A1).',
+            'fournisseur.site_internet.regex' => 'L\'URL ne doit pas contenir d\'espaces ou de caracteres spéciaux.',
 
-        'prenom.personne_ressource.*.regex' => 'Le prenom doit être entre 1-32 caracteres et ne doit pas contenir de caracteres spéciaux.',
-        'nom.personne_ressource.*.regex' => 'Le nom doit être entre 1-32 caracteres et ne doit pas contenir de caracteres spéciaux.',
-        'fonction.personne_ressource.*.regex' => 'La fonction de la personne doit être entre 1-32 caracteres et ne doit pas contenir de caracteres spéciaux.',
-        'email_contact.personne_ressource.*.regex' => 'L\'adresse email doit être valide de format email@email.com.',
-        'no_tel.personne_ressource.*.regex' => 'Le numéro de téléphone ne doit être composé que de chiffres.',
-        'poste_tel.personne_ressource.*.regex' => 'Le numéro de téléphone ne doit être composé que de chiffres.',
-    ];
-}
+            'prenom.personne_ressource.*.regex' => 'Le prenom doit être entre 1-32 caracteres et ne doit pas contenir de caracteres spéciaux.',
+            'nom.personne_ressource.*.regex' => 'Le nom doit être entre 1-32 caracteres et ne doit pas contenir de caracteres spéciaux.',
+            'fonction.personne_ressource.*.regex' => 'La fonction de la personne doit être entre 1-32 caracteres et ne doit pas contenir de caracteres spéciaux.',
+            'email_contact.personne_ressource.*.regex' => 'L\'adresse email doit être valide de format email@email.com.',
+            'no_tel.personne_ressource.*.regex' => 'Le numéro de téléphone ne doit être composé que de chiffres.',
+            'poste_tel.personne_ressource.*.regex' => 'Le numéro de téléphone ne doit être composé que de chiffres.',
+        ];
+    }
 }
