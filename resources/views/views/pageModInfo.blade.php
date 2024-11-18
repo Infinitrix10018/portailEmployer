@@ -9,7 +9,7 @@
     @endsection
     @section('content')
 
-    <!--
+    
     @if ($errors->any())
         <ul>
             @foreach ($errors->all() as $error)
@@ -17,10 +17,6 @@
             @endforeach
         </ul>
     @endif
--->
-
-
-
 
 
     <form action="{{ route('ChangeInfo', ['id' => request('id')]) }}" method="POST" enctype="multipart/form-data" onsubmit="logToConsole()">
@@ -76,7 +72,8 @@
                     </div>
 
                     <div class="edit-info">
-                        <p id="text-region" data-field="region">Regions administratives: {{ $fournisseur->region ? $fournisseur->region->no_region : 'aucune region administrative' }} - {{ $fournisseur->region ? $fournisseur->region->nom_region : '' }}</p>
+                        <p id="text-no_region_admin" data-field="no_region_admin">Regions administratives: {{ $fournisseur->region ? $fournisseur->region->no_region : 'aucune region administrative' }} - {{ $fournisseur->region ? $fournisseur->region->nom_region : '' }}</p>
+                        <img src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="no_region_admin" onclick="makeEditable(this)">
                     </div>
 
                     <div class="edit-info">
@@ -90,6 +87,7 @@
                     <img src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="site_internet" onclick="makeEditable(this)">
                 </div>
                 <h2>Téléphone</h2>
+                <!--
                 <div class="row">
                     @foreach($phonesWithoutContact as $phone)
                         <p>Type de Téléphones: {{ $phone->type_tel }}</p>
@@ -97,11 +95,13 @@
                         <p>Poste: {{ $phone->poste_tel }}</p>
                     @endforeach
                 </div>
+                -->
             </div>
         </div>
 
         <div class="container-xxl">
             <h2>Personne ressource</h2>
+            <!--
             <div class="container-xxl" id="containerWithBorder">
                 <div class="contact-info">
                     @foreach($fournisseur->personne_ressources as $contact)
@@ -126,8 +126,10 @@
                     @endforeach
                 </div>
             </div>
+        -->
         </div>
 
+        <!--
         <div class="container-xxl">
             @if($licences->isNotEmpty())
                 <h2>Licences RBQ</h2>
@@ -139,9 +141,11 @@
                     @endforeach
                 </div>
             @endif
-
+        -->
+        
             @if($categorieCode->isNotEmpty())
                 <h2>Code UNSPSC</h2>
+            <!--
                 <div class="container-xxl" id="containerWithBorder">
                     @foreach($categorieCode as $section1 => $classCategories)
                         <h3>{{ $section1 }}</h3>
@@ -157,6 +161,7 @@
                         @endforeach
                     @endforeach
                 </div>
+            -->
             @endif
         </div>
     </div>
