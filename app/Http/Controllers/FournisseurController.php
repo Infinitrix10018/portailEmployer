@@ -160,13 +160,23 @@ class FournisseurController extends Controller
             'etat_demande'
         ];
 
+        $orderBy = '';
+
         // Conditionally add columns to the select based on a condition
         if (!empty(array_filter($listeRbq))) {
-            $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN sous_categorie IN (' . implode(',', $rbqPrep) . ') THEN 1 END) as nbrRbq');
+            $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN sous_categorie IN (' . implode(',', $rbqPrep) . ') THEN sous_categorie END) as nbrRbq');
+            $orderByColumn = $request->input('nbrRbq');
         }
 
         if (!empty(array_filter($listeCode))) {
-            $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN precision_categorie IN (' . implode(',', $codePrep) . ') THEN 1 END) as nbrCode');
+            $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN precision_categorie IN (' . implode(',', $codePrep) . ') THEN precision_categorie END) as nbrCode');
+            $orderByColumn = $request->input('nbrRbq');
+        }
+
+        if (!empty(array_filter($listeRbq)) && !empty(array_filter($listeCode))) {
+            $orderBy = 'nbrRbq, nbrCode';
+        } else if (empty(array_filter($listeRbq)) && empty(array_filter($listeCode))) {
+            $orderBy = 'fournisseurs.id_fournisseurs';
         }
                 
         // Get the fournisseurs and their counts for both lists
@@ -187,17 +197,22 @@ class FournisseurController extends Controller
                 return $query->whereIn('fournisseurs.ville', $listeVille); 
             })
             ->when(!empty(array_filter($listeRegion)), function ($query) use ($listeRegion) {
-                return $query->whereIn('fournisseurs.no_region_admin', $listeRegion);
+                return $query->whereIn('nom_region', $listeRegion);
             })
             ->select($selectColumns)
             ->groupBy('fournisseurs.id_fournisseurs', 'nom_entreprise',
-            'ville','etat_demande')
-            ->orderByDesc(DB::raw('nbrRbq'))  // Order by the sum of both counts
-            ->get();
+            'ville','etat_demande');
+
+            if (!empty($orderByColumn)) {
+                if (in_array($orderByColumn)) {
+                    $results->orderByDesc($orderByColumn);
+                }
+            }
+            $results = $results->get();
 
             //\Log::info('Generated SQL:', ['sql' => $results->toSql()]);
 
-         \Log::info('results:', $results->toArray());
+         //\Log::info('results:', $results->toArray());
 
          return view('partials.fournisseursListe', compact('results'));
     }
@@ -209,7 +224,9 @@ class FournisseurController extends Controller
         
         // Perform the query to find matching cities
         $ville = DB::table('fournisseurs')
+            ->select('ville')
             ->where('ville', 'LIKE', '%' . $searchTerm . '%')
+            ->distinct()
             ->orderBy('ville')
             ->limit(10) // Optional: limit results for performance
             ->get();
@@ -225,8 +242,14 @@ class FournisseurController extends Controller
         
         // Perform the query to find matching cities
         $region = DB::table('regions_administratives')
-            ->where('nom_region', 'LIKE', '%' . $searchTerm . '%')
-            ->orWhere('no_region', 'LIKE', '%' . $searchTerm . '%')
+            ->whereIn('no_region', function($query) {
+                $query->select('no_region_admin')
+                    ->from('fournisseurs');
+            })
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('nom_region', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('no_region', 'LIKE', '%' . $searchTerm . '%');
+            })
             ->orderBy('nom_region')
             ->limit(10) // Optional: limit results for performance
             ->get();
@@ -271,7 +294,7 @@ class FournisseurController extends Controller
             })
             ->where('categorie', 'LIKE', '%' . $searchTerm . '%')
             ->orWhere('code_unspsc', 'LIKE', '%' . $searchTerm . '%')
-            ->orWhere('sous_categorie', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('classe_categorie', 'LIKE', '%' . $searchTerm . '%')
             ->orWhere('precision_categorie', 'LIKE', '%' . $searchTerm . '%')
             ->orderBy('code_unspsc')
             ->limit(10) // Optional: limit results for performance
