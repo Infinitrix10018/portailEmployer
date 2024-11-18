@@ -44,17 +44,6 @@
                                 </a>
 
                             </div>
-                    </div> 
-
-                    <div class="container-xxl">
-
-                            <div class="col-lg-11">
-                                <button type="submit" class="button" id="idBoutonEnregistrer">Enregistrer les modifications</button>
-                            </div>
-
-                            <div class="col-sm-1">
-                                <button type="button" class="button" id="idBoutonAnnuler">Annuler</button>
-                            </div>
-                    </div> 
+                    </div>
     
 @endsection
