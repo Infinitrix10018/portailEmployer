@@ -9,6 +9,20 @@
     @endsection
     @section('content')
 
+    <!--
+    @if ($errors->any())
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+-->
+
+
+
+
+
     <form action="{{ route('ChangeInfo', ['id' => request('id')]) }}" method="POST" enctype="multipart/form-data" onsubmit="logToConsole()">
     @csrf
     <div class="container-xxl">
@@ -146,7 +160,7 @@
             @endif
         </div>
     </div>
-        <button type="submit" class="button" id="bt-center">Changer les informations</button>
+        <!--<button type="submit" class="button" id="bt-center">Changer les informations</button>-->
     </form>
 
 @endsection
