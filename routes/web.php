@@ -32,6 +32,8 @@ Route::post('/ajouterModeleCourriel', [ModelCourrielController::class, 'store'])
 
 Route::get('/ModifierModelCourriel', [ModelCourrielController::class, 'showModifierForm']);
 
+Route::post('/updateModele', [ModelCourrielController::class, 'updateModele'])->name('updateModele');
+
 Route::get('/users', 
 [UserController::class, 'index']);
 

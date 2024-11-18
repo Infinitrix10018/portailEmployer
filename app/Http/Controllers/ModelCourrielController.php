@@ -26,6 +26,24 @@ class ModelCourrielController extends Controller
         return view('views.pageModifierModelCourriel', compact('model'));
 }
 
+    public function updateModele(Request $request)
+{
+        $validated = $request->validate([
+            'id' => 'required|exists:id_model_courriel,id',
+            'nom' => 'required|string|max:250',
+            'objet' => 'required|string|max:64',
+            'message' => 'required|string|max:512',
+        ]);
+
+        $model = ModelCourriel::findOrFail($validated['id']);
+        $model->nom_courriel = $validated['nom'];
+        $model->objet = $validated['objet'];
+        $model->message = $validated['message'];
+        $model->save();
+
+        return redirect()->route('listeModelCourriel')->with('success', 'Modèle mis à jour avec succès!');
+}
+
 
     public function store(Request $request)
     {
