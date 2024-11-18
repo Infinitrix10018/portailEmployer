@@ -166,11 +166,13 @@ class FournisseurController extends Controller
         if (!empty(array_filter($listeRbq))) {
             $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN sous_categorie IN (' . implode(',', $rbqPrep) . ') THEN sous_categorie END) as nbrRbq');
             $orderByColumn = $request->input('nbrRbq');
+            $nbrRbqs = count($listeRbq);
         }
 
         if (!empty(array_filter($listeCode))) {
             $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN precision_categorie IN (' . implode(',', $codePrep) . ') THEN precision_categorie END) as nbrCode');
-            $orderByColumn = $request->input('nbrRbq');
+            $orderByColumn = $request->input('nbrCode');
+            $nbrCodes = count($listeCode);
         }
 
         if (!empty(array_filter($listeRbq)) && !empty(array_filter($listeCode))) {
@@ -214,7 +216,7 @@ class FournisseurController extends Controller
 
          //\Log::info('results:', $results->toArray());
 
-         return view('partials.fournisseursListe', compact('results'));
+         return view('partials.fournisseursListe', compact('results', 'nbrRbqs', 'nbrCodes'));
     }
 
     public function rechercheVille(Request $request)

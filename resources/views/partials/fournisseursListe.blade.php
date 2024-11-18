@@ -14,8 +14,8 @@
                 <div class="col-sm-3"><p>{{ $result->nom_entreprise }}</p></div>
                 <div class="col-sm-3"><p>{{ $result->ville }}</p></div>
                 <div class="col-sm-2"><p>{{ $result->etat_demande ?? 'aucun status' }}</p></div>
-                <div class="col-sm-2"><p>{{ $result->nbrRbq ?? 'aucune licences demander' }}</p></div>
-                <div class="col-sm-2"><p>{{ $result->nbrCode ?? 'aucun code demander' }}</p></div>
+                <div class="col-sm-2"><p>{{ $result->nbrRbq ?? '0'}}/{{ $nbrRbqs }}</p></div>
+                <div class="col-sm-2"><p>{{ $result->nbrCode ?? '0'}}/{{ $nbrCodes }}</p></div>
             </div>
         </a> 
     @endforeach
