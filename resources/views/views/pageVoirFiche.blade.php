@@ -12,7 +12,7 @@
          https://tablericons.com/ for icons
     -->
     @if (Auth::check() && (Auth::user()->role === 'Administrateur' || Auth::user()->role === 'Responsable'))
-        <a href="{{ route('ChangeInfoPage', ['id' => $fournisseur->id_fournisseurs]) }}"><button class="button" id="idModInfo"><img src="{{ asset('img/edit.svg') }}" width="50" height="50" alt="Edit"></button></a>
+        <a href="{{ route('choixModifierFournisseur', ['id' => $fournisseur->id_fournisseurs]) }}"><button class="button" id="idModInfo"><img src="{{ asset('img/edit.svg') }}" width="50" height="50" alt="Edit"></button></a>
     @endif
 
     <div class="container-xxl">

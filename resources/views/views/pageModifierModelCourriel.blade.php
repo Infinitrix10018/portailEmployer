@@ -28,7 +28,6 @@
                 </div> 
 
             <div class="container-xxl">
-
                    <div class="col-lg-9">
                        <button type="submit" class="button" id="idBoutonEnregistrer">Enregistrer les modifications</button>
                    </div>

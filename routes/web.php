@@ -90,9 +90,10 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur,Responsable']],
  function () {
-    Route::get('/ChangeInfoPage', [ModInfoController::class, 'index'])->name("ChangeInfoPage");
+    Route::get('/choixModifierFournisseur/{id}', function($id) {return view('views/pageModFournisseurChoix', ['id' => $id]);})->name("choixModifierFournisseur");
+    Route::get('/ChangeInfoPage/{id}', [ModInfoController::class, 'index'])->name('ChangeInfoPage');
     Route::post('/ChangeInfo', [ModInfoController::class, 'ChangeInfo'])->name("ChangeInfo");
-    Route::get('/ChangeStatusPage', [ModStatusController::class, 'index'])->name("ChangeStatusPage");
+    Route::get('/ChangeStatusPage/{id}', [ModStatusController::class, 'index'])->name("ChangeStatusPage");
     Route::post('/ChangeStatus', [ModStatusController::class, 'changeStatus'])->name("ChangeStatus");
 });
 

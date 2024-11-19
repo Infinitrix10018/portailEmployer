@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Storage;
 class ModInfoController extends Controller
 {
     
-    public function index()
+    public function index($id)
     {
-        $id_fournisseur = Session::get('id_fourni');
+        $id_fournisseur = $id;
         $fournisseur = Fournisseur::with([
             'region',
             'telephones',
