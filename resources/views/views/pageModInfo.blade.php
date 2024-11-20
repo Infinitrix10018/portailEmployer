@@ -9,7 +9,7 @@
     @endsection
     @section('content')
 
-    
+    <!--
     @if ($errors->any())
         <ul>
             @foreach ($errors->all() as $error)
@@ -17,7 +17,7 @@
             @endforeach
         </ul>
     @endif
-
+    -->
 
     <form action="{{ route('ChangeInfo', ['id' => request('id')]) }}" method="POST" enctype="multipart/form-data" onsubmit="logToConsole()">
     @csrf

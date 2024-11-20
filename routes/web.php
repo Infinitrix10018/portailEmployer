@@ -10,7 +10,7 @@ use App\Http\Controllers\ModelCourrielController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModStatusController;
 use App\Http\Controllers\ModInfoController;
-
+use App\Http\Controllers\ModContactController;
 
 
 //new routes
@@ -95,6 +95,7 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::post('/ChangeInfo', [ModInfoController::class, 'ChangeInfo'])->name("ChangeInfo");
     Route::get('/ChangeStatusPage/{id}', [ModStatusController::class, 'index'])->name("ChangeStatusPage");
     Route::post('/ChangeStatus', [ModStatusController::class, 'changeStatus'])->name("ChangeStatus");
+    Route::get('/ChangeContactPage/{id}', [ModContactController::class, 'index'])->name('ChangeContactPage');
 });
 
 // search routes

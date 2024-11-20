@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Fournisseur;
 use App\Models\Telephone;
-use App\Models\Documents;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -51,9 +50,7 @@ class ModInfoController extends Controller
             $categorieCode[$categorie] = $items->groupBy('classe_categorie');
         }
 
-        $fichiers = Documents::where('id_fournisseurs', $id_fournisseur)->get();
-
-        return view('views.pageModInfo', compact('fournisseur', 'phonesWithoutContact', 'licences', 'categorieCode', 'fichiers'));
+        return view('views.pageModInfo', compact('fournisseur', 'phonesWithoutContact', 'licences', 'categorieCode'));
     }
 
     public function ChangeInfo(UpdateSingleFieldRequest $request)

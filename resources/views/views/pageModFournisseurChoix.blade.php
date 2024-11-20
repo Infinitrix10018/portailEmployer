@@ -34,7 +34,7 @@
         </div>
         <div class="col-md-6">
             <a href="{{url('')}}"> 
-                <button type="button" class="button" id="btAjouterTelephone">Ajouter un telephone</button>
+                <button type="button" class="button" id="btModifierTelephone">Modifier les telephones</button>
             </a>
         </div>
     </div>
@@ -42,7 +42,7 @@
     <!--Make page to change contacts-->
     <div class="row" style="text-align:center">
         <div class="col-md-6">
-            <a href="{{url('')}}"> 
+            <a href="{{ route('ChangeContactPage', ['id' => $id]) }}"> 
                 <button type="button" class="button" id="btModifierContact">Modifier les personnes contactes</button>
             </a>
         </div>
