@@ -96,6 +96,7 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::get('/ChangeStatusPage/{id}', [ModStatusController::class, 'index'])->name("ChangeStatusPage");
     Route::post('/ChangeStatus', [ModStatusController::class, 'changeStatus'])->name("ChangeStatus");
     Route::get('/ChangeContactPage/{id}', [ModContactController::class, 'index'])->name('ChangeContactPage');
+    Route::post('/ChangeContact', [ModContactController::class, 'ChangeContact'])->name("ChangeContact");
 });
 
 // search routes

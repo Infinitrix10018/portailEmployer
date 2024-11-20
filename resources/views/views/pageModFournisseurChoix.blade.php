@@ -39,7 +39,6 @@
         </div>
     </div>
 
-    <!--Make page to change contacts-->
     <div class="row" style="text-align:center">
         <div class="col-md-6">
             <a href="{{ route('ChangeContactPage', ['id' => $id]) }}"> 

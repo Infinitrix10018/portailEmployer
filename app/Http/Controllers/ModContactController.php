@@ -29,4 +29,9 @@ class ModContactController extends Controller
 
         return view('views.pageModContact', compact('fournisseur'));
     }
+
+    public function ChangeContact(Request $request)
+    {
+
+    }
 }
