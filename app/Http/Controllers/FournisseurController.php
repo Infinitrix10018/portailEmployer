@@ -7,10 +7,12 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Fournisseur;
 use App\Models\Telephone;
 use App\Models\Documents;
+use App\Models\Fournisseur_a_contacter;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 
 class FournisseurController extends Controller
 {
@@ -37,7 +39,6 @@ class FournisseurController extends Controller
         }
         Log::info('Loaded Fournisseur:', $fournisseurs->toArray());
 
-
         return view('views.ListeFournisseur', compact('fournisseurs')); 
     }
 
@@ -63,7 +64,6 @@ class FournisseurController extends Controller
             abort(404); 
         }
 
-        
         if (!empty($fournisseur->demande->commentaire)) {
             try {
                 Log::info("Attempt decrypt comment for fournisseur ID: $id_fournisseur");
@@ -211,7 +211,7 @@ class FournisseurController extends Controller
             $results = $results->get();
 
             return view('partials.fournisseursListe', compact('results', 'nbrRbqs', 'nbrCodes'));
-        }
+    }
 
     public function rechercheVille(Request $request)
     {
@@ -308,6 +308,32 @@ class FournisseurController extends Controller
         $files = Storage::disk('your_disk')->files($directory);
         $pattern = '/^' . $id . '-.*-' . $fileName . '\./';
         $matchingFiles = preg_grep($pattern, $files);
+    }
+
+    public function ajouterContact(Request $request)
+    {
+        try {
+            $id_user = Auth::user()->id;
+            
+            \Log::info('avant enregistrement fichier dans bd');
+            Fournisseur_a_contacter::create([
+                'id_user' => $id_user,
+                'id_fournisseurs' => $request->input('id_fournisseurs'),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        } 
+        catch (\Exception $e) {
+            Log::error('Erreur dans la fonction store du controller d\'inscription ' . $e->getMessage());
+            //return redirect()->route('Inscription')->with('Erreur dans de formulaire');
+        }
+        return response()->json(['success' => true, 'user_id' => $id_user]);
+    }
+
+    public function voirFournisseurAContacter()
+    {
+        $fournisseurs = Fournisseur::with('demande')->get();
+        return view('ListeFournisseur', compact('fournisseurs'));
     }
 
 }

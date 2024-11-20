@@ -14,7 +14,7 @@ use App\Http\Controllers\ModInfoController;
 use App\Http\Controllers\ModContactController;
 
 
-//partie pour admin (va être dans un groupe de Route plus tard.)
+//partie pas connecté
 
  Route::get('/ModifierModelCourriel',
  function () {return view('views/pageModifierModelCourriel');})->name("ModifierModelCourriel");
@@ -78,6 +78,9 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 
     Route::get('/VoirFiche/search',
     [FournisseurController::class, 'search'])->name('VoirFiche.search');
+
+    Route::get('/ajouterContact',
+    [FournisseurController::class, 'ajouterContact'])->name('ajouterContact');
 
 });
 
