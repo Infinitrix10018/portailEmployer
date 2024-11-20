@@ -40,12 +40,7 @@
 
     <div class="" style="display:none;right:0;" id="Menu">
         <button onclick="closeMenu()">Fermer &times;</button>
-        <a href="{{ route('VoirFiche') }}">Ma fiche</a>
-        <a href="">Ajouter ou voir mes finances</a>
-        <a href="">Modifier ma fiche</a>
-        <a href="">Ajouter un telephone</a>
-        <a href="">Ajouter une personne contacte</a>
-        <a href="" class="Important">! Supprimer ma fiche !</a>
+        <a href="{{ route('VoirFiche') }}">Voir les fiches</a>
         @auth <a href="{{ route('Logout') }}" >Fermer Session</a> @endauth     
     </div>
 

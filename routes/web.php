@@ -13,8 +13,6 @@ use App\Http\Controllers\ModInfoController;
 use App\Http\Controllers\ModContactController;
 
 
-//new routes
-
 //partie pour admin (va être dans un groupe de Route plus tard.)
 
  Route::get('/ModifierModelCourriel',
@@ -42,12 +40,6 @@ Route::get('/ModelCourriel',
 
 Route::get('/Parametres',
  function () {return view('views/pageParametres');})->name("Parametres");
-
-
-//test route
-
-
-// routes pour voir les fiches
 
 
 Route::get('/SetSessionFicheFournisseur/{id}',
@@ -99,43 +91,9 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::post('/ChangeContact', [ModContactController::class, 'ChangeContact'])->name("ChangeContact");
 });
 
-// search routes
+// Route pour les recherches
 
 Route::get('/recherche/ville', [FournisseurController::class, 'rechercheVille'])->name('recherche.ville');
 Route::get('/recherche/region', [FournisseurController::class, 'rechercheRegion'])->name('recherche.region');
 Route::get('/recherche/licence', [FournisseurController::class, 'rechercheLicences'])->name('recherche.licence');
 Route::get('/recherche/code', [FournisseurController::class, 'rechercheCodes'])->name('recherche.code');
-
-
-/*
-// Different routes depending on role
-// Admin Routes
-Route::middleware(['auth:sanctum', 'check.role:admin'])->group(function () {
-    Route::get('/admin/dashboard', 'AdminController@index')->name('admin.dashboard');
-    Route::get('/admin/manage-users', 'AdminController@manageUsers')->name('admin.manageUsers');
-});
-
-// Editor Routes
-Route::middleware(['auth:sanctum', 'check.role:editor'])->group(function () {
-    Route::get('/editor/dashboard', 'EditorController@index')->name('editor.dashboard');
-    Route::get('/editor/edit-content', 'EditorController@editContent')->name('editor.editContent');
-});
-
-// Viewer Routes
-Route::middleware(['auth:sanctum', 'check.role:viewer'])->group(function () {
-    Route::get('/viewer/dashboard', 'ViewerController@index')->name('viewer.dashboard');
-    Route::get('/viewer/view-content', 'ViewerController@viewContent')->name('viewer.viewContent');
-});
-
-// Common Routes for Admin and Editor
-Route::middleware(['auth:sanctum', 'check.role:admin,editor'])->group(function () {
-    Route::get('/common/edit-settings', 'CommonController@editSettings')->name('common.editSettings');
-});
-
-// Different routes depending on role
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/showA', 'ContentController@showA')->middleware('check.role:admin')->name('content.showA');
-    Route::get('/showB', 'ContentController@showB')->middleware('check.role:editor,viewer')->name('content.showB');
-});
-// fin exemple de chatgpt
-*/

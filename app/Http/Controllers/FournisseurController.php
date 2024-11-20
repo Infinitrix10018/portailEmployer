@@ -160,13 +160,14 @@ class FournisseurController extends Controller
             'etat_demande'
         ];
 
-        $orderBy = '';
 
         // Conditionally add columns to the select based on a condition
         if (!empty(array_filter($listeRbq))) {
             $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN sous_categorie IN (' . implode(',', $rbqPrep) . ') THEN sous_categorie END) as nbrRbq');
             $orderByColumn = $request->input('nbrRbq');
             $nbrRbqs = count($listeRbq);
+        } else {
+            $nbrRbqs = 0;
         }
 
         if (!empty(array_filter($listeCode))) {
@@ -174,13 +175,10 @@ class FournisseurController extends Controller
             $orderByColumn = $request->input('nbrCode');
             $nbrCodes = count($listeCode);
         }
-
-        if (!empty(array_filter($listeRbq)) && !empty(array_filter($listeCode))) {
-            $orderBy = 'nbrRbq, nbrCode';
-        } else if (empty(array_filter($listeRbq)) && empty(array_filter($listeCode))) {
-            $orderBy = 'fournisseurs.id_fournisseurs';
+        else {
+            $nbrCodes = 0;
         }
-                
+      
         // Get the fournisseurs and their counts for both lists
         $results = DB::table('fournisseurs')
             ->leftJoin('fournisseur_licence_rbq_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
@@ -212,12 +210,8 @@ class FournisseurController extends Controller
             }
             $results = $results->get();
 
-            //\Log::info('Generated SQL:', ['sql' => $results->toSql()]);
-
-         //\Log::info('results:', $results->toArray());
-
-         return view('partials.fournisseursListe', compact('results', 'nbrRbqs', 'nbrCodes'));
-    }
+            return view('partials.fournisseursListe', compact('results', 'nbrRbqs', 'nbrCodes'));
+        }
 
     public function rechercheVille(Request $request)
     {
