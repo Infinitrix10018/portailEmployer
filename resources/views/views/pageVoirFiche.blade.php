@@ -65,10 +65,10 @@
 
         <div class="container-xxl">
             <h2>Personne ressource</h2>
-            <div class="container-xxl" id="containerWithBorder">
+            <div class="container-xxl" >
                 <div class="contact-info">
                     @foreach($fournisseur->personne_ressources as $contact)
-                        <div class="contact row">
+                        <div class="contact row" id="containerWithBorder">
                             <p class="col-md-4">Prenom du contact: {{ $contact->prenom_contact }}</p>
                             <p class="col-md-4">Nom du contact: {{ $contact->nom_contact }}</p>
                             <p class="col-md-4">Fonction du contact: {{ $contact->fonction }}</p>
@@ -133,12 +133,5 @@
             </div>
         </div>
     </div>
-
-
-    @if (Auth::check() && (Auth::user()->role === 'Administrateur' || Auth::user()->role === 'Responsable'))
-        <div class="col-lg-11">
-            <a href="{{ route('ChangeStatusPage', ['id' => $fournisseur->id_fournisseurs]) }}"><button class="button" id="idModStatus">Modifier etat demande</button></a>
-        </div>
-    @endif
 
 @endsection
