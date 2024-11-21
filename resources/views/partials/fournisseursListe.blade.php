@@ -1,14 +1,15 @@
 @if($results->isNotEmpty())
 
-    <div class="row">
-        <div class="col-sm-3"><h3>Nom de l'entreprise</h3></div>
-        <div class="col-sm-3"><h3>Ville</h3></div>
-        <div class="col-sm-2"><h3>Status</h3></div>
-        <div class="col-sm-2"><h3>licences rbq</h3></div>
-        <div class="col-sm-2"><h3>services</h3></div>
-    </div>
+<div class="row">
+    <div class="col-sm-3"><h3>Nom de l'entreprise</h3></div>
+    <div class="col-sm-3"><h3>Ville</h3></div>
+    <div class="col-sm-2"><h3>Status</h3></div>
+    <div class="col-sm-2"><h3>licences rbq</h3></div>
+    <div class="col-sm-2"><h3>services</h3></div>
+</div>
 
-    @foreach ($results as $result)
+@foreach ($results as $result)
+    <div>
         <a href="{{ route('SetSessionFicheFournisseur', ['id' => $result->id_fournisseurs]) }}" class="text-decoration-none">
             <div class="row"> 
                 <div class="col-sm-3"><p>{{ $result->nom_entreprise }}</p></div>
@@ -18,7 +19,11 @@
                 <div class="col-sm-2"><p>{{ $result->nbrCode ?? '0'}}/{{ $nbrCodes }}</p></div>
             </div>
         </a> 
-    @endforeach
+        <a href="{{ route('ajouterContact', ['id' => $result->id_fournisseurs]) }}" class="text-decoration-none">
+            <h5>Ajouter le fournisseur à la liste des fournisseurs à contacter</h5>
+        </a>
+    </div>
+@endforeach
 @else   
     <h4>
         Aucun résultat

@@ -7,13 +7,14 @@ use App\Http\Controllers\CommisController;
 use App\Http\Controllers\ResponsableController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\ModelCourrielController;
+use App\Http\Controllers\ParametresController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModStatusController;
 use App\Http\Controllers\ModInfoController;
 use App\Http\Controllers\ModContactController;
 
 
-//partie pour admin (va être dans un groupe de Route plus tard.)
+//partie pas connecté
 
  Route::get('/ModifierModelCourriel',
  function () {return view('views/pageModifierModelCourriel');})->name("ModifierModelCourriel");
@@ -32,14 +33,16 @@ Route::get('/ModifierModelCourriel', [ModelCourrielController::class, 'showModif
 
 Route::post('/updateModele', [ModelCourrielController::class, 'updateModele'])->name('updateModele');
 
+Route::post('/updateParametre', [ParametresController::class, 'updateParametre'])->name('updateParametre');
+
 Route::get('/users', 
 [UserController::class, 'index']);
 
 Route::get('/ModelCourriel',
 [ModelCourrielController::class, 'listeModelCourriel'])->name("listeModelCourriel");
 
-Route::get('/Parametres',
- function () {return view('views/pageParametres');})->name("Parametres");
+ Route::get('/Parametres', 
+[ParametresController::class, 'index'])->name("pagesParametres");
 
 
 Route::get('/SetSessionFicheFournisseur/{id}',
@@ -75,6 +78,9 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 
     Route::get('/VoirFiche/search',
     [FournisseurController::class, 'search'])->name('VoirFiche.search');
+
+    Route::get('/ajouterContact',
+    [FournisseurController::class, 'ajouterContact'])->name('ajouterContact');
 
 });
 
