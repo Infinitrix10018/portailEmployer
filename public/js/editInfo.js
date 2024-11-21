@@ -100,7 +100,6 @@ function makeEditableContact(iconElement) {
         return;
     }
 
-    // If there's another field being edited, save it
     if (currentlyEditing && currentlyEditing !== textElement) {
         const previousInput = currentlyEditing.querySelector('input');
         if (previousInput) {
@@ -109,7 +108,6 @@ function makeEditableContact(iconElement) {
         }
     }
 
-    // Mark this field as being edited
     currentlyEditing = textElement;
 
     const inputElement = document.getElementById(`input-${fieldKey}-${contactId}`);
@@ -122,32 +120,28 @@ function makeEditableContact(iconElement) {
 
     const currentValue = textElement.textContent.split(': ')[1].trim();
 
-    // Replace text with an input field
-    textElement.innerHTML = `
+
+    if(fieldKey === "type_tel")
+    {
+        textElement.innerHTML = `
+        <label>${textElement.textContent.split(': ')[0]}:</label> 
+        <select id="input-${fieldKey}-${contactId}" name="Info" value="${currentValue} data-original-value="${currentValue}">
+            <option value="bureau">Bureau</option>
+            <option value="cellulaire">Célulaire</option>
+            <option value="fax">Fax</option>
+        </select>
+        <input type="hidden" name="contact_id" value="${contactId}">
+        <button type="submit" value="${fieldKey}" name="TypeInfo">Save</button>
+    `;
+    }else
+    {
+        textElement.innerHTML = `
         <label>${textElement.textContent.split(': ')[0]}:</label> 
         <input type="text" id="input-${fieldKey}-${contactId}" value="${currentValue}" data-original-value="${currentValue}" name="Info">
         <input type="hidden" name="contact_id" value="${contactId}">
-        <button type="button" value="${fieldKey}" name="TypeInfo">Save</button>
+        <button type="submit" value="${fieldKey}" name="TypeInfo">Save</button>
     `;
+    }
 
-    // Add save button listener
-    const saveButton = textElement.querySelector('button[type="button"]');
-    saveButton.addEventListener('click', (event) => {
-        event.preventDefault();  // Prevent the default behavior of the button
 
-        const updatedValue = document.getElementById(`input-${fieldKey}-${contactId}`).value;
-
-        // Set the updated value in the text element
-        textElement.innerHTML = `${textElement.textContent.split(': ')[0]}: ${updatedValue}`;
-
-        // Add the updated value to the hidden input (TypeInfo)
-        const typeInfoInput = document.querySelector(`input[name="TypeInfo"]`);
-        typeInfoInput.value = fieldKey; // Set the field type (e.g., 'prenom_contact')
-
-        // Trigger the form submission after updating the value
-        const form = document.querySelector('form');  // Select the form
-        form.submit();  // Submit the form programmatically
-
-        currentlyEditing = null;
-    });
 }

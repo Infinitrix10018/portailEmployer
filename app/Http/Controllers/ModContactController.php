@@ -54,22 +54,62 @@ class ModContactController extends Controller
             return redirect()->back()->withErrors(['erreur' => 'Fournisseur ID is required.']);
         }
 
-        try {
-            $updated = DB::table('personne_ressource')
-                ->where('id_fournisseurs', $id_fournisseurs)
-                ->where('id_personne_ressource', $contactId)
-                ->update([$TypeInfo => $Info]);
+        if($TypeInfo == "fonction" || $TypeInfo == "prenom_contact" || $TypeInfo == "nom_contact" || $TypeInfo == "email_contact")
+        {
+            try {
+                $updated = DB::table('personne_ressource')
+                    ->where('id_fournisseurs', $id_fournisseurs)
+                    ->where('id_personne_ressource', $contactId)
+                    ->update([$TypeInfo => $Info]);
 
-            if ($updated) {
-                Log::info("Successfully updated field '$TypeInfo' for fournisseur ID: $id_fournisseurs");
-                return redirect()->back()->with('success', 'Information changer');
-            } else {
-                Log::warning("Update failed for fournisseur ID: $id_fournisseurs, no matching record or no changes.");
-                return redirect()->back()->withErrors(['erreur' => 'Erreur assurez-vous de valider que vos informations suivent toutes les contraintes!']);
+                if ($updated) {
+                    Log::info("Successfully updated field '$TypeInfo' for fournisseur ID: $id_fournisseurs");
+                    return redirect()->back()->with('success', 'Information changer');
+                } else {
+                    Log::warning("Update failed for fournisseur ID: $id_fournisseurs, no matching record or no changes.");
+                    return redirect()->back()->withErrors(['erreur' => 'Erreur assurez-vous de valider que vos informations suivent toutes les contraintes!']);
+                }
+            } catch (\Exception $e) {
+                Log::error('Database update error', ['exception' => $e->getMessage()]);
+                return redirect()->back()->withErrors(['erreur' => 'Erreur en lien avec MYSQL']);
             }
-        } catch (\Exception $e) {
-            Log::error('Database update error', ['exception' => $e->getMessage()]);
-            return redirect()->back()->withErrors(['erreur' => 'Erreur en lien avec MYSQL']);
         }
+        else
+        {
+            try {
+                $idTelephone = DB::table('personne_ressource')
+                    ->where('id_fournisseurs', $id_fournisseurs)
+                    ->where('id_personne_ressource', $contactId)
+                    ->value('id_telephone');
+        
+                if ($idTelephone) {
+                    Log::info("id telephone = $idTelephone");
+                    try {
+                        $updated = DB::table('telephone')
+                            ->where('id_fournisseurs', $id_fournisseurs)
+                            ->where('id_telephone', $idTelephone)
+                            ->update([$TypeInfo => $Info]);
+        
+                        if ($updated) {
+                            Log::info("Successfully updated field '$TypeInfo' for fournisseur ID: $id_fournisseurs");
+                            return redirect()->back()->with('success', 'Information changer');
+                        } else {
+                            Log::warning("Update failed for fournisseur ID: $id_fournisseurs, no matching record or no changes.");
+                            return redirect()->back()->withErrors(['erreur' => 'Erreur assurez-vous de valider que vos informations suivent toutes les contraintes!']);
+                        }
+                    } catch (\Exception $e) {
+                        Log::error('Database update error', ['exception' => $e->getMessage()]);
+                        return redirect()->back()->withErrors(['erreur' => 'Erreur en lien avec MYSQL']);
+                    }
+
+                } else {
+                    return response()->json(['error' => 'No matching record found'], 404);
+                }
+            } catch (\Exception $e) {
+                Log::error('Database update error', ['exception' => $e->getMessage()]);
+                return redirect()->back()->withErrors(['erreur' => 'Erreur en lien avec MYSQL']);
+            }
+        }
+        
     }
 }
