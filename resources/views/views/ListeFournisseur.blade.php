@@ -218,4 +218,30 @@
         </div>
     </div>
 
+    <script>
+        async function sendData(value) {
+            try {
+                const response = await fetch('/ajouterContact', {
+                    method: 'POST',
+                    body: JSON.stringify({ value }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    //alert('Data saved successfully!');
+                } else {
+                    //alert('Error saving data!');
+                } 
+            }
+            catch (error) {
+                console.error('Error:', error);
+            } 
+            
+        }
+    </script>
+
 @endsection

@@ -19,9 +19,10 @@
                 <div class="col-sm-2"><p>{{ $result->nbrCode ?? '0'}}/{{ $nbrCodes }}</p></div>
             </div>
         </a> 
-        <a href="{{ route('ajouterContact', ['id' => $result->id_fournisseurs]) }}" class="text-decoration-none">
-            <h5>Ajouter le fournisseur à la liste des fournisseurs à contacter</h5>
-        </a>
+        <button onclick="sendData('{{ $result->id_fournisseurs }}')" class="button">
+            Ajouter le fournisseur à la liste des fournisseurs à contacter
+        </button>
+        
     </div>
 @endforeach
 @else   

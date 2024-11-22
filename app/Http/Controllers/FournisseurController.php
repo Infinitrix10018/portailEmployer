@@ -312,13 +312,14 @@ class FournisseurController extends Controller
 
     public function ajouterContact(Request $request)
     {
+        \Log::info('debut fonction');
         try {
             $id_user = Auth::user()->id;
             
             \Log::info('avant enregistrement fichier dans bd');
             Fournisseur_a_contacter::create([
                 'id_user' => $id_user,
-                'id_fournisseurs' => $request->input('id_fournisseurs'),
+                'id_fournisseurs' => $request->input('value'),
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
@@ -327,13 +328,57 @@ class FournisseurController extends Controller
             Log::error('Erreur dans la fonction store du controller d\'inscription ' . $e->getMessage());
             //return redirect()->route('Inscription')->with('Erreur dans de formulaire');
         }
-        return response()->json(['success' => true, 'user_id' => $id_user]);
+        \Log::info('fin fonction');
+        return response()->json(['success' => true]);
     }
 
     public function voirFournisseurAContacter()
     {
-        $fournisseurs = Fournisseur::with('demande')->get();
-        return view('ListeFournisseur', compact('fournisseurs'));
+        \Log::info('début fonction');
+        $id_user = Auth::user()->id;
+        \Log::info(['id user = ', $id_user]);
+      
+        // Get the fournisseurs and their counts for both lists
+        $results = DB::table('fournisseurs')
+            ->leftJoin('fournisseur_licence_rbq_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
+            ->leftJoin('licences_rbq', 'fournisseur_licence_rbq_liaison.id_licence_rbq', '=', 'licences_rbq.id_licence_rbq')
+            ->leftJoin('fournisseur_code_unspsc_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_code_unspsc_liaison.id_fournisseurs')
+            ->leftJoin('code_unspsc', 'fournisseur_code_unspsc_liaison.id_code_unspsc', '=', 'code_unspsc.id_code_unspsc')
+            ->leftJoin('regions_administratives', 'fournisseurs.no_region_admin', '=', 'regions_administratives.no_region')
+            ->leftJoin('demandesfournisseurs', 'fournisseurs.id_fournisseurs', '=', 'demandesfournisseurs.id_fournisseurs')
+            ->leftJoin('fournisseur_a_contacter', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_a_contacter.id_fournisseurs')
+            ->where('fournisseur_a_contacter.id_user', '=', $id_user)
+            ->select(
+                'fournisseurs.id_fournisseurs',
+                'nom_entreprise',
+                'ville',
+                'etat_demande')
+            ->groupBy('fournisseurs.id_fournisseurs', 'nom_entreprise',
+            'ville','etat_demande')
+            ->get();
+
+            return view('views.ListeFournisseurAContacter', compact('results'));
+    }
+
+    public function supprimerFournisseurAContacter(Request $request)
+    {
+        \Log::info('debut fonction');
+        try {
+            $id_user = Auth::user()->id;
+            \Log::info('avant enregistrement fichier dans bd');
+            Fournisseur_a_contacter::where([
+                'id_user' => $id_user,
+                'id_fournisseurs' => $request->input('value')
+            ])->delete();
+
+        } 
+        catch (\Exception $e) {
+            Log::error('Erreur dans la fonction store du controller d\'inscription ' . $e->getMessage());
+            //return redirect()->route('Inscription')->with('Erreur dans de formulaire');
+        }
+        \Log::info('fin fonction');
+        //return redirect()->route('VoirAContacter');
+        return response()->json(['success' => true]);
     }
 
 }

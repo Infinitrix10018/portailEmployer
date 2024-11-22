@@ -79,8 +79,14 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::get('/VoirFiche/search',
     [FournisseurController::class, 'search'])->name('VoirFiche.search');
 
-    Route::get('/ajouterContact',
+    Route::post('/ajouterContact',
     [FournisseurController::class, 'ajouterContact'])->name('ajouterContact');
+
+    Route::get('/VoirAContacter',
+    [FournisseurController::class, 'voirFournisseurAContacter'])->name('VoirAContacter');
+
+    Route::post('/SupprimerAContacter',
+    [FournisseurController::class, 'supprimerFournisseurAContacter'])->name('SupprimerAContacter');
 
 });
 
