@@ -112,3 +112,7 @@ Route::get('/recherche/ville', [FournisseurController::class, 'rechercheVille'])
 Route::get('/recherche/region', [FournisseurController::class, 'rechercheRegion'])->name('recherche.region');
 Route::get('/recherche/licence', [FournisseurController::class, 'rechercheLicences'])->name('recherche.licence');
 Route::get('/recherche/code', [FournisseurController::class, 'rechercheCodes'])->name('recherche.code');
+
+
+Route::get('/pageTest', [FournisseurController::class, 'pageTest'])->name('pageTest');
+Route::get('/import-xml', [FournisseurController::class, 'importXml'])->name('import.xml');

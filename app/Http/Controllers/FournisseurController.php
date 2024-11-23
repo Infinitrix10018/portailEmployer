@@ -310,6 +310,11 @@ class FournisseurController extends Controller
         $matchingFiles = preg_grep($pattern, $files);
     }
 
+    public function pageTest()
+    {
+        return view('views.test');
+    }
+
     public function ajouterContact(Request $request)
     {
         \Log::info('debut fonction');
@@ -379,6 +384,124 @@ class FournisseurController extends Controller
         \Log::info('fin fonction');
         //return redirect()->route('VoirAContacter');
         return response()->json(['success' => true]);
+    }
+
+    public function importXML()
+    {
+        set_time_limit(300);
+        try {
+            $xml = simplexml_load_file(storage_path('app/files/stress-test.xml'));
+
+            // import the data
+            foreach ($xml->Fournisseur as $Fournisseur) {
+                DB::transaction(function () use ($Fournisseur) {
+
+                    $inputString = (string)$Fournisseur->Coordonnees->Adresse->RegionAdministrative;
+                    // Get the last 4 characters
+                    $lastFour = substr($inputString, -4);
+                    // Get the middle 2 characters of the last 4
+                    $regionAdmin = substr($lastFour, 1, 2);
+
+                    $data = (string)$Fournisseur->Identification->NomEntreprise;
+                    // Insert Fournisseur
+                    $FournisseurId = DB::table('fournisseurs')->insertGetId([
+                        'NEQ' => (string)$Fournisseur->Identification->NEQ ?: null,
+                        'email' => (string)$Fournisseur->Identification->Courriel,
+                        'mdp' => (string)$Fournisseur->Identification->MotDePasse,
+                        'nom_entreprise' => substr($data, 0, 64),
+                        'no_rue' => (string)$Fournisseur->Coordonnees->Adresse->noCivique,
+                        'rue' => (string)$Fournisseur->Coordonnees->Adresse->Rue,
+                        'no_bureau' => (string)$Fournisseur->Coordonnees->Adresse->Bureau,
+                        'ville' => (string)$Fournisseur->Coordonnees->Adresse->Ville,
+                        'province' => (string)$Fournisseur->Coordonnees->Adresse->Province,
+                        'no_region_admin' => $regionAdmin,
+                        'code_postal' => (string)$Fournisseur->Coordonnees->Adresse->CodePostal,
+                        'site_internet' => (string)$Fournisseur->Coordonnees->SiteInternet,
+                        'commentaire' => (string)$Fournisseur->ProduitsEtServices->Details,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+            
+                    // Insert Fournisseur details
+                    DB::table('users')->insert([
+                        'id_fournisseurs' => $FournisseurId,
+                        'name' => (string)$Fournisseur->Identification->NomEntreprise,
+                        'NEQ' => (string)$Fournisseur->Identification->NEQ,
+                        'email' => (string)$Fournisseur->Identification->Courriel,
+                        'password' => (string)$Fournisseur->Identification->MotDePasse,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+
+                    foreach ($Fournisseur->Coordonnees->Telephones->Telephone as $tel) {
+                        DB::table('telephone')->insert([
+                            'id_fournisseurs' => $FournisseurId,
+                            'no_tel' => (string)$tel->Numero,
+                            'type_tel' => (string)$tel->Type,
+                            'poste_tel' => (string)$tel->Poste,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+
+                    foreach ($Fournisseur->Contacts->Contact as $contact) {
+                        $id_tel = DB::table('telephone')->insertGetId([
+                            'id_fournisseurs' => $FournisseurId,
+                            'no_tel' => (string)$contact->Telephone->Numero,
+                            'type_tel' => (string)$contact->Telephone->Type,
+                            'poste_tel' => (string)$contact->Telephone->Poste,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+
+                        DB::table('personne_ressource')->insert([
+                            'id_fournisseurs' => $FournisseurId,
+                            'id_telephone' => $id_tel,
+                            'prenom_contact' => (string)$contact->Prenom,
+                            'nom_contact' => (string)$contact->Nom,
+                            'fonction' => (string)$contact->Fonction,
+                            'email_contact' => (string)$contact->Courriel,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+
+                    foreach ($Fournisseur->ProduitsEtServices->Offres->CodeUNSPSC as $code) {
+
+                        $id_code = DB::table('code_unspsc')
+                        ->where('code_unspsc', 'LIKE', '%' . $code . '%') //'sous_categorie', 'LIKE', '%' . $searchTerm . '%'
+                        ->pluck('id_code_unspsc')
+                        ->first();
+                        
+                        if (!empty($id_code)) {
+                            DB::table('fournisseur_code_unspsc_liaison')->insert([
+                                'id_fournisseurs' => $FournisseurId,
+                                'id_code_unspsc' => $id_code,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        } else {
+                           \Log::info($id_code);
+                        }
+                        
+                    }
+
+                    $etat = ["en attente", "actif", "refuse"];
+                    $randomNumber = rand(0, 2);
+                    DB::table('demandesfournisseurs')->insert([
+                        'id_fournisseurs' => $FournisseurId,
+                        'etat_demande' => $etat[$randomNumber],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                });
+            }
+
+            return response()->json(['success' => true, 'message' => 'XML imported successfully']);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
 }
