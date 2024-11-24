@@ -200,6 +200,7 @@ class FournisseurController extends Controller
                 return $query->whereIn('nom_region', $listeRegion);
             })
             ->select($selectColumns)
+            ->limit(50)
             ->groupBy('fournisseurs.id_fournisseurs', 'nom_entreprise',
             'ville','etat_demande');
 
@@ -208,6 +209,7 @@ class FournisseurController extends Controller
                     $results->orderByDesc($orderByColumn);
                 }
             }
+            $results->orderBy('etat_demande');
             $results = $results->get();
 
             return view('partials.fournisseursListe', compact('results', 'nbrRbqs', 'nbrCodes'));
@@ -288,10 +290,12 @@ class FournisseurController extends Controller
                 $query->select('id_code_unspsc')
                     ->from('fournisseur_code_unspsc_liaison');
             })
-            ->where('categorie', 'LIKE', '%' . $searchTerm . '%')
-            ->orWhere('code_unspsc', 'LIKE', '%' . $searchTerm . '%')
-            ->orWhere('classe_categorie', 'LIKE', '%' . $searchTerm . '%')
-            ->orWhere('precision_categorie', 'LIKE', '%' . $searchTerm . '%')
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('categorie', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('code_unspsc', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('classe_categorie', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('precision_categorie', 'LIKE', '%' . $searchTerm . '%');
+            })
             ->orderBy('code_unspsc')
             ->limit(10) // Optional: limit results for performance
             ->get();
@@ -388,13 +392,14 @@ class FournisseurController extends Controller
 
     public function importXML()
     {
-        set_time_limit(300);
+        set_time_limit(600);
         try {
             $xml = simplexml_load_file(storage_path('app/files/stress-test.xml'));
 
             // import the data
             foreach ($xml->Fournisseur as $Fournisseur) {
                 DB::transaction(function () use ($Fournisseur) {
+                    Log::info('début importation');
 
                     $inputString = (string)$Fournisseur->Coordonnees->Adresse->RegionAdministrative;
                     // Get the last 4 characters
@@ -402,10 +407,11 @@ class FournisseurController extends Controller
                     // Get the middle 2 characters of the last 4
                     $regionAdmin = substr($lastFour, 1, 2);
 
+                    $NEQ = !empty($Fournisseur->Identification->NEQ) ? (string)$Fournisseur->Identification->NEQ : null;
                     $data = (string)$Fournisseur->Identification->NomEntreprise;
                     // Insert Fournisseur
                     $FournisseurId = DB::table('fournisseurs')->insertGetId([
-                        'NEQ' => (string)$Fournisseur->Identification->NEQ ?: null,
+                        'NEQ' => $NEQ,
                         'email' => (string)$Fournisseur->Identification->Courriel,
                         'mdp' => (string)$Fournisseur->Identification->MotDePasse,
                         'nom_entreprise' => substr($data, 0, 64),
@@ -481,7 +487,7 @@ class FournisseurController extends Controller
                                 'updated_at' => now(),
                             ]);
                         } else {
-                           \Log::info($id_code);
+                           //\Log::info($id_code);
                         }
                         
                     }
@@ -496,7 +502,8 @@ class FournisseurController extends Controller
                     ]);
                 });
             }
-
+            
+            Log::info('fin importation');
             return response()->json(['success' => true, 'message' => 'XML imported successfully']);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
