@@ -16,58 +16,15 @@ use App\Http\Controllers\EmailController;
 
 
 //partie pas connecté
-<<<<<<< Updated upstream
 
 Route::get('/Email',
  function () {return view('views/pageEmail');})->name("Email");
 
  Route::post('/send-email', [EmailController::class, 'sendEmail'])->name('send.email');
 
- Route::get('/ModifierModelCourriel',
- function () {return view('views/pageModifierModelCourriel');})->name("ModifierModelCourriel");
-
- Route::get('/SupprimerModelCourriel',
- function () {return view('views/pageSupprimerModelCourriel');})->name("SupprimerModelCourriel");
- 
-Route::get('/ChangementRole', 
-[UserController::class, 'index'])->name("ChangementRole");
-
-Route::post('/user/updateRoles', [UserController::class, 'updateRoles'])->name('user.updateRoles');
-
-Route::post('/ajouterModeleCourriel', [ModelCourrielController::class, 'store'])->name('modelCourriel.store');
-
-Route::get('/ModifierModelCourriel', [ModelCourrielController::class, 'showModifierForm']);
-
-Route::post('/updateModele', [ModelCourrielController::class, 'updateModele'])->name('updateModele');
-
-Route::post('/updateParametre', [ParametresController::class, 'updateParametre'])->name('updateParametre');
-
-Route::get('/users', 
-[UserController::class, 'index']);
-
-Route::get('/ModelCourriel',
-[ModelCourrielController::class, 'listeModelCourriel'])->name("listeModelCourriel");
-
- Route::get('/Parametres', 
-[ParametresController::class, 'index'])->name("pagesParametres");
-
-
-Route::get('/SetSessionFicheFournisseur/{id}',
-[FournisseurController::class, 'setSession'])->name("SetSessionFicheFournisseur");
-
-Route::get('/VoirFicheFournisseur',
-[FournisseurController::class, 'showFiche'])->name("VoirFicheFournisseur");
-
-//route de recherche ci-dessous
-Route::get('/VoirFiche/searchx', 
-[FournisseurController::class, 'searchX'])->name('VoirFiche.search_x');
-
-
 Route::get('/PageInscriptionsLicences',
  function () {return view('views/pageInscriptionsLicences');})->name("InscriptionLicences");
 
-=======
->>>>>>> Stashed changes
 Route::get('/',
  function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployer");
 
