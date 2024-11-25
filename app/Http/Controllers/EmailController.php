@@ -5,18 +5,20 @@ namespace App\Http\Controllers;
 use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Models\ModelCourriel;
 
 class EmailController extends Controller
 {
     public function sendEmail(Request $request)
     {
-        // Adresse destination
-        $emailAddress = 'integrationtestadress@gmail.com';
+        $emailContent = ModelCourriel::first();
 
-        // Envoi email
-        Mail::to($emailAddress)->send(new WelcomeMail());
+        if ($emailContent) {
+            // Send the email using the WelcomeMail class
+            Mail::to('integrationtestadress@gmail.com')->send(new WelcomeMail($emailContent));
+            return back()->with('success', 'Email sent successfully!');
+        }
 
-        // Feedback
-        return back()->with('success', 'Email sent successfully!');
+        return "No email content found in the database.";
     }
 }
