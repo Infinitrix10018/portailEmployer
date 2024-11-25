@@ -12,9 +12,15 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModStatusController;
 use App\Http\Controllers\ModInfoController;
 use App\Http\Controllers\ModContactController;
+use App\Http\Controllers\EmailController;
 
 
 //partie pas connecté
+
+Route::get('/Email',
+ function () {return view('views/pageEmail');})->name("Email");
+
+ Route::post('/send-email', [EmailController::class, 'sendEmail'])->name('send.email');
 
  Route::get('/ModifierModelCourriel',
  function () {return view('views/pageModifierModelCourriel');})->name("ModifierModelCourriel");
