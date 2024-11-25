@@ -12,7 +12,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::all()
+        ->where('role', '!=', 'Fournisseur');
 
         return view('views.pageChangementRole', compact('users'));
     }

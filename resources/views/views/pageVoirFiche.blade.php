@@ -116,21 +116,23 @@
             @endif
         </div>
         <div class="container-xxl">
-            <h2>Commentaire</h2>
-            <div class="container-xxl" id="containerWithBorder">
-                @if($fournisseur->demande->commentaire)
-                    <h2>Votre commentaire</h2>
-                    <p class="col-sm-12">Votre commentaire: {{ $fournisseur->demande->commentaire }} </p>
-                @endif
+            @if($fournisseur->demande->commentaire && $fichiers->isNotEmpty())
+                <h2>Commentaire</h2>
+                <div class="container-xxl" id="containerWithBorder">
+                    @if($fournisseur->demande->commentaire)
+                        <h2>Votre commentaire</h2>
+                        <p class="col-sm-12">Votre commentaire: {{ $fournisseur->demande->commentaire }} </p>
+                    @endif
 
-                @foreach ($fichiers as $fichier)
-                <p>
-                    <a href="{{ route('VoirFiche.download', $fichier->id_document) }}" download>
-                        {{ $fichier->nomDocument }}
-                    </a>
-                </p>
-            @endforeach
-            </div>
+                    @foreach ($fichiers as $fichier)
+                        <p>
+                            <a href="{{ route('VoirFiche.download', $fichier->id_document) }}" download>
+                                {{ $fichier->nomDocument }}
+                            </a>
+                        </p>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 

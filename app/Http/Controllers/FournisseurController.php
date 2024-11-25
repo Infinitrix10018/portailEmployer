@@ -129,19 +129,11 @@ class FournisseurController extends Controller
 
     public function search(Request $request)
     {
-        \Log::info('avant recherche');
         // Retrieve the form inputs
         $listeRbq = explode(",", $request->input('listeRbq'));
         $listeCode = explode(",", $request->input('listeCode'));
         $listeVille = explode(",", $request->input('listeVille'));
         $listeRegion = explode(",", $request->input('listeRegion'));
-        \Log::info('log listes', [
-            'listeRbq' => $listeRbq,
-            'listeCode' => $listeCode,
-            'listeVille' => $listeVille,
-            'listeRegion' => $listeRegion
-        ]);
-
 
         $listeRbq = array_filter($listeRbq);
         $listeCode = array_filter($listeCode);
@@ -159,7 +151,6 @@ class FournisseurController extends Controller
             'ville',
             'etat_demande'
         ];
-
 
         // Conditionally add columns to the select based on a condition
         if (!empty(array_filter($listeRbq))) {
@@ -199,6 +190,7 @@ class FournisseurController extends Controller
             ->when(!empty(array_filter($listeRegion)), function ($query) use ($listeRegion) {
                 return $query->whereIn('nom_region', $listeRegion);
             })
+            ->where('etat_demande', '=', 'actif')
             ->select($selectColumns)
             ->limit(50)
             ->groupBy('fournisseurs.id_fournisseurs', 'nom_entreprise',
@@ -209,7 +201,7 @@ class FournisseurController extends Controller
                     $results->orderByDesc($orderByColumn);
                 }
             }
-            $results->orderBy('etat_demande');
+            //$results->orderBy('etat_demande');
             $results = $results->get();
 
             return view('partials.fournisseursListe', compact('results', 'nbrRbqs', 'nbrCodes'));
@@ -226,7 +218,7 @@ class FournisseurController extends Controller
             ->where('ville', 'LIKE', '%' . $searchTerm . '%')
             ->distinct()
             ->orderBy('ville')
-            ->limit(10) // Optional: limit results for performance
+            ->limit(25) // Optional: limit results for performance
             ->get();
 
         // Return the result as JSON
@@ -249,7 +241,7 @@ class FournisseurController extends Controller
                 ->orWhere('no_region', 'LIKE', '%' . $searchTerm . '%');
             })
             ->orderBy('nom_region')
-            ->limit(10) // Optional: limit results for performance
+            ->limit(25) // Optional: limit results for performance
             ->get();
 
         // Return the result as JSON
@@ -272,7 +264,7 @@ class FournisseurController extends Controller
                       ->orWhere('categorie', 'LIKE', '%' . $searchTerm . '%');
             })
             ->orderBy('id_licence_rbq')
-            ->limit(10) // Optional: limit results for performance
+            ->limit(25) // Optional: limit results for performance
             ->get();
 
         // Return the result as JSON
@@ -297,7 +289,7 @@ class FournisseurController extends Controller
                 ->orWhere('precision_categorie', 'LIKE', '%' . $searchTerm . '%');
             })
             ->orderBy('code_unspsc')
-            ->limit(10) // Optional: limit results for performance
+            ->limit(25) // Optional: limit results for performance
             ->get();
 
         // Return the result as JSON
@@ -395,11 +387,11 @@ class FournisseurController extends Controller
         set_time_limit(600);
         try {
             $xml = simplexml_load_file(storage_path('app/files/stress-test.xml'));
-
+            Log::info('début importation');
             // import the data
             foreach ($xml->Fournisseur as $Fournisseur) {
                 DB::transaction(function () use ($Fournisseur) {
-                    Log::info('début importation');
+                    
 
                     $inputString = (string)$Fournisseur->Coordonnees->Adresse->RegionAdministrative;
                     // Get the last 4 characters
@@ -408,6 +400,7 @@ class FournisseurController extends Controller
                     $regionAdmin = substr($lastFour, 1, 2);
 
                     $NEQ = !empty($Fournisseur->Identification->NEQ) ? (string)$Fournisseur->Identification->NEQ : null;
+                    Log::info(['neq', $NEQ]);
                     $data = (string)$Fournisseur->Identification->NomEntreprise;
                     // Insert Fournisseur
                     $FournisseurId = DB::table('fournisseurs')->insertGetId([

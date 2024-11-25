@@ -43,6 +43,16 @@
         <button onclick="closeMenu()">Fermer &times;</button>
         <a href="{{ route('VoirFiche') }}">Voir les fiches</a>
         <a href="{{ route('VoirAContacter') }}">Voir ma liste de personne à contacter</a>
+        @if (Auth::check() && (Auth::user()->role === 'Administrateur' || Auth::user()->role === 'Responsable'))
+            
+        @endif
+
+        @if (Auth::check() && (Auth::user()->role === 'Administrateur'))
+            <a href="{{ route('users') }}">Liste des employers</a>
+            <a href="{{ route('pagesParametres') }}">Parametre du site</a>
+            <a href="{{ route('listeModelCourriel') }}">page des modèles de courriel</a>
+        @endif
+        
         @auth <a href="{{ route('Logout') }}" >Fermer Session</a> @endauth     
     </div>
 

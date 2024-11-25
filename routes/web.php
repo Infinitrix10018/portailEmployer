@@ -16,6 +16,7 @@ use App\Http\Controllers\EmailController;
 
 
 //partie pas connecté
+<<<<<<< Updated upstream
 
 Route::get('/Email',
  function () {return view('views/pageEmail');})->name("Email");
@@ -65,6 +66,8 @@ Route::get('/VoirFiche/searchx',
 Route::get('/PageInscriptionsLicences',
  function () {return view('views/pageInscriptionsLicences');})->name("InscriptionLicences");
 
+=======
+>>>>>>> Stashed changes
 Route::get('/',
  function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployer");
 
@@ -94,6 +97,11 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::post('/SupprimerAContacter',
     [FournisseurController::class, 'supprimerFournisseurAContacter'])->name('SupprimerAContacter');
 
+    Route::get('/SetSessionFicheFournisseur/{id}',
+    [FournisseurController::class, 'setSession'])->name("SetSessionFicheFournisseur");
+
+    Route::get('/VoirFicheFournisseur',
+    [FournisseurController::class, 'showFiche'])->name("VoirFicheFournisseur");
 });
 
 //responsable et admin
@@ -112,13 +120,47 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::post('/ChangeContact', [ModContactController::class, 'ChangeContact'])->name("ChangeContact");
 });
 
-// Route pour les recherches
+
+Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
+'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur']],
+ function () {
+    
+    Route::get('/Parametres', 
+    [ParametresController::class, 'index'])->name("pagesParametres");
+
+    Route::get('/ModelCourriel',
+    [ModelCourrielController::class, 'listeModelCourriel'])->name("listeModelCourriel");
+
+    Route::get('/users', 
+    [UserController::class, 'index'])->name("users");
+
+    Route::get('/ModifierModelCourriel',
+    function () {return view('views/pageModifierModelCourriel');})->name("ModifierModelCourriel");
+
+    Route::get('/SupprimerModelCourriel',
+    function () {return view('views/pageSupprimerModelCourriel');})->name("SupprimerModelCourriel");
+    
+    Route::get('/ChangementRole', 
+    [UserController::class, 'index'])->name("ChangementRole");
+
+    Route::post('/user/updateRoles', [UserController::class, 'updateRoles'])->name('user.updateRoles');
+
+    Route::post('/ajouterModeleCourriel', [ModelCourrielController::class, 'store'])->name('modelCourriel.store');
+
+    Route::get('/ModifierModelCourriel', [ModelCourrielController::class, 'showModifierForm']);
+
+    Route::post('/updateModele', [ModelCourrielController::class, 'updateModele'])->name('updateModele');
+
+    Route::post('/updateParametre', [ParametresController::class, 'updateParametre'])->name('updateParametre');
+
+
+});
 
 Route::get('/recherche/ville', [FournisseurController::class, 'rechercheVille'])->name('recherche.ville');
 Route::get('/recherche/region', [FournisseurController::class, 'rechercheRegion'])->name('recherche.region');
 Route::get('/recherche/licence', [FournisseurController::class, 'rechercheLicences'])->name('recherche.licence');
 Route::get('/recherche/code', [FournisseurController::class, 'rechercheCodes'])->name('recherche.code');
 
-
 Route::get('/pageTest', [FournisseurController::class, 'pageTest'])->name('pageTest');
 Route::get('/import-xml', [FournisseurController::class, 'importXml'])->name('import.xml');
+Route::get('/import-codes', [FournisseurController::class, 'importCodes'])->name('import.codesd');
