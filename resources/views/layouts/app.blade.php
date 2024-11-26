@@ -41,18 +41,20 @@
 
     <div class="" style="display:none;right:0;" id="Menu">
         <button onclick="closeMenu()">Fermer &times;</button>
-        <a href="{{ route('VoirFiche') }}">Voir les fiches</a>
+        <a href="{{ route('VoirFiche') }}">Voir les fournisseurs</a>
         <a href="{{ route('VoirAContacter') }}">Voir ma liste de personne à contacter</a>
         @if (Auth::check() && (Auth::user()->role === 'Administrateur' || Auth::user()->role === 'Responsable'))
-            
+            <br>
+            <a href="{{ route('VoirListeFournisseur') }}">Voir les fournisseurs en attente</a>
         @endif
 
         @if (Auth::check() && (Auth::user()->role === 'Administrateur'))
+        <br>
             <a href="{{ route('users') }}">Liste des employers</a>
             <a href="{{ route('pagesParametres') }}">Parametre du site</a>
             <a href="{{ route('listeModelCourriel') }}">page des modèles de courriel</a>
         @endif
-        
+        <br>
         @auth <a href="{{ route('Logout') }}" >Fermer Session</a> @endauth     
     </div>
 
