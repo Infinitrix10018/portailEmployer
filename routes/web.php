@@ -16,7 +16,6 @@ use App\Http\Controllers\EmailController;
 
 
 //partie pas connecté
-
 Route::get('/Email',
  function () {return view('views/pageEmail');})->name("Email");
 
@@ -30,6 +29,15 @@ Route::get('/',
 
 Route::get('/login',function () {return view('views/pageConnexionEmployer');})->name("ConnexionEmployerUhOh");//don`t touch the tape
 Route::post('/login',[GestionConnection::class, 'login'])->name('login');
+
+Route::get('/recherche/ville', [FournisseurController::class, 'rechercheVille'])->name('recherche.ville');
+Route::get('/recherche/region', [FournisseurController::class, 'rechercheRegion'])->name('recherche.region');
+Route::get('/recherche/licence', [FournisseurController::class, 'rechercheLicences'])->name('recherche.licence');
+Route::get('/recherche/code', [FournisseurController::class, 'rechercheCodes'])->name('recherche.code');
+
+Route::get('/pageTest', [FournisseurController::class, 'pageTest'])->name('pageTest');
+Route::get('/import-xml', [FournisseurController::class, 'importXml'])->name('import.xml');
+Route::get('/import-codes', [FournisseurController::class, 'importCodes'])->name('import.codesd');
 
 //tous role non fournisseur
 Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
@@ -75,9 +83,13 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 
     Route::get('/ChangeContactPage/{id}', [ModContactController::class, 'index'])->name('ChangeContactPage');
     Route::post('/ChangeContact', [ModContactController::class, 'ChangeContact'])->name("ChangeContact");
+
+    Route::get('/VoirListeFournisseur',
+    [FournisseurController::class, 'showFournisseurs'])->name("VoirListeFournisseur");
 });
 
 
+//admin seuleument
 Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 'auth:sanctum', \App\Http\Middleware\RoleMiddleware::class.':Administrateur']],
  function () {
@@ -112,12 +124,3 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
 
 
 });
-
-Route::get('/recherche/ville', [FournisseurController::class, 'rechercheVille'])->name('recherche.ville');
-Route::get('/recherche/region', [FournisseurController::class, 'rechercheRegion'])->name('recherche.region');
-Route::get('/recherche/licence', [FournisseurController::class, 'rechercheLicences'])->name('recherche.licence');
-Route::get('/recherche/code', [FournisseurController::class, 'rechercheCodes'])->name('recherche.code');
-
-Route::get('/pageTest', [FournisseurController::class, 'pageTest'])->name('pageTest');
-Route::get('/import-xml', [FournisseurController::class, 'importXml'])->name('import.xml');
-Route::get('/import-codes', [FournisseurController::class, 'importCodes'])->name('import.codesd');

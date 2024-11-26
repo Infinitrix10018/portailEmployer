@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class FournisseurController extends Controller
 {
 
+    //partie pour afficher des choses
     public function index()
     {
         $fournisseurs = Fournisseur::with('demande')->get();
@@ -25,7 +26,6 @@ class FournisseurController extends Controller
 
     public function show()
     {
-        
         $fournisseurs = Fournisseur::with([
             'region',
             'demande'
@@ -42,10 +42,9 @@ class FournisseurController extends Controller
         return view('views.ListeFournisseur', compact('fournisseurs')); 
     }
 
-    public function setSession($id) {
+    public function setSession($id) 
+    {
         Session::put('id_fourni', $id);
-        //session(['id_fourni' => $id]);
-        //Log::info('id fournisseur: ', $id);
         return redirect()->route('VoirFicheFournisseur');
     }
 
@@ -66,12 +65,10 @@ class FournisseurController extends Controller
 
         if (!empty($fournisseur->demande->commentaire)) {
             try {
-                Log::info("Attempt decrypt comment for fournisseur ID: $id_fournisseur");
                 $fournisseur->demande->commentaire = Crypt::decryptString($fournisseur->demande->commentaire);
-                Log::info("Success decrypted comment for fournisseur ID: $id_fournisseur");
             } catch (\Exception $e) {
                 Log::error("Failed to decrypt comment for fournisseur ID: $id_fournisseur", ['error' => $e->getMessage()]);
-                $fournisseur->demande->commentaire = 'Unable to decrypt comment';
+                $fournisseur->demande->commentaire = 'Impossible de décrypter le document';
             }
         }
 
@@ -100,6 +97,19 @@ class FournisseurController extends Controller
         return view('views.pageVoirFiche', compact('fournisseur', 'phonesWithoutContact', 'licences', 'categorieCode', 'fichiers'));
     }
 
+    public function showFournisseurs()
+    {
+        $fournisseurs = Fournisseur::join('demandesFournisseurs', 'demandesFournisseurs.id_fournisseurs', '=', 'fournisseurs.id_fournisseurs')
+        ->select('fournisseurs.*', 'demandesFournisseurs.etat_demande') // Select columns from both tables
+        ->orderByRaw("FIELD(demandesFournisseurs.etat_demande, 'en attente', 'refuse', 'actif')")
+        ->with('demande') // Include the relationship for eager loading
+        ->get();
+
+        return view('views.ListeFournisseurRole', compact('fournisseurs'));
+    }
+
+
+    //download le document
     public function download($id_document)
     {
         \Log::info('Before download');
@@ -127,8 +137,12 @@ class FournisseurController extends Controller
         ]);
     }
 
+
+    //les recherches
     public function search(Request $request)
     {
+        $roleUser = Auth::user()->role;
+
         // Retrieve the form inputs
         $listeRbq = explode(",", $request->input('listeRbq'));
         $listeCode = explode(",", $request->input('listeCode'));
@@ -152,24 +166,18 @@ class FournisseurController extends Controller
             'etat_demande'
         ];
 
-        // Conditionally add columns to the select based on a condition
-        if (!empty(array_filter($listeRbq))) {
-            $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN sous_categorie IN (' . implode(',', $rbqPrep) . ') THEN sous_categorie END) as nbrRbq');
-            $orderByColumn = $request->input('nbrRbq');
-            $nbrRbqs = count($listeRbq);
-        } else {
-            $nbrRbqs = 0;
-        }
+        $nbrRbqsTotal = count(array_filter($listeRbq));
+        $nbrCodesTotal = count(array_filter($listeCode));
 
-        if (!empty(array_filter($listeCode))) {
-            $selectColumns[] = DB::raw('COUNT(DISTINCT CASE WHEN precision_categorie IN (' . implode(',', $codePrep) . ') THEN precision_categorie END) as nbrCode');
-            $orderByColumn = $request->input('nbrCode');
-            $nbrCodes = count($listeCode);
-        }
-        else {
-            $nbrCodes = 0;
-        }
-      
+        $nbrCodes = !empty(array_filter($listeCode)) ? 
+        'COUNT(DISTINCT CASE WHEN precision_categorie IN (' . implode(',', $codePrep) . ') THEN precision_categorie END)' : 0;
+        $nbrRbqs = !empty(array_filter($listeRbq)) ? 
+        'COUNT(DISTINCT CASE WHEN sous_categorie IN (' . implode(',', $rbqPrep) . ') THEN sous_categorie END)' : 0;
+
+        $selectColumns[] = DB::raw("$nbrCodes as nbrCode");
+        $selectColumns[] = DB::raw("$nbrRbqs as nbrRbq");
+        $selectColumns[] = DB::raw("($nbrCodes + $nbrRbqs) as total");
+
         // Get the fournisseurs and their counts for both lists
         $results = DB::table('fournisseurs')
             ->leftJoin('fournisseur_licence_rbq_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
@@ -190,21 +198,23 @@ class FournisseurController extends Controller
             ->when(!empty(array_filter($listeRegion)), function ($query) use ($listeRegion) {
                 return $query->whereIn('nom_region', $listeRegion);
             })
-            ->where('etat_demande', '=', 'actif')
             ->select($selectColumns)
             ->limit(50)
             ->groupBy('fournisseurs.id_fournisseurs', 'nom_entreprise',
             'ville','etat_demande');
 
-            if (!empty($orderByColumn)) {
-                if (in_array($orderByColumn)) {
-                    $results->orderByDesc($orderByColumn);
-                }
+            $results->orderBy('total', 'desc');
+            
+            if ($roleUser == 'Commis') {
+                $results->where('etat_demande', '=', 'actif');
+            } else{
+                $results->orderByRaw("FIELD(etat_demande, 'actif', 'en attente', 'refuse')");
             }
+
             //$results->orderBy('etat_demande');
             $results = $results->get();
 
-            return view('partials.fournisseursListe', compact('results', 'nbrRbqs', 'nbrCodes'));
+            return view('partials.fournisseursListe', compact('results', 'nbrRbqsTotal', 'nbrCodesTotal'));
     }
 
     public function rechercheVille(Request $request)
@@ -306,18 +316,15 @@ class FournisseurController extends Controller
         $matchingFiles = preg_grep($pattern, $files);
     }
 
-    public function pageTest()
-    {
-        return view('views.test');
-    }
 
+    //Partie pour les contactes
     public function ajouterContact(Request $request)
     {
         \Log::info('debut fonction');
         try {
             $id_user = Auth::user()->id;
             
-            \Log::info('avant enregistrement fichier dans bd');
+            //\Log::info('avant enregistrement fichier dans bd');
             Fournisseur_a_contacter::create([
                 'id_user' => $id_user,
                 'id_fournisseurs' => $request->input('value'),
@@ -329,15 +336,15 @@ class FournisseurController extends Controller
             Log::error('Erreur dans la fonction store du controller d\'inscription ' . $e->getMessage());
             //return redirect()->route('Inscription')->with('Erreur dans de formulaire');
         }
-        \Log::info('fin fonction');
+        //\Log::info('fin fonction');
         return response()->json(['success' => true]);
     }
 
     public function voirFournisseurAContacter()
     {
-        \Log::info('début fonction');
+        //\Log::info('début fonction');
         $id_user = Auth::user()->id;
-        \Log::info(['id user = ', $id_user]);
+       // \Log::info(['id user = ', $id_user]);
       
         // Get the fournisseurs and their counts for both lists
         $results = DB::table('fournisseurs')
@@ -363,10 +370,8 @@ class FournisseurController extends Controller
 
     public function supprimerFournisseurAContacter(Request $request)
     {
-        \Log::info('debut fonction');
         try {
             $id_user = Auth::user()->id;
-            \Log::info('avant enregistrement fichier dans bd');
             Fournisseur_a_contacter::where([
                 'id_user' => $id_user,
                 'id_fournisseurs' => $request->input('value')
@@ -375,11 +380,15 @@ class FournisseurController extends Controller
         } 
         catch (\Exception $e) {
             Log::error('Erreur dans la fonction store du controller d\'inscription ' . $e->getMessage());
-            //return redirect()->route('Inscription')->with('Erreur dans de formulaire');
         }
-        \Log::info('fin fonction');
-        //return redirect()->route('VoirAContacter');
         return response()->json(['success' => true]);
+    }
+
+
+    //parite un peu plus test
+    public function pageTest()
+    {
+        return view('views.test');
     }
 
     public function importXML()
@@ -392,7 +401,6 @@ class FournisseurController extends Controller
             foreach ($xml->Fournisseur as $Fournisseur) {
                 DB::transaction(function () use ($Fournisseur) {
                     
-
                     $inputString = (string)$Fournisseur->Coordonnees->Adresse->RegionAdministrative;
                     // Get the last 4 characters
                     $lastFour = substr($inputString, -4);
@@ -466,7 +474,6 @@ class FournisseurController extends Controller
                     }
 
                     foreach ($Fournisseur->ProduitsEtServices->Offres->CodeUNSPSC as $code) {
-
                         $id_code = DB::table('code_unspsc')
                         ->where('code_unspsc', 'LIKE', '%' . $code . '%') //'sous_categorie', 'LIKE', '%' . $searchTerm . '%'
                         ->pluck('id_code_unspsc')
@@ -479,10 +486,7 @@ class FournisseurController extends Controller
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ]);
-                        } else {
-                           //\Log::info($id_code);
-                        }
-                        
+                        } 
                     }
 
                     $etat = ["en attente", "actif", "refuse"];

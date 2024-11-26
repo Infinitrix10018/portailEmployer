@@ -15,12 +15,12 @@
                 <div class="col-sm-3"><p>{{ $result->nom_entreprise }}</p></div>
                 <div class="col-sm-3"><p>{{ $result->ville }}</p></div>
                 <div class="col-sm-2"><p>{{ $result->etat_demande ?? 'aucun status' }}</p></div>
-                <div class="col-sm-2"><p>{{ $result->nbrRbq ?? '0'}}/{{ $nbrRbqs }}</p></div>
-                <div class="col-sm-2"><p>{{ $result->nbrCode ?? '0'}}/{{ $nbrCodes }}</p></div>
+                <div class="col-sm-2"><p>{{ $result->nbrRbq ?? '0'}}/{{ $nbrRbqsTotal }}</p></div>
+                <div class="col-sm-2"><p>{{ $result->nbrCode ?? '0'}}/{{ $nbrCodesTotal }}</p></div>
             </div>
         </a> 
         <button onclick="sendData('{{ $result->id_fournisseurs }}')" class="button">
-            Ajouter le fournisseur à la liste des fournisseurs à contacter
+            À contacter
         </button>
         
     </div>
