@@ -63,14 +63,14 @@ class ModInfoController extends Controller
         $id_fournisseurs = $request->query('id');
         $telephoneId = $request->input('contact_id', null);
         
-
-        Log::info('Change Info request received', [
-            'TypeInfo' => $TypeInfo,
-            'Info' => $Info,
-            'id' => $id_fournisseurs,
-            'contactID' => $telephoneId,
-        ]);
-        
+        /*
+            Log::info('Change Info request received', [
+                'TypeInfo' => $TypeInfo,
+                'Info' => $Info,
+                'id' => $id_fournisseurs,
+                'contactID' => $telephoneId,
+            ]);
+        */
        
         if (!$id_fournisseurs) {
             Log::error('Fournisseur ID missing from request');

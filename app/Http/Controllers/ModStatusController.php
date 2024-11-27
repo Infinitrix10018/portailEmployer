@@ -18,11 +18,14 @@ class ModStatusController extends Controller
 
     public function changeStatus(Request $request)
     {
-        Log::info('Received changeStatus request', [
-            'status' => $request->input('status'),
-            'comment' => $request->input('comment'),
-            'id' => $request->query('id')
-        ]);
+        /*
+            Log::info('Received changeStatus request', [
+                'status' => $request->input('status'),
+                'comment' => $request->input('comment'),
+                'id' => $request->query('id')
+            ]);
+        */
+
         $status = $request->input('status');
         $comment = $request->input('comment');
         $id_fournisseurs = $request->query('id');
@@ -62,7 +65,7 @@ class ModStatusController extends Controller
             return redirect()->back()->with('success', 'État de la demande/commentaire mis à jour avec succès !');
         } else {
             Log::warning("No matching fournisseur found for ID: $id_fournisseurs or update failed");
-            return redirect()->back()->withErrors(['erreur' => 'Fournisseur non trouvé.']);
+            return redirect()->back()->with(['erreur' => 'Fournisseur non trouvé.']);
         }
     }
 }
