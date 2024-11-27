@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-6">
             <a href=""> 
-                <button type="button" class="button" id="btAjouterFinance">Modifier finance a venir</button>
+                <button type="button" class="button" id="btAjouterFinance">Modifier finance à venir</button>
             </a>
         </div>
     </div>

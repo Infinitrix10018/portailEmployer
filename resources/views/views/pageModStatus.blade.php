@@ -17,14 +17,14 @@
                                 <div class="row">
                                 <div class="form-check">
                                     <label class="form-check-label" for="myCheckbox">
-                                        Envoyer commentaire à fournisseur ?
+                                        Envoyer le commentaire au fournisseur ?
                                     </label>
                                     <input class="form-check-input" type="checkbox" id="myCheckbox" name="envoiCommentaire">
                                     
                                 </div>
                                     <button type="submit" class="button" id="idBoutonActif" name="status" value="actif">Changer le statut à actif</button>
                                     <button type="submit" class="button" id="idBoutonRefusé" name="status" value="refusé">Changer le statut à refusé</button>
-                                    <button type="submit" class="button" id="idBoutonComment" name="status" value="comment">Changer seulment commentaire</button>
+                                    <button type="submit" class="button" id="idBoutonComment" name="status" value="comment">Changer uniquement le commentaire</button>
                                 </div>
                             </div>
                     </div> 

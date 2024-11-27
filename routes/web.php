@@ -16,8 +16,6 @@ use App\Http\Controllers\EmailController;
 
 
 //partie pas connecté
-Route::get('/Email',
- function () {return view('views/pageEmail');})->name("Email");
 
  Route::post('/send-email', [EmailController::class, 'sendEmail'])->name('send.email');
 

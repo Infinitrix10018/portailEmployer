@@ -14,22 +14,22 @@
     <div class="container-xxl">
         <div class="row">
             <div class="col-sm-3">
-                <label for="rechercheRbq">licences rbq</label> 
+                <label for="rechercheRbq">Licences RBQ</label> 
                 <input type="text" id="rechercheRbq" name="licences_rbq" class="form-control">
                 <div id="rbqSuggestions" class="suggestions-container"></div>
             </div>
             <div class="col-sm-3">
-                <label for="rechercheCode">service et code unspsc</label> 
+                <label for="rechercheCode">Service et Code UNSPSC</label> 
                 <input type="text" id="rechercheCode" name="code_unspsc" class="form-control">
                 <div id="codeSuggestions" class="suggestions-container"></div>
             </div>
             <div class="col-sm-2">
-                <label for="rechercheVille">ville</label> 
+                <label for="rechercheVille">Ville</label> 
                 <input type="text" id="rechercheVille" name="ville" class="form-control">
                 <div id="villeSuggestions" class="suggestions-container"></div>
             </div>
             <div class="col-sm-2">
-                <label for="rechercheRegion">region administrative</label> 
+                <label for="rechercheRegion">Region Administrative</label> 
                 <input type="text" id="rechercheRegion" name="region" class="form-control">
                 <div id="regionSuggestions" class="suggestions-container"></div>
             </div>
@@ -50,31 +50,28 @@
                 
                 if (query.length > 1) {
                     $.ajax({
-                        url: '{{ route("recherche.licence") }}', // Replace with your actual route
+                        url: '{{ route("recherche.licence") }}',
                         method: 'GET',
                         data: { search: query },
                         success: function(data) {
                             let suggestionsContainer = $('#rbqSuggestions');
-                            suggestionsContainer.empty(); // Clear previous suggestions
+                            suggestionsContainer.empty();
 
-                            // Populate the suggestions container with results
                             data.forEach(function(item) {
                                 suggestionsContainer.append(`<div class="suggestion-item">${item.sous_categorie}</div>`);
                             });
 
-                            // Add a click event to each suggestion item
                             $('.suggestion-item').on('click', function() {
-                                $('#rechercheRbq').val($(this).text()); // Set the input value
-                                suggestionsContainer.empty(); // Clear suggestions
+                                $('#rechercheRbq').val($(this).text());
+                                suggestionsContainer.empty();
                             });
                         }
                     });
                 } else {
-                    $('#rbqSuggestions').empty(); // Clear suggestions if query is too short
+                    $('#rbqSuggestions').empty();
                 }
             });
 
-            // Optional: Hide suggestions when clicking outside
             $(document).on('click', function(e) {
                 if (!$(e.target).closest('#rechercheRbq').length) {
                     $('#rbqSuggestions').empty();
@@ -190,15 +187,15 @@
     <div class="row"> 
         <div class="container-xxl col-sm-8" id="searchResultsContainer">
             <h2>    
-                Faite une recherche pour voir des fournisseurs.
+                Faites une recherche pour voir des fournisseurs.
             </h2>
         </div>
         <div class="container-xxl col-sm-3">
             <div>
-                <h3>Liste de licences rbq</h3>
+                <h3>Liste de licences RBQ</h3>
                 <ul id="listeRbq" onclick="deleteItem(event)"></ul>
 
-                <h3>Liste des services et codes unspsc</h3>
+                <h3>Liste des services et codes UNSPSC</h3>
                 <ul id="listeCode" onclick="deleteItem(event)"></ul>
 
                 <h3>Liste des villes</h3>

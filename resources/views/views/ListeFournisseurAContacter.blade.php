@@ -43,7 +43,7 @@
     @else  
         <div class="container-xxl">
             <h4>
-                aucune pesrone à contacter
+                Aucune personne à contacter
             </h4>
         </div>
     @endif

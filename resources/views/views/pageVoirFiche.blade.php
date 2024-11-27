@@ -69,14 +69,14 @@
                 <div class="contact-info">
                     @foreach($fournisseur->personne_ressources as $contact)
                         <div class="contact row" id="containerWithBorder">
-                            <p class="col-md-4">Prenom du contact: {{ $contact->prenom_contact }}</p>
+                            <p class="col-md-4">Prénom du contact: {{ $contact->prenom_contact }}</p>
                             <p class="col-md-4">Nom du contact: {{ $contact->nom_contact }}</p>
                             <p class="col-md-4">Fonction du contact: {{ $contact->fonction }}</p>
 
                             @foreach($contact->telephones as $phone)
                                 <p class="col-md-4">Type de téléphone: {{ $phone->type_tel }}</p>
                                 <p class="col-md-4">Numéro de téléphone: {{ $phone->no_tel }}</p>
-                                <p class="col-md-4">poste du téléphone: {{ $phone->poste_tel }}</p>
+                                <p class="col-md-4">Poste du téléphone: {{ $phone->poste_tel }}</p>
                             @endforeach
 
                              <p class="col-md-6">Adresse courriel: {{ $contact->email_contact }}</p>

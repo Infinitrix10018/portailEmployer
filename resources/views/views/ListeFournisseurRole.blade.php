@@ -15,13 +15,13 @@
         <form id="listsForm" action="{{ route('VoirFiche.search') }}" method="get">
             <div class="row">
                 <div class="col-sm-9">
-                    <label for="rechercheFournisseur">recherche fournisseur</label> 
+                    <label for="rechercheFournisseur">Recherche fournisseur</label> 
                     <input type="text" id="rechercheFournisseur" name="fournisseur" class="form-control">
                     <div id="fourniSuggestions" class="suggestions-container"></div>
                 </div>
                 <div class="col-sm-3">
                     <div style="text-align:center">
-                    <button class="button" onclick="submitLists()">recherche le fournisseur</button>
+                    <button class="button" onclick="submitLists()">Recherche le fournisseur</button>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
 
     <div class="container-xxl" id="searchResultsContainer">
         <h2>    
-            Faite une recherche pour voir des fournisseurs.
+            Faites une recherche pour voir des fournisseurs.
         </h2>
     </div>
 

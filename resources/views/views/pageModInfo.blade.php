@@ -23,7 +23,7 @@
     @csrf
     <div class="container-xxl">
         <div class="container-xxl" id="containerWithBorder">
-            <h1>Information</h1>
+            <h1>Informations</h1>
 
             <div class="edit-info">
                 <p id="text-NEQ" data-field="NEQ">Numéro d'entreprise du Québec: {{ $fournisseur->NEQ }}</p>
