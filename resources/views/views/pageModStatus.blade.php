@@ -19,7 +19,7 @@
                                     <label class="form-check-label" for="myCheckbox">
                                         Envoyer commentaire à fournisseur ?
                                     </label>
-                                    <input class="form-check-input" type="checkbox" id="myCheckbox">
+                                    <input class="form-check-input" type="checkbox" id="myCheckbox" name="envoiCommentaire">
                                     
                                 </div>
                                     <button type="submit" class="button" id="idBoutonActif" name="status" value="actif">Changer le statut à actif</button>
