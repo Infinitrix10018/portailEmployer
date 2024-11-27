@@ -116,12 +116,12 @@
             @endif
         </div>
         <div class="container-xxl">
-            @if($fournisseur->demande->commentaire && $fichiers->isNotEmpty())
+            @if($fournisseur->commentaire && $fichiers->isNotEmpty())
                 <h2>Commentaire</h2>
                 <div class="container-xxl" id="containerWithBorder">
                     @if($fournisseur->demande->commentaire)
                         <h2>Votre commentaire</h2>
-                        <p class="col-sm-12">Votre commentaire: {{ $fournisseur->demande->commentaire }} </p>
+                        <p class="col-sm-12">Votre commentaire: {{ $fournisseur->commentaire }} </p>
                     @endif
 
                     @foreach ($fichiers as $fichier)
