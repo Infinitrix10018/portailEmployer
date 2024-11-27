@@ -50,26 +50,22 @@ function submitLists() {
     document.getElementById("listeVilleCacher").value = listeVilleValues.join(",");
     document.getElementById("listeRegionCacher").value = listeRegionValues.join(",");
 
-    $('#listsForm').on('submit', function(e) {
+    $('#listsForm').off('submit',).on('submit', function(e) {
         e.preventDefault();
 
         $.ajax({
-            url: searchUrl, // Same route, just handling it with AJAX
+            url: searchUrl,
             method: "get",
-            data: $('#listsForm').serialize(), // Serialize the form data
+            data: $('#listsForm').serialize(), 
             success: function (response) {
-                // Update the results container with the partial view content
                 $('#searchResultsContainer').html(response);
-                console.log($('#listsForm').serialize());
+                console.log('data send');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('Error:', textStatus, errorThrown);
             }
         });
     });
-
-    // Submit the form
-    //document.getElementById("listsForm").submit();
 }
 
 

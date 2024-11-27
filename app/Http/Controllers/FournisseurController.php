@@ -26,20 +26,7 @@ class FournisseurController extends Controller
 
     public function show()
     {
-        $fournisseurs = Fournisseur::with([
-            'region',
-            'demande'
-        ])
-        ->where('id_fournisseurs', -1)//mettre en commentaire si nous ne voulons pas avoir le where ici
-        ->get();
-        Log::info('Fournisseur: ', $fournisseurs->toArray());
-
-        if (!$fournisseurs) {
-            abort(404);
-        }
-        Log::info('Loaded Fournisseur:', $fournisseurs->toArray());
-
-        return view('views.ListeFournisseur', compact('fournisseurs')); 
+        return view('views.ListeFournisseur'); 
     }
 
     public function setSession($id) 
@@ -108,7 +95,6 @@ class FournisseurController extends Controller
         return view('views.ListeFournisseurRole', compact('fournisseurs'));
     }
 
-
     //download le document
     public function download($id_document)
     {
@@ -142,6 +128,7 @@ class FournisseurController extends Controller
     public function search(Request $request)
     {
         $roleUser = Auth::user()->role;
+        \Log::info('debut fonction search');
 
         // Retrieve the form inputs
         $listeRbq = explode(",", $request->input('listeRbq'));
@@ -214,7 +201,9 @@ class FournisseurController extends Controller
             //$results->orderBy('etat_demande');
             $results = $results->get();
 
+            \Log::info('fin fonction search');
             return view('partials.fournisseursListe', compact('results', 'nbrRbqsTotal', 'nbrCodesTotal'));
+            \Log::info('après logs fonction search');
     }
 
     public function rechercheVille(Request $request)

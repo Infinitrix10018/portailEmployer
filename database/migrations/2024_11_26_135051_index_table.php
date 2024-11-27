@@ -23,6 +23,16 @@ return new class extends Migration
             $table->index('sous_categorie');
         });
 
+        Schema::table('fournisseur_licence_rbq_liaison', function (Blueprint $table) {
+            $table->index('id_fournisseurs');
+            $table->index('id_licence_rbq');
+        });
+
+        Schema::table('fournisseur_code_unspsc_liaison', function (Blueprint $table) {
+            $table->index('id_fournisseurs');
+            $table->index('id_code_unspsc');
+        });
+
         Schema::table('fournisseurs', function (Blueprint $table) {
             $table->index('ville');
             $table->index('id_fournisseurs');
@@ -32,8 +42,10 @@ return new class extends Migration
             $table->index('etat_demande');
         });
 
-
-
+        /*
+            CREATE INDEX idx_rbq_fournisseur ON fournisseur_licence_rbq_liaison(id_fournisseurs, id_licence_rbq);
+            CREATE INDEX idx_code_fournisseur  ON fournisseur_code_unspsc_liaison(id_fournisseurs, id_code_unspsc);
+        */
     }
 
     /**
