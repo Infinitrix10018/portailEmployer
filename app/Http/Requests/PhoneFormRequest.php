@@ -23,13 +23,11 @@ class PhoneFormRequest extends FormRequest
     }
     protected function failedValidation(Validator $validator)
     {
-        // Log the request data
         Log::error('Validation failed', [
             'errors' => $validator->errors(),
             'request_data' => $this->all(),
         ]);
 
-        // Throw the validation exception
         throw new ValidationException($validator);
     }
 

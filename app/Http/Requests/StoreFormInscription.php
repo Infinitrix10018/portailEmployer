@@ -9,16 +9,12 @@ use Illuminate\Support\Facades\Log;
 
 class StoreFormInscription extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
     /**
-     * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -74,12 +70,8 @@ class StoreFormInscription extends FormRequest
 
 
             'licences_rbq' => 'nullable|json',
-            //'licences_rbq' => 'nullable|array', // Ensure the array is present
-            //'licences_rbq.*' => 'nullable|integer', // Validate each checkbox as an integer
 
             'codeUnspsc' => 'nullable|json',
-            //'codeUnspsc' => 'nullable|array', // Ensure the array is present
-            //'codeUnspsc.*' => 'nullable|integer', // Validate each checkbox as an integer
         ];
 
         return $rules;
@@ -87,20 +79,17 @@ class StoreFormInscription extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        // Log the request data
         Log::error('Validation failed', [
             'errors' => $validator->errors(),
             'request_data' => $this->all(),
         ]);
 
-        // Throw the validation exception
         throw new ValidationException($validator);
     }
 
     public function messages()
     {
         return [
-            //a faire un peu plus, mais cela va prendre du temps.
             'fournisseur.nom_entreprise.required' => 'Vous devez fournir un nom d\'entreprise.',
             'fournisseur.nom_entreprise.regex' => 'Le nom d\'entreprise doit seuleument contenir des lettres, des chiffres ainsi que c\'est caractére-ci : "’‘-.".',
             'fournisseur.email.regex' => 'L\'adresse email doit être valide de format email@email.com.',

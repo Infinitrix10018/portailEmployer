@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('code_unspsc', function (Blueprint $table) {
@@ -42,15 +39,8 @@ return new class extends Migration
             $table->index('etat_demande');
         });
 
-        /*
-            CREATE INDEX idx_rbq_fournisseur ON fournisseur_licence_rbq_liaison(id_fournisseurs, id_licence_rbq);
-            CREATE INDEX idx_code_fournisseur  ON fournisseur_code_unspsc_liaison(id_fournisseurs, id_code_unspsc);
-        */
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         //

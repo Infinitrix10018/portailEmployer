@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class parametreSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         

@@ -93,9 +93,9 @@ class FournisseurController extends Controller
     public function showFournisseurs()
     {
         $fournisseurs = Fournisseur::join('demandesFournisseurs', 'demandesFournisseurs.id_fournisseurs', '=', 'fournisseurs.id_fournisseurs')
-        ->select('fournisseurs.*', 'demandesFournisseurs.etat_demande') // Select columns from both tables
+        ->select('fournisseurs.*', 'demandesFournisseurs.etat_demande')
         ->orderByRaw("FIELD(demandesFournisseurs.etat_demande, 'en attente', 'refuse', 'actif')")
-        ->with('demande') // Include the relationship for eager loading
+        ->with('demande')
         ->get();
 
         return view('partial.fournisseursRoleListe', compact('fournisseurs'));
@@ -106,23 +106,19 @@ class FournisseurController extends Controller
     {
         \Log::info('Before download');
 
-        //$fichier = Documents::findOrFail($id_document);
         $fichier = Documents::where('id_document', $id_document)->first();
 
         $filePath = $fichier->cheminDocument;
         $fileName = $fichier->nomDocument;
     
-        // Check if the file exists before proceeding
         if (!Storage::disk('public')->exists($filePath)) {
             \Log::error("File not found: $filePath");
             abort(404, 'File not found');
         }
     
-        // Get the file size and MIME type
         $fileSize = Storage::disk('public')->size($filePath);
         $mimeType = Storage::disk('public')->mimeType($filePath);
     
-        // Return the download response with custom headers
         return response()->download(storage_path("app/public/$filePath"), $fileName, [
             'Content-Length' => $fileSize,
             'Content-Type' => $mimeType,
@@ -136,7 +132,6 @@ class FournisseurController extends Controller
         $roleUser = Auth::user()->role;
         \Log::info('debut fonction search');
 
-        // Retrieve the form inputs
         $listeRbq = explode(",", $request->input('listeRbq'));
         $listeCode = explode(",", $request->input('listeCode'));
         $listeVille = explode(",", $request->input('listeVille'));
@@ -171,7 +166,6 @@ class FournisseurController extends Controller
         $selectColumns[] = DB::raw("$nbrRbqs as nbrRbq");
         $selectColumns[] = DB::raw("($nbrCodes + $nbrRbqs) as total");
 
-        // Get the fournisseurs and their counts for both lists
         $results = DB::table('fournisseurs')
             ->leftJoin('fournisseur_licence_rbq_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
             ->leftJoin('licences_rbq', 'fournisseur_licence_rbq_liaison.id_licence_rbq', '=', 'licences_rbq.id_licence_rbq')
@@ -204,7 +198,6 @@ class FournisseurController extends Controller
                 $results->orderByRaw("FIELD(etat_demande, 'actif', 'en attente', 'refuse')");
             }
 
-            //$results->orderBy('etat_demande');
             $results = $results->get();
 
             \Log::info('fin fonction search');
@@ -214,28 +207,23 @@ class FournisseurController extends Controller
 
     public function rechercheVille(Request $request)
     {
-        // Get the search term from the query string
         $searchTerm = $request->input('search');
-        
-        // Perform the query to find matching cities
+
         $ville = DB::table('fournisseurs')
             ->select('ville')
             ->where('ville', 'LIKE', '%' . $searchTerm . '%')
             ->distinct()
             ->orderBy('ville')
-            ->limit(25) // Optional: limit results for performance
+            ->limit(25)
             ->get();
 
-        // Return the result as JSON
         return response()->json($ville);
     }
 
     public function rechercheRegion(Request $request)
     {
-        // Get the search term from the query string
         $searchTerm = $request->input('search');
         
-        // Perform the query to find matching cities
         $region = DB::table('regions_administratives')
             ->whereIn('no_region', function($query) {
                 $query->select('no_region_admin')
@@ -246,19 +234,16 @@ class FournisseurController extends Controller
                 ->orWhere('no_region', 'LIKE', '%' . $searchTerm . '%');
             })
             ->orderBy('nom_region')
-            ->limit(25) // Optional: limit results for performance
+            ->limit(25)
             ->get();
 
-        // Return the result as JSON
         return response()->json($region);
     }
 
     public function rechercheLicences(Request $request)
     {
-        // Get the search term from the query string
         $searchTerm = $request->input('search');
         
-        // Perform the query to find matching cities
         $licences = DB::table('licences_rbq')
             ->whereIn('id_licence_rbq', function($query) {
                 $query->select('id_licence_rbq')
@@ -269,19 +254,16 @@ class FournisseurController extends Controller
                       ->orWhere('categorie', 'LIKE', '%' . $searchTerm . '%');
             })
             ->orderBy('id_licence_rbq')
-            ->limit(25) // Optional: limit results for performance
+            ->limit(25)
             ->get();
 
-        // Return the result as JSON
         return response()->json($licences);
     }
 
     public function rechercheCodes(Request $request)
     {
-        // Get the search term from the query string
         $searchTerm = $request->input('search');
         
-        // Perform the query to find matching cities
         $ville = DB::table('code_unspsc')
             ->whereIn('id_code_unspsc', function($query) {
                 $query->select('id_code_unspsc')
@@ -294,10 +276,9 @@ class FournisseurController extends Controller
                 ->orWhere('precision_categorie', 'LIKE', '%' . $searchTerm . '%');
             })
             ->orderBy('code_unspsc')
-            ->limit(25) // Optional: limit results for performance
+            ->limit(25)
             ->get();
 
-        // Return the result as JSON
         return response()->json($ville);
     }
 
@@ -311,7 +292,6 @@ class FournisseurController extends Controller
             ->limit(25)
             ->get();
 
-        // Return the result as JSON
         return response()->json($fournisseur);
     }
 
@@ -333,7 +313,6 @@ class FournisseurController extends Controller
         try {
             $id_user = Auth::user()->id;
             
-            //\Log::info('avant enregistrement fichier dans bd');
             Fournisseur_a_contacter::create([
                 'id_user' => $id_user,
                 'id_fournisseurs' => $request->input('value'),
@@ -343,20 +322,15 @@ class FournisseurController extends Controller
         } 
         catch (\Exception $e) {
             Log::error('Erreur dans la fonction store du controller d\'inscription ' . $e->getMessage());
-            //return redirect()->route('Inscription')->with('Erreur dans de formulaire');
         }
-        //\Log::info('fin fonction');
         return response()->json(['success' => true]);
     }
     
 
     public function voirFournisseurAContacter()
     {
-        //\Log::info('début fonction');
         $id_user = Auth::user()->id;
-       // \Log::info(['id user = ', $id_user]);
       
-        // Get the fournisseurs and their counts for both lists
         $results = DB::table('fournisseurs')
             ->leftJoin('fournisseur_licence_rbq_liaison', 'fournisseurs.id_fournisseurs', '=', 'fournisseur_licence_rbq_liaison.id_fournisseurs')
             ->leftJoin('licences_rbq', 'fournisseur_licence_rbq_liaison.id_licence_rbq', '=', 'licences_rbq.id_licence_rbq')
@@ -407,20 +381,16 @@ class FournisseurController extends Controller
         try {
             $xml = simplexml_load_file(storage_path('app/files/stress-test.xml'));
             Log::info('début importation');
-            // import the data
             foreach ($xml->Fournisseur as $Fournisseur) {
                 DB::transaction(function () use ($Fournisseur) {
                     
                     $inputString = (string)$Fournisseur->Coordonnees->Adresse->RegionAdministrative;
-                    // Get the last 4 characters
                     $lastFour = substr($inputString, -4);
-                    // Get the middle 2 characters of the last 4
                     $regionAdmin = substr($lastFour, 1, 2);
 
                     $NEQ = !empty($Fournisseur->Identification->NEQ) ? (string)$Fournisseur->Identification->NEQ : null;
                     Log::info(['neq', $NEQ]);
                     $data = (string)$Fournisseur->Identification->NomEntreprise;
-                    // Insert Fournisseur
                     $FournisseurId = DB::table('fournisseurs')->insertGetId([
                         'NEQ' => $NEQ,
                         'email' => (string)$Fournisseur->Identification->Courriel,
@@ -439,7 +409,6 @@ class FournisseurController extends Controller
                         'updated_at' => now(),
                     ]);
             
-                    // Insert Fournisseur details
                     DB::table('users')->insert([
                         'id_fournisseurs' => $FournisseurId,
                         'name' => (string)$Fournisseur->Identification->NomEntreprise,

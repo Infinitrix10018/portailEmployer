@@ -14,7 +14,6 @@ class EmailController extends Controller
         $emailContent = ModelCourriel::first();
 
         if ($emailContent) {
-            // Send the email using the WelcomeMail class
             Mail::to('integrationtestadress@gmail.com')->send(new WelcomeMail($emailContent));
             return back()->with('success', 'Email sent successfully!');
         }

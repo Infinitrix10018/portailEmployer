@@ -40,13 +40,6 @@ class ModelCourrielController extends Controller
             'objet' => $request->objet,
             'message' => $request->message,
         ]); 
-        /*
-        $model = ModelCourriel::findOrFail($validated['id']);
-        $model->nom_courriel = $validated['nom'];
-        $model->objet = $validated['objet'];
-        $model->message = $validated['message'];
-        $model->save();
-        */
         return redirect()->route('listeModelCourriel')->with('success', 'Modèle mis à jour avec succès!');
     }
 

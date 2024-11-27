@@ -48,7 +48,7 @@
             $('#rechercheRbq').on('keyup', function() {
                 let query = $(this).val();
                 
-                if (query.length > 1) { // Start searching after two characters
+                if (query.length > 1) {
                     $.ajax({
                         url: '{{ route("recherche.licence") }}', // Replace with your actual route
                         method: 'GET',

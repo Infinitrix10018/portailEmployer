@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class RegionsAdministrativesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         DB::table('regions_administratives')->insert([
