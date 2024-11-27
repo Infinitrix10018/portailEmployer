@@ -381,11 +381,6 @@ class FournisseurController extends Controller
         set_time_limit(600);
         try {
             $xml = simplexml_load_file(storage_path('app/files/stress-test.xml'));
-<<<<<<< Updated upstream
-            Log::info('début importation');
-=======
-            // import the data
->>>>>>> Stashed changes
             foreach ($xml->Fournisseur as $Fournisseur) {
                 DB::transaction(function () use ($Fournisseur) {
                     
