@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class FournisseurController extends Controller
 {
@@ -98,7 +99,7 @@ class FournisseurController extends Controller
         ->with('demande')
         ->get();
 
-        return view('partial.fournisseursRoleListe', compact('fournisseurs'));
+        return view('partials.fournisseursRoleListe', compact('fournisseurs'));
     }
 
     //download le document
@@ -380,7 +381,11 @@ class FournisseurController extends Controller
         set_time_limit(600);
         try {
             $xml = simplexml_load_file(storage_path('app/files/stress-test.xml'));
+<<<<<<< Updated upstream
             Log::info('début importation');
+=======
+            // import the data
+>>>>>>> Stashed changes
             foreach ($xml->Fournisseur as $Fournisseur) {
                 DB::transaction(function () use ($Fournisseur) {
                     
@@ -389,12 +394,11 @@ class FournisseurController extends Controller
                     $regionAdmin = substr($lastFour, 1, 2);
 
                     $NEQ = !empty($Fournisseur->Identification->NEQ) ? (string)$Fournisseur->Identification->NEQ : null;
-                    Log::info(['neq', $NEQ]);
                     $data = (string)$Fournisseur->Identification->NomEntreprise;
                     $FournisseurId = DB::table('fournisseurs')->insertGetId([
                         'NEQ' => $NEQ,
                         'email' => (string)$Fournisseur->Identification->Courriel,
-                        'mdp' => (string)$Fournisseur->Identification->MotDePasse,
+                        'mdp' => Hash::make((string)$Fournisseur->Identification->MotDePasse),
                         'nom_entreprise' => substr($data, 0, 64),
                         'no_rue' => (string)$Fournisseur->Coordonnees->Adresse->noCivique,
                         'rue' => (string)$Fournisseur->Coordonnees->Adresse->Rue,
@@ -479,7 +483,6 @@ class FournisseurController extends Controller
                 });
             }
             
-            Log::info('fin importation');
             return response()->json(['success' => true, 'message' => 'XML imported successfully']);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
