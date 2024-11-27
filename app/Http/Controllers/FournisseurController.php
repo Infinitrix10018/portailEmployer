@@ -84,6 +84,12 @@ class FournisseurController extends Controller
         return view('views.pageVoirFiche', compact('fournisseur', 'phonesWithoutContact', 'licences', 'categorieCode', 'fichiers'));
     }
 
+    public function indexFournisseurs()
+    {
+       
+        return view('views.ListeFournisseurRole');
+    }
+
     public function showFournisseurs()
     {
         $fournisseurs = Fournisseur::join('demandesFournisseurs', 'demandesFournisseurs.id_fournisseurs', '=', 'fournisseurs.id_fournisseurs')
@@ -92,7 +98,7 @@ class FournisseurController extends Controller
         ->with('demande') // Include the relationship for eager loading
         ->get();
 
-        return view('views.ListeFournisseurRole', compact('fournisseurs'));
+        return view('partial.fournisseursRoleListe', compact('fournisseurs'));
     }
 
     //download le document
@@ -295,6 +301,20 @@ class FournisseurController extends Controller
         return response()->json($ville);
     }
 
+    public function rechercheFournisseur(Request $request)
+    {
+        $searchTerm = $request->input('fournisseur');
+        Log::info(['recherche fournisseur', $searchTerm]);
+        $fournisseur = DB::table('fournisseurs')
+            ->where('nom_entreprise', 'LIKE', '%' . $searchTerm . '%')
+            ->orderBy('nom_entreprise')
+            ->limit(25)
+            ->get();
+
+        // Return the result as JSON
+        return response()->json($fournisseur);
+    }
+
     public function rechercheFichiers(string $id)
     {
         $directory = '';
@@ -328,6 +348,7 @@ class FournisseurController extends Controller
         //\Log::info('fin fonction');
         return response()->json(['success' => true]);
     }
+    
 
     public function voirFournisseurAContacter()
     {

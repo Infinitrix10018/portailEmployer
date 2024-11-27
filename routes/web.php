@@ -34,6 +34,7 @@ Route::get('/recherche/ville', [FournisseurController::class, 'rechercheVille'])
 Route::get('/recherche/region', [FournisseurController::class, 'rechercheRegion'])->name('recherche.region');
 Route::get('/recherche/licence', [FournisseurController::class, 'rechercheLicences'])->name('recherche.licence');
 Route::get('/recherche/code', [FournisseurController::class, 'rechercheCodes'])->name('recherche.code');
+Route::get('/recherche/fournisseur', [FournisseurController::class, 'rechercheFournisseur'])->name('recherche.fournisseur');
 
 Route::get('/pageTest', [FournisseurController::class, 'pageTest'])->name('pageTest');
 Route::get('/import-xml', [FournisseurController::class, 'importXml'])->name('import.xml');
@@ -85,7 +86,10 @@ Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,
     Route::post('/ChangeContact', [ModContactController::class, 'ChangeContact'])->name("ChangeContact");
 
     Route::get('/VoirListeFournisseur',
-    [FournisseurController::class, 'showFournisseurs'])->name("VoirListeFournisseur");
+    [FournisseurController::class, 'indexFournisseurs'])->name("VoirListeFournisseur");
+
+    Route::get('/VoirListeFournisseur/search',
+    [FournisseurController::class, 'showFournisseurs'])->name("VoirListeFournisseur.search");
 });
 
 
