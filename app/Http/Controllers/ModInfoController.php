@@ -61,41 +61,63 @@ class ModInfoController extends Controller
         $Info = $validatedData['Info'];
         $TypeInfo = $validatedData['TypeInfo'];
         $id_fournisseurs = $request->query('id');
+        $telephoneId = $request->input('contact_id', null);
+        
 
         Log::info('Change Info request received', [
             'TypeInfo' => $TypeInfo,
             'Info' => $Info,
             'id' => $id_fournisseurs,
+            'contactID' => $telephoneId,
         ]);
         
-
-        /*Log::info('Change Info request received', [
-            'Info' => $request->input('Info'),
-            'TypeInfo' => $request->input('TypeInfo'),
-            'id' => $request->query('id')
-        ]);
-        */
        
         if (!$id_fournisseurs) {
             Log::error('Fournisseur ID missing from request');
-            return redirect()->back()->withErrors(['erreur' => 'Fournisseur ID is required.']);
+            return redirect()->back()->with(['erreur' => 'Fournisseur ID is required.']);
         }
 
-        try {
-            $updated = DB::table('fournisseurs')
-                ->where('id_fournisseurs', $id_fournisseurs)
-                ->update([$TypeInfo => $Info]);
 
-            if ($updated) {
-                Log::info("Successfully updated field '$TypeInfo' for fournisseur ID: $id_fournisseurs");
-                return redirect()->back()->with('success', 'Information changer');
-            } else {
-                Log::warning("Update failed for fournisseur ID: $id_fournisseurs, no matching record or no changes.");
-                return redirect()->back()->withErrors(['erreur' => 'Erreur assurez-vous de valider que vos informations suivent toutes les contraintes!']);
+        if($telephoneId)
+        {
+            try {
+                $updated = DB::table('telephone')
+                    ->where('id_fournisseurs', $id_fournisseurs)
+                    ->where('id_telephone', $telephoneId)
+                    ->update([$TypeInfo => $Info]);
+    
+                if ($updated) {
+                    Log::info("Successfully updated field '$TypeInfo' for fournisseur ID: $id_fournisseurs");
+                    return redirect()->back()->with('success', 'Information changer');
+                } else {
+                    Log::warning("Update failed for fournisseur ID: $id_fournisseurs, no matching record or no changes.");
+                    return redirect()->back()->with(['erreur' => 'Erreur assurez-vous de valider que vos informations suivent toutes les contraintes!']);
+                }
+            } catch (\Exception $e) {
+                Log::error('Database update error', ['exception' => $e->getMessage()]);
+                return redirect()->back()->with(['erreur' => 'Erreur en lien avec MYSQL']);
             }
-        } catch (\Exception $e) {
-            Log::error('Database update error', ['exception' => $e->getMessage()]);
-            return redirect()->back()->withErrors(['erreur' => 'Erreur en lien avec MYSQL']);
         }
+        else
+        {
+            try {
+                $updated = DB::table('fournisseurs')
+                    ->where('id_fournisseurs', $id_fournisseurs)
+                    ->update([$TypeInfo => $Info]);
+    
+                if ($updated) {
+                    Log::info("Successfully updated field '$TypeInfo' for fournisseur ID: $id_fournisseurs");
+                    return redirect()->back()->with('success', 'Information changer');
+                } else {
+                    Log::warning("Update failed for fournisseur ID: $id_fournisseurs, no matching record or no changes.");
+                    return redirect()->back()->with(['erreur' => 'Erreur assurez-vous de valider que vos informations suivent toutes les contraintes!']);
+                }
+            } catch (\Exception $e) {
+                Log::error('Database update error', ['exception' => $e->getMessage()]);
+                return redirect()->back()->with(['erreur' => 'Erreur en lien avec MYSQL']);
+            }
+        }
+
+        
     }
 }

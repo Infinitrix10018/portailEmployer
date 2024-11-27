@@ -87,85 +87,27 @@
                     <img src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="site_internet" onclick="makeEditable(this)">
                 </div>
                 <h2>Téléphone</h2>
-                <!--
                 <div class="row">
                     @foreach($phonesWithoutContact as $phone)
-                        <p>Type de Téléphones: {{ $phone->type_tel }}</p>
-                        <p>Téléphones: {{ $phone->no_tel }}</p>
-                        <p>Poste: {{ $phone->poste_tel }}</p>
-                    @endforeach
-                </div>
-                -->
-            </div>
-        </div>
-
-        <div class="container-xxl">
-            <h2>Personne ressource</h2>
-            <!--
-            <div class="container-xxl" id="containerWithBorder">
-                <div class="contact-info">
-                    @foreach($fournisseur->personne_ressources as $contact)
-                        <div class="contact row">
-                            <div class="edit-info">
-                                <p id="text-prenom_contact" data-field="prenom_contact">Prenom du contact: {{ $contact->prenom_contact }}</p>
-                                <img src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="prenom_contact" onclick="makeEditable(this)">
-                            </div>
-                            <div class="edit-info">
-                                <p id="text-nom_contact" data-field="nom_contact">Nom du contact: {{ $contact->nom_contact }}</p>
-                                <img src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="nom_contact" onclick="makeEditable(this)">
-                            </div>
-                            <div class="edit-info">
-                                <p id="text-fonction" data-field="fonction">Fonction du contact: {{ $contact->fonction }}</p>
-                                <img src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="fonction" onclick="makeEditable(this)">
-                            </div>
-                            <div class="edit-info">
-                                <p id="text-email_contact" data-field="email_contact">Adresse courriel: {{ $contact->email_contact }}</p>
-                                <img src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="email_contact" onclick="makeEditable(this)">
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        -->
-        </div>
-
-        <!--
-        <div class="container-xxl">
-            @if($licences->isNotEmpty())
-                <h2>Licences RBQ</h2>
-                <div class="container-xxl" id="containerWithBorder">
-                    @foreach($licences as $licence)
+                    <div id="containerWithBorder">
                         <div class="edit-info">
-                            <p id="text-licence" data-field="licence">{{ $licence->sous_categorie }}</p>
+                            <p id="text-type_tel-{{ $phone->id_telephone }}" data-field="type_tel">Type de téléphone: {{ $phone->type_tel }}</p>
+                            <img data-contact-id="{{ $phone->id_telephone }}"  src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="type_tel" onclick="makeEditableContact(this)">
                         </div>
+                        <div class="edit-info">
+                            <p id="text-no_tel-{{ $phone->id_telephone }}" data-field="no_tel">Numéro de téléphone: {{ $phone->no_tel }}</p>
+                            <img data-contact-id="{{ $phone->id_telephone }}"  src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="no_tel" onclick="makeEditableContact(this)">
+                        </div>
+                        <div class="edit-info">
+                            <p id="text-poste_tel-{{ $phone->id_telephone }}" data-field="poste_tel">Poste du téléphone: {{ $phone->poste_tel }}</p>
+                            <img data-contact-id="{{ $phone->id_telephone }}"  src="{{ asset('img/edit.svg') }}" width="25" height="25" alt="Logo Edit" class="edit-icon" data-field="poste_tel" onclick="makeEditableContact(this)">
+                        </div>
+                    </div>
                     @endforeach
                 </div>
-            @endif
-        -->
-        
-            @if($categorieCode->isNotEmpty())
-                <h2>Code UNSPSC</h2>
-            <!--
-                <div class="container-xxl" id="containerWithBorder">
-                    @foreach($categorieCode as $section1 => $classCategories)
-                        <h3>{{ $section1 }}</h3>
-                        @foreach($classCategories as $section2 => $codeUnspscs)
-                            <h5>{{ $section2 }}</h5>
-                            <ul>
-                                @foreach($codeUnspscs as $codeUnspsc)
-                                    <li class="licence-item" data-id="{{ $codeUnspsc->id_code_unspsc }}">
-                                        {{ $codeUnspsc->precision_categorie }}
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endforeach
-                    @endforeach
-                </div>
-            -->
-            @endif
+            </div>
         </div>
     </div>
-        <!--<button type="submit" class="button" id="bt-center">Changer les informations</button>-->
     </form>
 
 @endsection

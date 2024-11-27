@@ -14,8 +14,8 @@
             </a>
         </div>
         <div class="col-md-6">
-            <a href="{{url('')}}"> 
-                <button type="button" class="button" id="btAjouterFinance">Modifier finances</button>
+            <a href=""> 
+                <button type="button" class="button" id="btAjouterFinance">Modifier finance a venir</button>
             </a>
         </div>
     </div>
@@ -30,11 +30,6 @@
         <div class="col-md-6">
             <a href="{{ route('ChangeStatusPage', ['id' => $id]) }}">
                 <button type="button" class="button" id="btModifierStatus">Modifier le status</button>
-            </a>
-        </div>
-        <div class="col-md-6">
-            <a href="{{url('')}}"> 
-                <button type="button" class="button" id="btModifierTelephone">Modifier les telephones</button>
             </a>
         </div>
     </div>
