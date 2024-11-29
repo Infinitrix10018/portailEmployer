@@ -378,7 +378,7 @@ class FournisseurController extends Controller
 
     public function importXML()
     {
-        set_time_limit(600);
+        set_time_limit(1200);
         try {
             $xml = simplexml_load_file(storage_path('app/files/stress-test.xml'));
             foreach ($xml->Fournisseur as $Fournisseur) {
