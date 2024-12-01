@@ -87,14 +87,20 @@ class FournisseurController extends Controller
 
     public function indexFournisseurs()
     {
-       
-        return view('views.ListeFournisseurRole');
-    }
-
-    public function showFournisseurs()
-    {
         $fournisseurs = Fournisseur::join('demandesFournisseurs', 'demandesFournisseurs.id_fournisseurs', '=', 'fournisseurs.id_fournisseurs')
         ->select('fournisseurs.*', 'demandesFournisseurs.etat_demande')
+        ->orderByRaw("FIELD(demandesFournisseurs.etat_demande, 'en attente', 'refuse', 'actif')")
+        ->get();
+
+        return view('views.ListeFournisseurRole', compact('fournisseurs'));
+    }
+
+    public function showFournisseurs(Request $request)
+    {   
+        $searchTerm = $request->input('fournisseur');
+        $fournisseurs = Fournisseur::join('demandesFournisseurs', 'demandesFournisseurs.id_fournisseurs', '=', 'fournisseurs.id_fournisseurs')
+        ->select('fournisseurs.*', 'demandesFournisseurs.etat_demande')
+        ->where('nom_entreprise', $searchTerm)
         ->orderByRaw("FIELD(demandesFournisseurs.etat_demande, 'en attente', 'refuse', 'actif')")
         ->with('demande')
         ->get();
@@ -467,8 +473,8 @@ class FournisseurController extends Controller
                         } 
                     }
 
-                    $etat = ["en attente", "actif", "refuse"];
-                    $randomNumber = rand(0, 2);
+                    $etat = ["actif", "refuse"];
+                    $randomNumber = rand(0, 1);
                     DB::table('demandesfournisseurs')->insert([
                         'id_fournisseurs' => $FournisseurId,
                         'etat_demande' => $etat[$randomNumber],

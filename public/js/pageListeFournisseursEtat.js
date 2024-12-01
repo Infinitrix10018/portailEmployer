@@ -1,12 +1,13 @@
 function submitLists() {
 
-    $('#listsForm').off('submit',).on('submit', function(e) {
+    $('#rechercheFournisseur').off('submit',).on('submit', function(e) {
         e.preventDefault();
+        let query = $(this).val();
 
         $.ajax({
             url: searchUrl,
             method: "get",
-            data: $('#listsForm').serialize(), 
+            data: { fournisseur: query }, 
             success: function (response) {
                 $('#searchResultsContainer').html(response);
                 console.log('data send');

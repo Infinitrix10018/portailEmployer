@@ -12,44 +12,33 @@
                     <form method="POST" action="{{ route('updateParametre') }}">
                         @csrf
                         <div class="row">
-                            <div class="col-md-6" id="texteh5">
-                                
-                                <h4>Courriel de l'approvisionnement</h4>
-                                
-                            </div>
-
-                            <div class="col-md-6" id="texteBox">
-                            <input type="text" class="form-control" id="idCourriel" value="{{ $courriel->valeur_parametre ?? '' }}" name="courriel">
-                            </div>
 
                             <div class="col-md-6" id="texteh5">
-                                
-                                <h4>Délai avant révision</h4>
-                                
-                            </div>
-
-                            <div class="col-md-6" id="texteBox">
-                            <input type="text" class="form-control" id="idDelai" value="{{ $delai->valeur_parametre ?? '' }}" name="valeur">
-                            </div>
-
-                            <div class="col-md-6" id="texteh5">
-                                
                                 <h4>Taille maximale des fichiers joints (Mo)</h4>
-                                
                             </div>
-
                             <div class="col-md-6" id="texteBox">
-                            <input type="number" class="form-control" id="idTaille" value="{{ $tailleFichier->valeur_parametre ?? '' }}" name="tailleFichier">
+                                <input type="number" class="form-control" id="idTaille" value="{{ $tailleFichier->valeur_parametre ?? '' }}" name="tailleFichier">
+                            </div>
+                            
+                            <div class="col-md-6" id="texteh5">
+                                <h4>Délai avant révision</h4>
+                            </div>
+                            <div class="col-md-6" id="texteBox">
+                                <input type="text" class="form-control" id="idDelai" value="{{ $delai->valeur_parametre ?? '' }}" name="valeur">
                             </div>
 
                             <div class="col-md-6" id="texteh5">
-                                
-                                <h4>Courriel des finances</h4>
-                                
+                                <h4>Courriel de l'approvisionnement</h4>
+                            </div>
+                            <div class="col-md-6" id="texteBox">
+                                <input type="text" class="form-control" id="idCourriel" value="{{ $courriel->valeur_parametre ?? '' }}" name="courriel">
                             </div>
 
+                            <div class="col-md-6" id="texteh5">
+                                <h4>Courriel des finances</h4>
+                            </div>
                             <div class="col-md-6" id="texteBox">
-                            <input type="text" class="form-control" id="idCourrielFinance" value="{{ $courrielFinance->valeur_parametre ?? '' }}" name="courrielFinance">
+                                <input type="text" class="form-control" id="idCourrielFinance" value="{{ $courrielFinance->valeur_parametre ?? '' }}" name="courrielFinance">
                             </div>
 
                             <div class="col-lg-7">

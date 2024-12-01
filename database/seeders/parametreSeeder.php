@@ -20,13 +20,13 @@ class parametreSeeder extends Seeder
             ],
             [
                 'nom_parametre' => 'Courriel approvisionnement',
-                'valeur_parametre' => 'unCourrielPlaceHolder@gmail.com',
+                'valeur_parametre' => 'unCourrielExemple@gmail.com',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'nom_parametre' => 'Courriel des finances',
-                'valeur_parametre' => 'unDeuxiemeCourrielPlaceHolder@gmail.com',
+                'valeur_parametre' => 'unCourrielExemple@gmail.com',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
