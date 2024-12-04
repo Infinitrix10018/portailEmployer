@@ -3,7 +3,7 @@
             <div class="row">
                 <div class="col-sm-4"><h3>Nom de l'entreprise</h3></div>
                 <div class="col-sm-4"><h3>Ville</h3></div>
-                <div class="col-sm-4"><h3>Statu de la demande</h3></div>
+                <div class="col-sm-4"><h3>Statut de la demande</h3></div>
             </div>
         </div>
 
