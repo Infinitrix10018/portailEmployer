@@ -59,7 +59,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'id_fournisseurs' => 0,
-                'name' => 'commis',
+                'name' => 'commise',
                 'email' => 'commis',
                 'NEQ' => null,
                 'password' => Hash::make('Commis'),
