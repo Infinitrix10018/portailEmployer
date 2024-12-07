@@ -97,6 +97,9 @@ class FournisseurController extends Controller
 
     public function showFournisseurs(Request $request)
     {   
+        \Log::info('Entrer dans le show fournisseur');
+        $data = $request->all();
+        \Log::info(['all from the request : ' ,$data]);
         $searchTerm = $request->input('fournisseur');
         $fournisseurs = Fournisseur::join('demandesFournisseurs', 'demandesFournisseurs.id_fournisseurs', '=', 'fournisseurs.id_fournisseurs')
         ->select('fournisseurs.*', 'demandesFournisseurs.etat_demande')
@@ -104,7 +107,7 @@ class FournisseurController extends Controller
         ->orderByRaw("FIELD(demandesFournisseurs.etat_demande, 'en attente', 'refuse', 'actif')")
         ->with('demande')
         ->get();
-
+        \Log::info(['search term : ' ,$searchTerm]);
         return view('partials.fournisseursRoleListe', compact('fournisseurs'));
     }
 

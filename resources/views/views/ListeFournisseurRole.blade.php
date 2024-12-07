@@ -12,7 +12,7 @@
 @section('content')
 
     <div class="container-xxl">
-        <form id="listsForm" action="{{ route('VoirFiche.search') }}" method="get">
+        <form id="listsForm" action="{{ route('VoirListeFournisseur.search') }}" method="get">
             <div class="row">
                 <div class="col-sm-9">
                     <label for="rechercheFournisseur">Recherche fournisseur</label> 
@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-sm-3">
                     <div style="text-align:center">
-                        <button class="button">Recherche le fournisseur</button>
+                        <button class="button" onclick="submitLists()">Recherche le fournisseur</button>
                     </div>
                 </div>
             </div>
@@ -66,19 +66,21 @@
             <div class="row">
                 <div class="col-sm-4"><h3>Nom de l'entreprise</h3></div>
                 <div class="col-sm-4"><h3>Ville</h3></div>
-                <div class="col-sm-4"><h3>Statu de la demande</h3></div>
+                <div class="col-sm-4"><h3>Statut de la demande</h3></div>
             </div>
         </div>
 
         <div class="container-xxl">
             @foreach ($fournisseurs as $fournisseur)
-                <a href="{{ route('SetSessionFicheFournisseur', ['id' => $fournisseur->id_fournisseurs]) }}" class="text-decoration-none">
-                    <div class="row"> 
-                        <div class="col-sm-4"><p>{{ $fournisseur->nom_entreprise }}</p></div>
-                        <div class="col-sm-4"><p>{{ $fournisseur->ville }}</p></div>
-                        <div class="col-sm-4"><p>{{ $fournisseur->demande->etat_demande }}</p></div>
-                    </div>
-                </a> 
+                <ul id="hoverable">
+                    <a href="{{ route('SetSessionFicheFournisseur', ['id' => $fournisseur->id_fournisseurs]) }}"  class="text-decoration-none">
+                        <div class="row"> 
+                            <div class="col-sm-4"><p>{{ $fournisseur->nom_entreprise }}</p></div>
+                            <div class="col-sm-4"><p>{{ $fournisseur->ville }}</p></div>
+                            <div class="col-sm-4"><p>{{ $fournisseur->demande->etat_demande }}</p></div>
+                        </div>
+                    </a> 
+                </ul>
             @endforeach
         </div>
 

@@ -1,5 +1,5 @@
 body {
-    background-color:rgb(0,118,213); 
+    background-color:whitesmoke; 
 }
 
 form{
@@ -61,5 +61,14 @@ a:link{
 
 .suggestions-container div:hover {
     background-color: #f0f0f0;
+}
+
+
+#hoverable:hover{
+    background-color: black;
+    font-size: 18px;
+    color: white;
+    border-color: rgb(0,118,213);
+    border-radius: 10px;
 }
 

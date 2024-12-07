@@ -21,22 +21,24 @@
 
         <div class="container-xxl">
             @foreach ($results as $result)
-                <div class="row"> 
-                    <div class="col-sm-8">
-                        <a href="{{ route('SetSessionFicheFournisseur', ['id' => $result->id_fournisseurs]) }}" class="text-decoration-none">
-                            <div class="row"> 
-                                <div class="col-sm-6"><p>{{ $result->nom_entreprise }}</p></div>
-                                <div class="col-sm-6"><p>{{ $result->ville }}</p></div>
-                                
-                            </div>
-                        </a> 
+                <ul id="hoverable">
+                    <div class="row"> 
+                        <div class="col-sm-8">
+                            <a href="{{ route('SetSessionFicheFournisseur', ['id' => $result->id_fournisseurs]) }}" class="text-decoration-none">
+                                <div class="row"> 
+                                    <div class="col-sm-6"><p>{{ $result->nom_entreprise }}</p></div>
+                                    <div class="col-sm-6"><p>{{ $result->ville }}</p></div>
+                                    
+                                </div>
+                            </a> 
+                        </div>
+                        <div class="col-sm-4">
+                            <button onclick="sendData('{{ $result->id_fournisseurs }}')" class="button">
+                                Enlever le fournisseur de la liste
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-sm-4">
-                         <button onclick="sendData('{{ $result->id_fournisseurs }}')" class="button">
-                             Enlever le fournisseur de la liste
-                         </button>
-                     </div>
-                </div>
+                </ul>
             @endforeach
         </div>
 
