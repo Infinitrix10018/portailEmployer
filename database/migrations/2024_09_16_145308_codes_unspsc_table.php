@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('categorie', length: 250);
             $table->string('code_unspsc', length: 8);
             $table->string('classe_categorie', length: 128);
-            $table->string('precision_categorie', length: 128);
+            $table->string('precision_categorie', length: 256);
         });
     }
 

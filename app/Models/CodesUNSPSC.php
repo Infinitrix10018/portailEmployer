@@ -13,6 +13,13 @@ class CodesUNSPSC extends Model
     protected $primaryKey = 'id_code_unspsc';
     public $timestamps = false;
 
+    protected $fillable = [
+        'categorie',
+        'code_unspsc',
+        'classe_categorie',
+        'precision_categorie',
+    ];
+
     public function code_unspsc()
     {
         return $this->belongsToMany(Fournisseur::class, 'fournisseur_code_unspsc_liaison', 'id_code_unspsc', 'id_fournisseurs');

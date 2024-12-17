@@ -12,7 +12,7 @@
         Import XML
     </a>
 
-    <a href="{{ route('import.xml') }}" class="btn btn-primary">
+    <a href="{{ route('import.codes') }}" class="btn btn-primary">
         Import code unspsc
     </a>
 

@@ -36,7 +36,7 @@ Route::get('/recherche/fournisseur', [FournisseurController::class, 'rechercheFo
 
 Route::get('/pageTest', [FournisseurController::class, 'pageTest'])->name('pageTest');
 Route::get('/import-xml', [FournisseurController::class, 'importXml'])->name('import.xml');
-Route::get('/import-codes', [FournisseurController::class, 'importCodes'])->name('import.codesd');
+Route::get('/import-codes', [FournisseurController::class, 'importCodes'])->name('import.codes');
 
 //tous role non fournisseur
 Route::group(['middleware' => [ \App\Http\Middleware\PreventBackHistory::class,

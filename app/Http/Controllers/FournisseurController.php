@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Fournisseur;
+use App\Models\Fournisseur; 
+use App\Models\CodesUNSPSC;
 use App\Models\Telephone;
 use App\Models\Documents;
 use App\Models\Fournisseur_a_contacter;
@@ -490,6 +491,55 @@ class FournisseurController extends Controller
             return response()->json(['success' => true, 'message' => 'XML imported successfully']);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function importCodes()
+    {
+        Log::info('Début fonction');
+        try {
+            Log::info('dans try catch');
+            //$xml = simplexml_load_file(storage_path('app/files/stress-test.xml'));
+             // Define the path to the file in storage
+            $filePath = 'codes-unspsc.csv';
+
+            \Log::info('File Path: ' . Storage::path($filePath));
+            \Log::info('File Exists? ' . (Storage::exists($filePath) ? 'Yes' : 'No'));
+
+            // Check if the file exists
+            if (!Storage::exists($filePath)) {
+                Log::info('aucun fichier touver');
+                return back()->with('error', 'File not found in storage.');
+            }
+
+            // Open the file for reading
+            $file = Storage::path($filePath); // Get the full path to the file
+            $handle = fopen($file, 'r');
+
+             // Skip the header row (if any)
+            $header = fgetcsv($handle);
+
+            // Loop through the rows in the file
+            while (($row = fgetcsv($handle)) !== false) {
+                // Map the row to your database fields
+                CodesUNSPSC::create([
+                    'categorie' => $row[2], // Adjust to match your CSV columns
+                    'code_unspsc' => $row[9],
+                    'classe_categorie' => $row[8],
+                    'precision_categorie' => $row[11],
+                ]);
+            }
+
+            // Close the file handle
+            fclose($handle);
+
+            Log::info('Fin fonction');
+            return back()->with('success', 'CSV file imported successfully.');
+            
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            Log::info('erreur');
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
