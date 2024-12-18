@@ -488,7 +488,7 @@ class FournisseurController extends Controller
                 });
             }
             
-            return response()->json(['success' => true, 'message' => 'XML imported successfully']);
+            return view('views.test');
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
@@ -535,7 +535,7 @@ class FournisseurController extends Controller
             fclose($handle);
 
             Log::info('Fin fonction');
-            return back()->with('success', 'CSV file imported successfully.');
+            return view('views.test');
             
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
