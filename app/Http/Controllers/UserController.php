@@ -19,17 +19,17 @@ class UserController extends Controller
     }
 
     public function updateRoles(Request $request)
-{
-    $roles = $request->input('roles');
+    {
+        $roles = $request->input('roles');
 
-    foreach ($roles as $userId => $role) {
-        $user = User::find($userId);
-        if ($user) {
-            $user->role = $role;
-            $user->save();
+        foreach ($roles as $userId => $role) {
+            $user = User::find($userId);
+            if ($user) {
+                $user->role = $role;
+                $user->save();
+            }
         }
-    }
 
-    return redirect()->back()->with('success', 'Roles mis à jour avec succès.');
-}
+        return redirect()->back()->with('success', 'Roles mis à jour avec succès.');
+    }
 }

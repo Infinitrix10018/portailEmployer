@@ -1,56 +1,38 @@
 body {
-    background-color:whitesmoke; 
+    background-color: #F2F2F2; 
 }
 
-form{
-    padding: 20px;
-}
-
-h1, h2, h3, h4, h5, h6, label, li{ 
-    color: rgb(120,198,224);
-}
-
-h3 {
-    text-align: left;
-    font-weight: bold;
-    margin-bottom: 25;
-}
-
-p{ 
-    color: rgb(255,255,255);  
-}
-
-.selected-item{
+.selected-item {
     font-weight: bold;
 }
 
-.button{
-    border-color: rgb(0,118,213);
+.button {
+    border-color: #D6D6D6;
     border-radius: 10px;
     margin-top: 5px;
     padding: 15px;
-    background-color:rgb(0,118,213);
+    background-color: #D6D6D6;
     align-items: center;
-    color: white;
+    color: #2C2B30;
 }
 
-.container-fluid, .container, .container-xl, .container-lg, .container-xxl{ 
-    border-color: rgb(0,118,213);
+.container-fluid, .container, .container-xl, .container-lg, .container-xxl { 
+    border: 1px solid #D6D6D6;
     border-radius: 10px;
     margin-top: 5px;
     padding: 15px;
-    background-color:rgb(11,35,65);
+    background-color: #FFFFFF;
     align-items: center;
 }
 
-a:link{
+a:link {
     text-decoration: none;    
 }
 
 .suggestions-container {
     max-height: 200px;
     overflow-y: auto;
-    background-color: #fff;
+    background-color: #F2F2F2;
     position: absolute; /* Position it right below the input field */
 }
 
@@ -60,15 +42,13 @@ a:link{
 }
 
 .suggestions-container div:hover {
-    background-color: #f0f0f0;
+    background-color: #D6D6D6;
 }
 
-
-#hoverable:hover{
-    background-color: black;
+#hoverable:hover {
+    background-color: #D6D6D6;
     font-size: 18px;
-    color: white;
-    border-color: rgb(0,118,213);
+    color: #2C2B30;
+    border-color: #4F4F51;
     border-radius: 10px;
 }
-

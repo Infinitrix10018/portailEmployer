@@ -1,30 +1,12 @@
 body {
-    background-color: rgb(0,118,213);
+    background-color: #F2F2F2;
 }
 
-.center-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.container-xxl {
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-}
-
-.row {
-    display: flex;
-    flex-direction: column;
-}
-
-.col-md-7, .col-md-5 {
-    background-color: white;
+.container {
+    background-color: #FFFFFF;
     border-radius: 20px;
     border-style: solid;
-    border-color: gray;
+    border-color: #D6D6D6;
     margin-top: 50px;
     padding: 30px;
 }
@@ -34,23 +16,25 @@ button {
     font-size: 16px;
     border: none;
     border-radius: 5px;
-    background-color: white;
-    color: rgb(0,118,213);
+    background-color: #D6D6D6;
+    color: #2C2B30;
 }
 
-#idBoutonActif,#idBoutonRefusé,#idBoutonComment {
+#idBoutonActif, #idBoutonRefusé, #idBoutonComment {
     width: 200px;
-    background-color: rgb(0,118,213);
-    color: white;
+    background-color: #D6D6D6;
+    color: #2C2B30;
     margin: 20px 10px 0px 10px;
 }
 
 #idBoutonRefusé {
     background-color: darkred;
+    color: white;
 }
 
 #idBoutonComment {
     background-color: grey;
+    color: white;
 }
 
 #idMessage {
@@ -62,7 +46,6 @@ textarea {
     width: 250px;
 }
 
-h1,h2
-{
-    color: black;
+h1, h2 {
+    color: #2C2B30;
 }
