@@ -19,9 +19,11 @@
     @endif
     -->
 
+
     <form action="{{ route('ChangeInfo', ['id' => request('id')]) }}" method="POST" enctype="multipart/form-data" onsubmit="logToConsole()">
     @csrf
     <div class="container-xxl">
+    <h1>Entreprise: {{ $fournisseur->nom_entreprise }} </h1>
         <div class="container-xxl" id="containerWithBorder">
             <h1>Informations</h1>
 

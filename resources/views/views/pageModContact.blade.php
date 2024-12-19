@@ -12,6 +12,7 @@
     <form action="{{ route('ChangeContact', ['id' => request('id')]) }}" method="POST" enctype="multipart/form-data" onsubmit="logToConsole()">
     @csrf
         <div class="container-xxl">
+        <h1>Entreprise: {{ $fournisseur->nom_entreprise }} </h1>
             <h2>Personne ressource</h2>
             <div class="container-xxl">
                 <div class="contact-info">

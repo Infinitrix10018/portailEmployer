@@ -15,6 +15,10 @@
         <a href="{{ route('choixModifierFournisseur', ['id' => $fournisseur->id_fournisseurs]) }}"><button class="button" id="idModInfo"><img src="{{ asset('img/edit.svg') }}" width="50" height="50" alt="Edit"></button></a>
     @endif
 
+    <div class="container">
+        <h1>Entreprise: {{ $fournisseur->nom_entreprise }} </h1>
+    <div>
+
     <div class="container-xxl">
         <div class="container-xxl" id="containerWithBorder">
             <h1>Information</h1>

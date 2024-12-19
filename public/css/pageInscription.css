@@ -27,6 +27,13 @@ form{
     align-items: center;
 }
 
+.CompanyName
+{
+    align-items: center;
+    margin-top: 10px;
+    padding: 15px;
+}
+
 .form-control, .form-select {
     margin-top: 10px;
     margin-bottom: 10px;

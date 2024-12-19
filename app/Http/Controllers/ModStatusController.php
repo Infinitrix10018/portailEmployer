@@ -14,9 +14,21 @@ use App\Models\ModelCourriel;
 
 class ModStatusController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        return view('views.pageModStatus');
+        $id_fournisseur = $id;
+        $fournisseur = DB::table('demandesFournisseurs')
+            ->join('fournisseurs', 'demandesFournisseurs.id_fournisseurs', '=', 'fournisseurs.id_fournisseurs')
+            ->where('demandesFournisseurs.id_fournisseurs', $id_fournisseur)
+            ->select('fournisseurs.nom_entreprise', 'demandesFournisseurs.*')
+            ->first();
+        
+        if (!$fournisseur) 
+        {
+            abort(404); 
+        }
+
+        return view('views.pageModStatus', compact('fournisseur'));
     }
 
     public function changeStatus(Request $request)
